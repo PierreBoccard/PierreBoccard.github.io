@@ -19,7 +19,7 @@ resume: true
 resume-external: false
 resume-url: assets/CV.pdf
 
-url: https://PierreBoccard.github.io/indigo
+url: https://PierreBoccard.github.io
 # your url: https://USERNAME.github.io
 
 permalink: /:title/
