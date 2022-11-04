@@ -36,4 +36,10 @@
             <i class="fa-regular fa-envelope"></i>
         </a>
     {% endif %}
+    
+    {% if site.custom %}
+        <a class="link" data-title="{{ site.custom }}" href="{{ site.custom }}"  rel="noopener">
+            <i class="fa-regular fa-user"></i>
+        </a>
+    {% endif %}
 </div>
