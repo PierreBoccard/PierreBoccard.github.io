@@ -6,7 +6,7 @@ tag:
 headerImage: true
 projects: true
 hidden: true # don't count this post in blog pagination
-description: "This is a second year Master project"
+description: "This is a full-time project carried out during my second year of my master studies in astrophysics."
 category: project
 author: Pierre Boccard
 externalLink: false
