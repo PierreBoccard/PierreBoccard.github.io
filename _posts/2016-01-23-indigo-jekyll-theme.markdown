@@ -12,7 +12,7 @@ author: Pierre Boccard
 externalLink: false
 ---
 
-![Screenshot](https://github.com/PierreBoccard/PierreBoccard.github.io/tree/gh-pages/assets/images/TNG_3boxes_DM_3840-min.png)
+![Screenshot](https://github.com/PierreBoccard/PierreBoccard.github.io/assets/images/TNG_3boxes_DM_3840-min.png)
 
 ---
 
