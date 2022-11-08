@@ -1,15 +1,15 @@
 ---
-title: ":ramen: Indigo, minimalist jekyll theme"
+title: "How do supermassive black holes co-evolve with their host galaxy – the perspective of cosmological simulations."
 layout: post
-date: 2016-01-23 22:10
-tag: jekyll
-image: https://sergiokopplin.github.io/indigo/assets/images/jekyll-logo-light-solid.png
+date: 2022-09-19
+tag: 
+image: https://github.com/PierreBoccard/PierreBoccard.github.io/tree/gh-pages/assets/images
 headerImage: true
 projects: true
 hidden: true # don't count this post in blog pagination
-description: "This is a simple and minimalist template for Jekyll for those who likes to eat noodles."
+description: "This is a second year Master project"
 category: project
-author: johndoe
+author: Pierre Boccard
 externalLink: false
 ---
 
