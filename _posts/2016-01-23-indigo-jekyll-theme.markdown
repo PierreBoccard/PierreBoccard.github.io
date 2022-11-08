@@ -12,8 +12,8 @@ author: Pierre Boccard
 externalLink: false
 
 ---
-subtitle: "Overview"
-description: "This is a full-time project carried out during my second year of my master studies in astrophysics."
+title: "Overview"
+description: ""
 
 ---
 
