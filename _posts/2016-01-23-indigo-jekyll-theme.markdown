@@ -15,15 +15,8 @@ externalLink: false
 #![Screenshot](https://github.com/PierreBoccard/PierreBoccard.github.io/assets/images/TNG_3boxes_DM_3840-min-2-2-2.png)
 
 ---
-
-What has inside?
-
-- Gulp
-- BrowserSync
-- Stylus
-- SVG
-- No JS
-- [98/100](https://developers.google.com/speed/pagespeed/insights/?url=http%3A%2F%2Fsergiokopplin.github.io%2Findigo%2F)
+subtitle: "Overview"
+description: "This is a full-time project carried out during my second year of my master studies in astrophysics."
 
 ---
 
