@@ -3,7 +3,7 @@ title: "How do supermassive black holes co-evolve with their host galaxy – the
 layout: post
 date: 2022-09-19
 tag: 
-image: https://github.com/PierreBoccard/PierreBoccard.github.io/tree/gh-pages/assets/images
+image: https://github.com/PierreBoccard/PierreBoccard.github.io/tree/gh-pages/assets/images/TNG_3boxes_DM_3840-min.png
 headerImage: true
 projects: true
 hidden: true # don't count this post in blog pagination
@@ -13,9 +13,7 @@ author: Pierre Boccard
 externalLink: false
 ---
 
-![Screenshot](https://raw.githubusercontent.com/sergiokopplin/indigo/gh-pages/assets/screen-shot.png)
-
-Example of project - Indigo Minimalist Jekyll Template - [Demo](https://sergiokopplin.github.io/indigo/). This is a simple and minimalist template for Jekyll for those who likes to eat noodles.
+![Screenshot](https://github.com/PierreBoccard/PierreBoccard.github.io/tree/gh-pages/assets/images/TNG_3boxes_DM_3840-min.png)
 
 ---
 
