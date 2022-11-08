@@ -12,7 +12,7 @@ author: Pierre Boccard
 externalLink: false
 ---
 
-![Screenshot](https://github.com/PierreBoccard/PierreBoccard.github.io/assets/images/TNG_3boxes_DM_3840-min.png)
+![Screenshot](https://github.com/PierreBoccard/PierreBoccard.github.io/assets/images/TNG_3boxes_DM_3840-min-2-2-2.png)
 
 ---
 
@@ -27,5 +27,4 @@ What has inside?
 
 ---
 
-[Check it out](https://sergiokopplin.github.io/indigo/) here.
-If you need some help, just [tell me](https://github.com/sergiokopplin/indigo/issues).
+Here is a link to [the report](https://github.com/PierreBoccard/PierreBoccard.github.io/assets/) 
