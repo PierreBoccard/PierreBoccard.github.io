@@ -2,7 +2,7 @@ title: "How do supermassive black holes co-evolve with their host galaxy – the
 layout: post
 date: 2022-09-21 22:10
 tag: mia-nlp
-image: /assets/images/EPFL_logo.png
+image:
 headerImage: false
 projects: true
 hidden: true # don't count this post in blog pagination
@@ -22,9 +22,6 @@ Most galaxies contain a supermassive black hole (SMBH) between a few millions to
 
 **Membership inference**
 
-<figcaption class="caption">example of a membership inference attack: starting from a (sensitive) data record, the attacker will extract meaningful features through a forward pass to the target model, and make a membership prediction based on an attack model.</figcaption>
-<img class="image" src="/assets/images/semester1/mia.png" alt="Alt Text">
-
 
 ### About this project
 * Gravitational lensing
@@ -35,4 +32,4 @@ Most galaxies contain a supermassive black hole (SMBH) between a few millions to
 
 
 ### Links
-* Here's the link to the [report](/assets/projectreports/membership_inference_report.pdf). 
+* Here's the link to the [report](). 
