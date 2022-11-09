@@ -16,9 +16,9 @@ My GitHub is [PierreBoccard](https://github.com/PierreBoccard).
 
 [//]: <aaa>
 <ul class="skill-list">
-	<li>Gravitational lensing, Cosmology, Relativity</li>
-	<li>Statistics, Numerical Analysis</li>
+	<li>Gravitational lensing, Cosmology, Relativity, N-body simulations</li>
 	<li>Python, C/C++, Matlab</li>
+	<li>Statistics, Numerical Analysis</li>
 	<li>Git</li>
 </ul>
 
