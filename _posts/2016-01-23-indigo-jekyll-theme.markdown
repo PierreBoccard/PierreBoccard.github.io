@@ -28,10 +28,10 @@ Most galaxies contain a supermassive black hole (SMBH) between a few millions to
 
 ### About this project
 * Gravitational lensing
+   * Lenstronomy
 * N-body simulations
+   * IllustrisTNG
 * Blackholes
-    * 
-    * GPT-2 fine-tuned on Wikidata 
 
 
 ### Links
