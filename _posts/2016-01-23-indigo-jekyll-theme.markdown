@@ -1,20 +1,39 @@
----
-title: "How do supermassive black holes co-evolve with their host galaxy – the perspective of cosmological simulations."
+title: "Effective Unbiased Membership Inference against Image and Language Models"
 layout: post
-date: 2022-09-19
-tag: 
-headerImage: true
+date: 2022-01-21 22:10
+tag: mia-nlp
+image: /assets/images/EPFL_logo.png
+headerImage: false
 projects: true
 hidden: true # don't count this post in blog pagination
-description: "This is a full-time project carried out during my second year of my master studies in astrophysics."
-category: project
-author: Pierre Boccard
-externalLink: false
-
----
-title: "Overview"
 description: ""
-
+category: project
+author: eliott
+externalLink: false
 ---
 
-Here is a link to [the report](https://github.com/PierreBoccard/PierreBoccard.github.io/assets/) 
+This is a semester project carried out during my master studies in computational science and engineering at EPFL. 
+* Duration: 5 months (September 2021 - January 2022)
+* Supervisor: Bogdan Kulynych (Spring lab, EPFL) 
+
+### Overview
+
+In the recent past, ML models have demonstrated excellent ability for prediction and classification tasks in various fields such as image recognition, NLP, and even healthcare analysis. Such breakthroughs are often associated with **large amounts of data** available, which can consist of **sensitive** and **private** data such as user’s private discussions or medical records.
+
+
+**Membership inference** is a type of attack against machine learning models where an adversary aims to infer whether a given data record was part of the model’s training dataset or not. Although Membership Inference Attack (MIA) does not recover the training data in itself, it can lead to severe privacy risks to individuals, especially when it becomes possible to deduce sensitive information from inferred membership.
+
+<figcaption class="caption">example of a membership inference attack: starting from a (sensitive) data record, the attacker will extract meaningful features through a forward pass to the target model, and make a membership prediction based on an attack model.</figcaption>
+<img class="image" src="/assets/images/semester1/mia.png" alt="Alt Text">
+
+
+### About this project
+* Differential privacy
+* Membership inference attacks
+* Models:
+    * ResNet trained on CIFAR-10/100
+    * GPT-2 fine-tuned on Wikidata 
+
+
+### Links
+* Here's the link to the [report](/assets/projectreports/membership_inference_report.pdf). 
