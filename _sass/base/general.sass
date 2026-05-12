@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap")
+
 body, html
 	font-size: 62.5%
 
@@ -5,12 +7,15 @@ body
 	font: 16px $fontSans
 	color: $alpha
 	background: $omega
+	background-image: radial-gradient(circle at 15% 20%, rgba(124, 244, 255, 0.12), transparent 40%), radial-gradient(circle at 80% 10%, rgba(63, 140, 255, 0.18), transparent 45%)
+	background-attachment: fixed
 
 h1, h2, h3, h4
 	font-family: $fontSans
 	color: $beta
 	-webkit-font-smoothing: antialiased
 	text-rendering: optimizeLegibility
+	letter-spacing: 0.02em
 
 h1
 	font-size: 3rem
@@ -29,13 +34,20 @@ h4
 
 a
 	color: $delta
-	text-decoration: underline
-	font-weight: $thin-font
+	text-decoration: none
+	font-weight: 500
+	border-bottom: 1px solid rgba($delta, 0.3)
+	transition: color 0.2s ease, text-shadow 0.2s ease, border-color 0.2s ease
+
+	&:hover
+		color: $beta
+		text-shadow: 0 0 12px rgba($delta, 0.45)
+		border-color: rgba($delta, 0.6)
 
 p
 	line-height: 1.7
 	color: $alpha
-	font-weight: 300
+	font-weight: 400
 	margin-bottom: 20px
 	letter-spacing: 0.4px
 
