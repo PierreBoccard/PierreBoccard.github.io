@@ -30,3 +30,15 @@
 	100%
 		opacity: 1
 		transform: translateY(0)
+
+@keyframes float
+	0%, 100%
+		transform: translateY(0)
+	50%
+		transform: translateY(-6px)
+
+@keyframes glow
+	0%, 100%
+		box-shadow: 0 0 12px rgba($delta, 0.25), 0 0 30px rgba($delta, 0.2)
+	50%
+		box-shadow: 0 0 18px rgba($delta, 0.45), 0 0 40px rgba($delta, 0.3)
