@@ -86,8 +86,8 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
         </div>
 
         <figure class="section-figure reveal reveal-right">
-            <img src="/assets/images/phd/cosmic-void.svg" alt="Schematic of a cosmic void embedded in the cosmic web"/>
-            <figcaption>An underdense void carved out of the cosmic web of galaxies and filaments.</figcaption>
+            <img src="/assets/images/phd/cosmic-voids-annotated.jpg" alt="Cosmic web with four underdense void regions highlighted"/>
+            <figcaption>A slice of the cosmic web (Illustris simulation), with four prominent underdense voids highlighted in cyan. They are the calm, near-empty bubbles between the bright filaments and clusters.</figcaption>
         </figure>
     </div>
 
@@ -112,8 +112,8 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
         </div>
 
         <figure class="section-figure reveal reveal-left">
-            <img src="/assets/images/phd/vsf-curve.svg" alt="The void size function with photometric distortions"/>
-            <figcaption>The theoretical VSF (solid cyan) versus a photometrically-distorted measurement (dashed pink) — the gap is what my PhD aims to model and remove.</figcaption>
+            <img src="/assets/images/phd/vsf-plot.png" alt="Theoretical void size function with mock measurements and a photo-z-degraded prediction"/>
+            <figcaption>The theoretical VSF (solid cyan) with a mock measurement (points + Poisson error bars) and a photometric prediction with $\sigma_z = 0.02$ (dashed pink). The gap between the spec-z and photo-z curves is what my PhD aims to model and remove.</figcaption>
         </figure>
     </div>
 </section>
@@ -184,7 +184,7 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
      Sibling of (not inside) the .phd-section above, because that wrapper
      uses a transform-based .reveal animation that would break the
      descendants' position: sticky in some browsers.
-     6 sky patches * 5 passes. JS in assets/js/rubin-scrolly.js drives
+     10 sky patches * 5 passes. JS in assets/js/rubin-scrolly.js drives
      the scene from the scroll position; the SVG below is the static
      scaffolding (sky outline, telescope, ground) and the galaxies +
      octagonal footprint + light cone are appended at runtime.
@@ -212,7 +212,7 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
                 </defs>
 
                 <!-- Sky region label -->
-                <text class="label-faint" x="80" y="42">SOUTHERN&#160;SKY  *  6&#160;PATCHES  *  5&#160;PASSES</text>
+                <text class="label-faint" x="80" y="42">SOUTHERN&#160;SKY  *  10&#160;PATCHES  *  5&#160;PASSES</text>
 
                 <!--
                   JS will insert, before .foreground:
@@ -337,8 +337,8 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
         </div>
 
         <figure class="section-figure reveal reveal-right">
-            <img src="/assets/images/phd/photoz-scatter.svg" alt="Scatter of photo-z vs spec-z with catastrophic outliers"/>
-            <figcaption>The photo-z error budget: a tight scatter around the y = x line, a small bias, and a population of catastrophic outliers (pink) that mimic foreground or background galaxies.</figcaption>
+            <img src="/assets/images/phd/photoz-scatter.png" alt="Scatter of photo-z vs spec-z with a sigma_z*(1+z) envelope and catastrophic outliers"/>
+            <figcaption>Photo-z vs spec-z for a mock LSST gold sample. The scatter envelope follows $\sigma_z\,(1+z)$ with $\sigma_z = 0.02$ &mdash; so the spread widens at higher redshift &mdash; and a $\sim 3\%$ catastrophic-outlier population (pink) mimics foreground or background galaxies.</figcaption>
         </figure>
     </div>
 

@@ -36,15 +36,15 @@
 
     /* Smaller sky region, pushed upper-left, so the cone has room to be long
        and the sky reads as "further away" from the telescope. */
-    var SKY = { x: 100, y: 80, w: 600, h: 260 };
-    var PATCH_COLS = 3;
+    var SKY = { x: 60, y: 80, w: 720, h: 260 };
+    var PATCH_COLS = 5;
     var PATCH_ROWS = 2;
     var PATCH_W = SKY.w / PATCH_COLS;
     var PATCH_H = SKY.h / PATCH_ROWS;
-    var N_PATCHES = PATCH_COLS * PATCH_ROWS;
+    var N_PATCHES = PATCH_COLS * PATCH_ROWS;     /* 10 */
     var N_PASSES = 5;
-    var TOTAL_VISITS = N_PATCHES * N_PASSES;     /* 30 */
-    var GALAXIES_PER_LAYER = 22;                  /* per patch per pass */
+    var TOTAL_VISITS = N_PATCHES * N_PASSES;     /* 50 */
+    var GALAXIES_PER_LAYER = 14;                  /* per patch per pass */
 
     /* Telescope apex (the LIGHT cone is anchored here) */
     var TELESCOPE = { x: 1000, y: 540 };

@@ -289,8 +289,9 @@ $phd-panel-solid: #0b1020
         margin-right: calc(50% - 50vw)
         margin-top: 80px
         margin-bottom: 80px
-        /* 5 passes need more scroll distance to play out comfortably */
-        height: 460vh
+        /* 10 patches x 5 passes = 50 visits -- a longer track keeps the
+           per-visit scroll distance comfortable (~12 vh / visit). */
+        height: 600vh
 
         @media #{$mobile}, #{$tablet}
             height: auto
