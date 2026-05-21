@@ -49,24 +49,47 @@
        reads as a continuous field with no empty gaps at patch boundaries. */
     var PATCH_GAL_OVERLAP = 0.22;                /* fraction of patch size */
 
-    /* Shell curvature -- the sky is bowed so it looks like the inner surface
-       of a dome:
-         * horizontal bend (rows arc downward at the edges)
-         * vertical squeeze (columns get a hair smaller toward the edges)
-       Implemented as a simple parametric warp applied to every (x, y) inside
-       the sky region: galaxy positions, patch centres, footprint position. */
-    var SHELL_BEND_Y = 36;   /* px the rows arc downward at the very edges */
-    var SHELL_SQUEEZE_X = 0.06; /* fractional horizontal compression at edges */
+    /* Shell curvature + 3D perspective tilt -- the sky panel is treated as
+       the inner surface of a dome, rotated slightly about the vertical axis
+       so we see it from a small side angle (the right side is "further
+       away" than the left).
+
+       Two effects, applied to every (x, y) inside the sky region:
+         (1) Perspective tilt:  rotate (X, Z) by SHELL_TILT_DEG about the Y
+             axis at a virtual depth Z = SKY.w * 1.3, then project back to 2D.
+             Net visual: right side compressed inward, left side stretched,
+             rows shifted in y depending on x.
+         (2) Inward shell bend: rows arc downward at the edges (quadratic in
+             the horizontal position).
+       The warp is applied to galaxy positions, patch centres and the camera
+       footprint so the whole survey lives on the same curved, tilted dome. */
+    var SHELL_BEND_Y    = 72;    /* px arc at the edges, was 36 */
+    var SHELL_TILT_DEG  = 16;    /* tilt about vertical axis, in degrees */
+    var SHELL_DEPTH_K   = 1.3;   /* virtual depth as a multiple of sky width */
+
+    var _SHELL_TILT_RAD = SHELL_TILT_DEG * Math.PI / 180;
+    var _SHELL_COS = Math.cos(_SHELL_TILT_RAD);
+    var _SHELL_SIN = Math.sin(_SHELL_TILT_RAD);
 
     function shellWarp(x, y) {
-        /* u: horizontal position normalised to [-1, 1] across the sky */
-        var u = (x - (SKY.x + SKY.w / 2)) / (SKY.w / 2);
-        /* gentle quadratic bend downward toward the edges */
-        var dy = SHELL_BEND_Y * u * u;
-        /* slight horizontal compression toward the edges (sin-warp) */
-        var ux = Math.sin(u * 1.05) / Math.sin(1.05);
-        var x2 = (SKY.x + SKY.w / 2) + ux * (SKY.w / 2) * (1 - SHELL_SQUEEZE_X * u * u);
-        return [x2, y + dy];
+        var skyCx = SKY.x + SKY.w / 2;
+        var skyCy = SKY.y + SKY.h / 2;
+        var X = x - skyCx;
+        var Y = y - skyCy;
+        var Z = SKY.w * SHELL_DEPTH_K;
+        /* 3D rotate (X, Z) about vertical Y axis by SHELL_TILT_DEG. */
+        var Xr = X * _SHELL_COS;
+        var Zr = Z + X * _SHELL_SIN;
+        /* Project back to the 2D screen plane (pinhole camera at distance Z). */
+        var k = Z / Zr;
+        var xScreen = skyCx + Xr * k;
+        var yScreen = skyCy + Y * k;
+        /* Inward shell bend, applied after the perspective tilt. The bend is
+           keyed off the ORIGINAL horizontal position so it follows the
+           pre-tilt grid -- otherwise the dome edges look uneven. */
+        var u = X / (SKY.w / 2);
+        var dyBend = SHELL_BEND_Y * u * u;
+        return [xScreen, yScreen + dyBend];
     }
 
     /* Telescope apex (the LIGHT cone is anchored here) */
