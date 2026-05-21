@@ -4,3 +4,12 @@ _site
 Gemfile.lock
 .bundle
 vendor/
+
+# ----- Privacy guardrails -----------------------------------------------
+# Plaintext PhD drafts must NEVER be committed. Drop them in ~/phd_drafts/
+# (outside the repo) and run `node scripts/encrypt-drafts.js`. The
+# .enc files in assets/private/ are the only thing that should land in git.
+phd_drafts/
+_phd_drafts/
+.phd-pass
+*.draft.html

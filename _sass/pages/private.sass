@@ -1,0 +1,231 @@
+// ===========================================================================
+// Password-gated PhD sub-project page
+// Same fixed dark palette as the PhD page so the look is consistent.
+// ===========================================================================
+
+$priv-text:        #c7d2fe
+$priv-text-strong: #f8fbff
+$priv-text-muted:  #8b95b7
+$priv-accent:      #7cf4ff
+$priv-panel:       rgba(11, 16, 32, 0.72)
+$priv-panel-solid: #0b1020
+$priv-bg:          #02050f
+
+body:has(.private-page)
+    background: $priv-bg
+
+.private-page
+    color: $priv-text
+    max-width: 900px
+    margin: 0 auto
+    padding: 120px 24px 80px
+
+    &::before
+        content: ""
+        position: fixed
+        inset: 0
+        z-index: -1
+        background: $priv-bg url("/assets/images/phd/hero-web.svg") center / cover no-repeat
+        opacity: 0.55
+
+    &::after
+        content: ""
+        position: fixed
+        inset: 0
+        z-index: -1
+        background: radial-gradient(circle at 50% 0%, rgba(124, 244, 255, 0.10), transparent 55%)
+
+    .private-back
+        display: inline-block
+        font-size: 1.2rem
+        letter-spacing: 0.15em
+        text-transform: uppercase
+        color: $priv-text-muted
+        border-bottom: 1px solid transparent
+        margin-bottom: 40px
+        transition: color 0.2s ease, border-color 0.2s ease
+
+        &:hover
+            color: $priv-accent
+            border-color: rgba($priv-accent, 0.5)
+
+    .private-eyebrow
+        display: inline-block
+        font-size: 1.05rem
+        letter-spacing: 0.35em
+        text-transform: uppercase
+        color: $priv-accent
+        padding: 6px 14px
+        border: 1px solid rgba($priv-accent, 0.45)
+        border-radius: 999px
+        background: rgba($priv-accent, 0.06)
+
+    .private-title
+        font-size: clamp(2.4rem, 4vw, 3.6rem)
+        line-height: 1.18
+        margin: 22px 0 16px
+        color: $priv-text-strong
+        font-weight: 700
+        letter-spacing: -0.01em
+
+    .private-status
+        display: flex
+        align-items: flex-start
+        gap: 10px
+        font-size: 1.3rem
+        color: $priv-text-muted
+        margin: 0 0 40px
+        line-height: 1.55
+
+        i
+            color: $priv-accent
+            margin-top: 3px
+
+        a
+            color: $priv-accent
+
+    // ---- Lock screen ------------------------------------------------------
+    .private-lock
+        margin: 0 auto
+        max-width: 460px
+        padding: 36px 32px
+        border-radius: 18px
+        border: 1px solid rgba($priv-accent, 0.25)
+        background: $priv-panel
+        backdrop-filter: blur(14px)
+        box-shadow: 0 30px 80px rgba(2, 5, 15, 0.6), inset 0 0 0 1px rgba(124, 244, 255, 0.05)
+        text-align: center
+
+        label
+            display: block
+            font-size: 1.05rem
+            letter-spacing: 0.3em
+            text-transform: uppercase
+            color: $priv-text-muted
+            margin-bottom: 14px
+
+        input
+            width: 100%
+            font: inherit
+            font-size: 1.6rem
+            padding: 12px 14px
+            border-radius: 10px
+            border: 1px solid rgba($priv-accent, 0.35)
+            background: rgba(2, 5, 15, 0.6)
+            color: $priv-text-strong
+            text-align: center
+            letter-spacing: 0.1em
+            outline: none
+            transition: border-color 0.2s ease, box-shadow 0.2s ease
+
+            &::placeholder
+                color: $priv-text-muted
+
+            &:focus
+                border-color: $priv-accent
+                box-shadow: 0 0 16px rgba($priv-accent, 0.35)
+
+        button
+            margin-top: 16px
+            width: 100%
+            padding: 12px 22px
+            border-radius: 999px
+            border: 1px solid rgba($priv-accent, 0.55)
+            background: rgba($priv-accent, 0.12)
+            color: $priv-text-strong
+            font-size: 1.35rem
+            letter-spacing: 0.18em
+            text-transform: uppercase
+            cursor: pointer
+            transition: all 0.2s ease
+
+            &:hover:not(:disabled)
+                background: rgba($priv-accent, 0.22)
+                box-shadow: 0 0 18px rgba($priv-accent, 0.45)
+
+            &:disabled
+                opacity: 0.6
+                cursor: progress
+
+    .private-error
+        margin: 14px 0 0
+        font-size: 1.2rem
+        color: #ff7adf
+
+    // ---- Decrypted content ------------------------------------------------
+    .private-content
+        margin-top: 50px
+        padding: 40px
+        border-radius: 18px
+        border: 1px solid rgba($priv-accent, 0.18)
+        background: $priv-panel
+        backdrop-filter: blur(14px)
+        box-shadow: 0 30px 80px rgba(2, 5, 15, 0.6)
+
+        @media #{$mobile}, #{$tablet}
+            padding: 28px 22px
+
+        h1, h2, h3, h4
+            color: $priv-text-strong
+            margin-top: 32px
+            line-height: 1.25
+
+        h2
+            font-size: 2.2rem
+            padding-bottom: 8px
+            border-bottom: 1px solid rgba($priv-accent, 0.2)
+
+        h3
+            font-size: 1.7rem
+            color: $priv-accent
+
+        p, li
+            font-size: 1.45rem
+            line-height: 1.7
+            color: $priv-text
+
+        a
+            color: $priv-accent
+
+        img
+            max-width: 100%
+            height: auto
+            display: block
+            margin: 28px auto
+            border-radius: 12px
+            border: 1px solid rgba($priv-accent, 0.25)
+            background: $priv-bg
+            cursor: zoom-in
+
+        figure
+            margin: 32px 0
+
+            figcaption
+                margin-top: 10px
+                text-align: center
+                font-size: 1.2rem
+                color: $priv-text-muted
+
+        blockquote
+            margin: 24px 0
+            padding: 16px 22px
+            border-left: 3px solid $priv-accent
+            background: rgba($priv-accent, 0.05)
+            border-radius: 0 12px 12px 0
+            font-size: 1.4rem
+            color: $priv-text
+
+        pre
+            background: rgba(2, 5, 15, 0.85)
+            color: $priv-text
+            padding: 14px 18px
+            border-radius: 10px
+            font-size: 1.2rem
+            overflow-x: auto
+            border: 1px solid rgba($priv-accent, 0.15)
+
+        code
+            background: rgba(2, 5, 15, 0.6)
+            color: $priv-accent
+            padding: 1px 5px
+            border-radius: 4px

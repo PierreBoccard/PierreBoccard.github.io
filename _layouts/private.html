@@ -1,0 +1,93 @@
+---
+layout: default
+---
+{% include nav.html %}
+
+<div class="private-page">
+
+    <a class="private-back" href="/phd/">&larr; Back to PhD overview</a>
+
+    <span class="private-eyebrow">{{ page.project_letter }} &middot; Private draft</span>
+    <h1 class="private-title">{{ page.project_full_title }}</h1>
+    <p class="private-status">
+        <i class="fa-solid fa-lock"></i>
+        <span>Unpublished work &mdash; gated by a passphrase. Drop me an <a href="mailto:boccard.pierre@gmail.com">email</a> if you'd like access.</span>
+    </p>
+
+    <form class="private-lock" id="lockForm" autocomplete="off">
+        <label for="pw">Passphrase</label>
+        <input type="password" id="pw" name="pw" required autofocus spellcheck="false" autocapitalize="off"/>
+        <button type="submit" id="unlockBtn">Unlock</button>
+        <p class="private-error" id="lockErr" hidden></p>
+    </form>
+
+    <div class="private-content" id="privateContent" hidden></div>
+
+</div>
+
+{% include footer.html %}
+
+<script>
+(function () {
+    var slug = "{{ page.project_slug }}";
+    var form = document.getElementById('lockForm');
+    var pwInput = document.getElementById('pw');
+    var err = document.getElementById('lockErr');
+    var content = document.getElementById('privateContent');
+    var btn = document.getElementById('unlockBtn');
+
+    /* PBKDF2 + AES-GCM decryption via Web Crypto API */
+    async function decrypt(blobB64, passphrase) {
+        var raw = Uint8Array.from(atob(blobB64), function (c) { return c.charCodeAt(0); });
+        if (raw.length < 16 + 12 + 16 + 1) throw new Error('ciphertext too short');
+        var salt = raw.slice(0, 16);
+        var iv = raw.slice(16, 28);
+        var ctAndTag = raw.slice(28); /* ciphertext followed by 16-byte auth tag */
+
+        var enc = new TextEncoder();
+        var keyMat = await crypto.subtle.importKey(
+            'raw', enc.encode(passphrase),
+            { name: 'PBKDF2' }, false, ['deriveKey']
+        );
+        var key = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: salt, iterations: 250000, hash: 'SHA-256' },
+            keyMat,
+            { name: 'AES-GCM', length: 256 },
+            false, ['decrypt']
+        );
+        var plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, ctAndTag);
+        return new TextDecoder().decode(plain);
+    }
+
+    function showError(msg) {
+        err.textContent = msg;
+        err.hidden = false;
+        btn.disabled = false;
+        btn.textContent = 'Unlock';
+        pwInput.select();
+    }
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        err.hidden = true;
+        btn.disabled = true;
+        btn.textContent = 'Decrypting...';
+        try {
+            var res = await fetch('/assets/private/' + slug + '.enc', { cache: 'no-store' });
+            if (!res.ok) throw new Error('missing');
+            var blob = (await res.text()).trim();
+            var html = await decrypt(blob, pwInput.value);
+            content.innerHTML = html;
+            content.hidden = false;
+            form.style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        } catch (ex) {
+            if (ex && ex.message === 'missing') {
+                showError('Encrypted draft not uploaded yet for this project.');
+            } else {
+                showError('Wrong passphrase. Try again.');
+            }
+        }
+    });
+})();
+</script>
