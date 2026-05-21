@@ -11,7 +11,7 @@ layout: default
 
 <script>
 (function () {
-    // ---- Scroll progress bar ----------------------------------------------
+    /* Scroll progress bar */
     var bar = document.getElementById('phdProgress');
     function updateProgress() {
         var h = document.documentElement;
@@ -22,7 +22,7 @@ layout: default
     window.addEventListener('scroll', updateProgress, { passive: true });
     updateProgress();
 
-    // ---- Intersection-observer reveal animations --------------------------
+    /* Intersection-observer reveal animations */
     var revealEls = document.querySelectorAll('.reveal');
     if ('IntersectionObserver' in window) {
         var io = new IntersectionObserver(function (entries) {
@@ -38,7 +38,7 @@ layout: default
         revealEls.forEach(function (el) { el.classList.add('in-view'); });
     }
 
-    // ---- Active section dot in the floating TOC ---------------------------
+    /* Active section dot in the floating TOC */
     var sections = document.querySelectorAll('.phd-section[id]');
     var dots = document.querySelectorAll('.phd-toc a[href^="#"]');
     function syncActiveDot() {
@@ -55,14 +55,14 @@ layout: default
     window.addEventListener('scroll', syncActiveDot, { passive: true });
     syncActiveDot();
 
-    // ---- Parallax tilt on figures (very gentle) ---------------------------
+    /* Parallax tilt on figures (very gentle) */
     var figs = document.querySelectorAll('.section-figure');
     window.addEventListener('scroll', function () {
         var vh = window.innerHeight;
         figs.forEach(function (f) {
             var r = f.getBoundingClientRect();
             var center = r.top + r.height / 2;
-            var delta = (vh / 2 - center) / vh; // -0.5 .. 0.5
+            var delta = (vh / 2 - center) / vh;
             f.style.transform = 'translateY(' + (delta * -16).toFixed(1) + 'px)';
         });
     }, { passive: true });
