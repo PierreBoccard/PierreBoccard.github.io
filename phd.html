@@ -163,29 +163,98 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
         </div>
     </div>
 
-    <div class="section-grid reverse" style="margin-top:50px">
-        <div class="reveal reveal-left">
-            <p>
-                Rubin's depth means that voids will be detected out to redshifts
-                where the universe was less than half its current age, when dark
-                energy was just beginning to dominate. The statistical power is
-                staggering: <strong>tens of thousands of voids</strong>, an
-                order of magnitude beyond anything we have today.
-            </p>
-            <p>
-                But statistical power is wasted if we cannot control systematics.
-                Photometric distance errors leak directly into the radii and
-                positions of the voids we recover — and the imprint of that
-                leakage on the VSF is exactly what my thesis aims to model.
-            </p>
-        </div>
+    <div class="reveal reveal-left" style="margin-top:50px; max-width:780px">
+        <p>
+            Rubin's depth means that voids will be detected out to redshifts
+            where the universe was less than half its current age, when dark
+            energy was just beginning to dominate. The statistical power is
+            staggering: <strong>tens of thousands of voids</strong>, an
+            order of magnitude beyond anything we have today. But statistical
+            power is wasted if we cannot control systematics. Photometric
+            distance errors leak directly into the radii and positions of
+            the voids we recover &mdash; and the imprint of that leakage on
+            the VSF is exactly what my thesis aims to model.
+        </p>
+    </div>
 
-        <figure class="section-figure reveal reveal-right">
-            <img src="/assets/images/phd/rubin-lsst.svg" alt="Schematic of the Rubin Observatory scanning the sky in six LSST filters"/>
-            <figcaption>The Rubin telescope sweeps the southern sky in six photometric bands — u, g, r, i, z, y — each tuned to a different slice of galaxy spectral energy.</figcaption>
-        </figure>
+</section>
+
+<!-- =====================================================================
+     Scroll-pinned Rubin survey animation.
+     Sibling of (not inside) the .phd-section above, because that wrapper
+     uses a transform-based .reveal animation that would break the
+     descendants' position: sticky in some browsers.
+     6 sky patches * 3 passes. JS in assets/js/rubin-scrolly.js drives
+     the scene from the scroll position; the SVG below is the static
+     scaffolding (sky frame, patch grid, telescope, ground) and the
+     galaxies / footprint / scan beam are appended at runtime.
+     ===================================================================== -->
+<section class="scrolly-rubin" id="rubinScrolly" aria-label="Animated illustration of the LSST survey strategy">
+    <div class="scrolly-pin">
+        <div class="scrolly-stage">
+
+            <svg class="rubin-scene" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet">
+
+                <!-- Sky frame + patch grid (static scaffolding) -->
+                <rect class="sky-frame" x="60" y="50" width="1080" height="400" rx="6"/>
+                <g class="patch-grid">
+                    <line x1="420" y1="50" x2="420" y2="450"/>
+                    <line x1="780" y1="50" x2="780" y2="450"/>
+                    <line x1="60"  y1="250" x2="1140" y2="250"/>
+                </g>
+
+                <text class="label-faint" x="78"   y="35">SOUTHERN&#160;SKY  *  6&#160;PATCHES  *  3&#160;PASSES</text>
+                <text class="label-accent" x="1118" y="35" text-anchor="end">VERA&#160;C.&#160;RUBIN&#160;OBSERVATORY  *  LSST</text>
+
+                <!--
+                  JS inserts here, before .foreground so galaxies sit behind the dome:
+                    <g class="galaxies"> ...circles... </g>
+                    <rect class="footprint"/>
+                    <path class="scan-beam"/>
+                -->
+                <g class="foreground">
+
+                    <!-- Ground / horizon silhouette -->
+                    <path class="horizon" d="M0,520 L120,500 L260,540 L380,495 L520,540 L600,470 L700,535 L820,505 L960,545 L1100,510 L1200,535 L1200,720 L0,720 Z"/>
+
+                    <!-- Pier (telescope mount) -->
+                    <rect class="pier" x="580" y="540" width="40" height="80"/>
+
+                    <!-- Dome on Cerro Pachon -- telescope in the 1st plan -->
+                    <g transform="translate(600 540)">
+                        <ellipse class="dome" cx="0" cy="0" rx="68" ry="58"/>
+                        <path class="dome-slit" d="M-12,-58 Q0,-20 12,-58 L12,5 L-12,5 Z"/>
+                        <path class="dome-rim"  d="M-68,0 Q0,-68 68,0"/>
+                        <line x1="-20" y1="58" x2="-30" y2="78" stroke="rgba(124,244,255,0.45)" stroke-width="1.2"/>
+                        <line x1="20"  y1="58" x2="30"  y2="78" stroke="rgba(124,244,255,0.45)" stroke-width="1.2"/>
+                    </g>
+
+                    <text class="label-faint" x="600" y="660" text-anchor="middle">CERRO&#160;PACHON  *  2680&#160;m</text>
+
+                </g>
+
+            </svg>
+
+            <!-- HUD: progress bar + textual pass / patch counter -->
+            <div class="scrolly-hud" aria-hidden="true">
+                <div class="scrolly-progress-label" role="status"></div>
+                <div class="scrolly-progress-track">
+                    <div class="scrolly-progress-bar"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="scrolly-hint">scroll &darr;  to drive the survey</div>
     </div>
 </section>
+
+<p class="scrolly-caption">
+    Each visit to a patch adds a layer of galaxies; after three full passes the
+    survey footprint is dense enough to detect tens of thousands of cosmic voids.
+    The Rubin/LSST cadence is, in reality, ${\sim}\,3\,000$ visits per night over
+    ten years &mdash; this animation is a stylised three-pass sketch of the
+    build-up.
+</p>
 
 <!-- ============================================================ -->
 <!-- 3. PHOTOMETRIC REDSHIFTS                                      -->
@@ -315,3 +384,6 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
         <a href="https://github.com/PierreBoccard" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>
     </div>
 </section>
+
+<!-- Rubin scroll-pinned survey animation logic -->
+<script src="{{ site.url }}/assets/js/rubin-scrolly.js" defer></script>

@@ -280,6 +280,186 @@ $phd-panel-solid: #0b1020
                     background: $phd-accent
                     box-shadow: 0 0 10px rgba($phd-accent, 0.7)
 
+    // ---- Rubin scroll-pinned animation -----------------------------------
+    .scrolly-rubin
+        position: relative
+        /* Break out of the .phd-section max-width 1280 so the scene goes full-bleed */
+        width: 100vw
+        margin-left: calc(50% - 50vw)
+        margin-right: calc(50% - 50vw)
+        margin-top: 80px
+        margin-bottom: 80px
+        /* Total scroll distance over which the animation plays.
+           = 1 visible viewport (the pin) + extra to drive the animation. */
+        height: 320vh
+
+        @media #{$mobile}, #{$tablet}
+            height: auto
+            /* On small screens skip the scroll-pin and show a static end-state */
+
+    .scrolly-pin
+        position: sticky
+        top: 0
+        height: 100vh
+        display: flex
+        flex-direction: column
+        align-items: center
+        justify-content: center
+        padding: 30px 20px 50px
+
+        @media #{$mobile}, #{$tablet}
+            position: static
+            height: auto
+            padding: 30px 14px
+
+    .scrolly-stage
+        width: min(95vw, 1380px)
+        max-height: calc(100vh - 110px)
+        aspect-ratio: 12 / 7.2
+        position: relative
+
+        @media #{$mobile}, #{$tablet}
+            max-height: none
+
+    .rubin-scene
+        width: 100%
+        height: 100%
+        display: block
+        border-radius: 14px
+        background: radial-gradient(ellipse at 50% 35%, #0d1730 0%, #060a18 65%, #02050f 100%)
+        box-shadow: 0 30px 80px rgba(2, 5, 15, 0.75), 0 0 40px rgba(124, 244, 255, 0.08)
+        border: 1px solid rgba($phd-accent, 0.18)
+
+    /* Patch grid outlines: drawn statically in the SVG */
+    .rubin-scene .patch-grid
+        fill: none
+        stroke: rgba(124, 244, 255, 0.13)
+        stroke-width: 1.2
+        stroke-dasharray: 3 4
+
+    .rubin-scene .sky-frame
+        fill: rgba(2, 5, 15, 0.45)
+        stroke: rgba(124, 244, 255, 0.25)
+        stroke-width: 1
+
+    /* Galaxy dots; opacity is set per-frame from JS */
+    .rubin-scene .galaxy
+        opacity: 0
+        transition: opacity 0.35s ease-out
+        filter: drop-shadow(0 0 2px rgba(124, 244, 255, 0.55))
+
+    /* The Rubin camera footprint rectangle */
+    .rubin-scene .footprint
+        fill: rgba(124, 244, 255, 0.08)
+        stroke: #7cf4ff
+        stroke-width: 2.2
+        stroke-dasharray: 6 5
+        transition: x 0.55s cubic-bezier(.16,1,.3,1), y 0.55s cubic-bezier(.16,1,.3,1), width 0.55s cubic-bezier(.16,1,.3,1), height 0.55s cubic-bezier(.16,1,.3,1), filter 0.45s ease-out
+
+    /* Telescope scan beam */
+    .rubin-scene .scan-beam
+        fill: none
+        stroke: rgba(124, 244, 255, 0.9)
+        stroke-width: 1.4
+        stroke-linecap: round
+        stroke-dasharray: 2 5
+        transition: opacity 0.35s ease-out
+        filter: drop-shadow(0 0 6px rgba(124, 244, 255, 0.6))
+
+    /* Static foreground / telescope / horizon -- styled via classes set in markup */
+    .rubin-scene .horizon
+        fill: #060a18
+    .rubin-scene .dome
+        fill: #0e1632
+        stroke: rgba(124, 244, 255, 0.45)
+        stroke-width: 1.4
+    .rubin-scene .dome-slit
+        fill: #02050f
+    .rubin-scene .dome-rim
+        fill: none
+        stroke: rgba(124, 244, 255, 0.85)
+        stroke-width: 1.6
+        filter: drop-shadow(0 0 8px rgba(124, 244, 255, 0.55))
+    .rubin-scene .pier
+        fill: #0e1632
+        stroke: rgba(124, 244, 255, 0.3)
+        stroke-width: 1
+    .rubin-scene .label
+        font-family: $fontSans
+        font-size: 13px
+        letter-spacing: 0.18em
+        fill: #c7d2fe
+    .rubin-scene .label-faint
+        fill: #5b647a
+        font-size: 11px
+        letter-spacing: 0.22em
+    .rubin-scene .label-accent
+        fill: $phd-accent
+        font-family: $fontSans
+        font-size: 12px
+        letter-spacing: 0.22em
+
+    /* Floating progress bar + label */
+    .scrolly-hud
+        position: absolute
+        left: 26px
+        right: 26px
+        bottom: 18px
+        display: flex
+        align-items: center
+        gap: 16px
+        pointer-events: none
+
+        @media #{$mobile}
+            left: 14px
+            right: 14px
+
+    .scrolly-progress-track
+        flex: 1
+        height: 3px
+        background: rgba(199, 210, 254, 0.12)
+        border-radius: 999px
+        overflow: hidden
+
+    .scrolly-progress-bar
+        height: 100%
+        width: 0
+        background: linear-gradient(90deg, $phd-accent 0%, #a96bff 100%)
+        box-shadow: 0 0 10px rgba(124, 244, 255, 0.7)
+        transition: width 0.18s linear
+
+    .scrolly-progress-label
+        font-family: $fontSans
+        font-size: 1rem
+        letter-spacing: 0.25em
+        text-transform: uppercase
+        color: $phd-text-muted
+        white-space: nowrap
+
+    .scrolly-hint
+        margin-top: 14px
+        font-family: $fontSans
+        font-size: 1rem
+        letter-spacing: 0.4em
+        text-transform: uppercase
+        color: $phd-text-muted
+        opacity: 0.65
+
+        @media #{$mobile}, #{$tablet}
+            display: none
+
+    .scrolly-caption
+        margin: 28px auto 0
+        max-width: 760px
+        text-align: center
+        font-size: 1.2rem
+        line-height: 1.55
+        color: $phd-text-muted
+        font-style: italic
+
+        @media #{$mobile}, #{$tablet}
+            padding: 0 14px
+
     // ---- Section divider -- subtle horizontal rule between sections -------
     .phd-section + .phd-section
         margin-top: 80px
