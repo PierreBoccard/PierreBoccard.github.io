@@ -1,6 +1,6 @@
 # main text of home
 title: Pierre Boccard
-bio: Master of Astrophysics @ EPFL in Lausanne, Switzerland 
+bio: PhD candidate in cosmology — CPPM / CNRS, Aix-Marseille Université. Voids, photometric redshifts, and the Vera C. Rubin Observatory (LSST).
 
 # twitter summary info
 description: 
@@ -42,9 +42,9 @@ email: boccard.pierre@gmail.com
 custom: https://people.epfl.ch/pierre.boccard
 
 authors:
-  johndoe:
+  pierre:
     name: Pierre Boccard
-    bio: Astrophysics master student @ EPFL in Lausanne, Switzerland
+    bio: PhD candidate, CPPM / CNRS — Aix-Marseille Université. Voids, photo-z, LSST.
     external-image: false
     picture: assets/images/CVphoto.png
     #twitter: johndoe

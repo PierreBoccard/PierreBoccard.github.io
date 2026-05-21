@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Cosmic web background">
+  <defs>
+    <radialGradient id="vignette" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#0e1632" stop-opacity="1"/>
+      <stop offset="55%" stop-color="#070b1c" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#02050f" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="voidGlow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7cf4ff" stop-opacity="0.0"/>
+      <stop offset="70%" stop-color="#7cf4ff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#7cf4ff" stop-opacity="0.0"/>
+    </radialGradient>
+    <filter id="blurStars" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="0.7"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#vignette)"/>
+
+  <!-- faint cosmic-web filaments -->
+  <g stroke="#3f8cff" stroke-width="1" fill="none" opacity="0.32">
+    <path d="M-20,180 C220,260 360,120 540,200 S820,360 1040,260 1280,160 1620,220"/>
+    <path d="M-20,450 C200,400 380,520 560,470 S820,400 1020,460 1280,520 1620,470"/>
+    <path d="M-20,700 C220,640 360,760 540,720 S820,620 1040,700 1280,820 1620,720"/>
+    <path d="M180,-20 C260,200 200,420 280,560 S320,820 220,920"/>
+    <path d="M780,-20 C740,200 820,420 760,560 S720,820 800,920"/>
+    <path d="M1320,-20 C1260,200 1380,420 1300,560 S1340,820 1280,920"/>
+  </g>
+
+  <!-- denser clusters at filament intersections -->
+  <g fill="#7cf4ff" opacity="0.85">
+    <circle cx="240" cy="200" r="2.8"/><circle cx="250" cy="220" r="1.8"/><circle cx="230" cy="240" r="2.2"/>
+    <circle cx="800" cy="200" r="3"/><circle cx="780" cy="180" r="2"/><circle cx="820" cy="220" r="2.2"/>
+    <circle cx="1340" cy="200" r="2.8"/><circle cx="1320" cy="220" r="2"/><circle cx="1360" cy="180" r="2.2"/>
+    <circle cx="240" cy="470" r="2.8"/><circle cx="260" cy="490" r="2"/><circle cx="220" cy="450" r="2.2"/>
+    <circle cx="800" cy="470" r="3.2"/><circle cx="780" cy="490" r="2"/><circle cx="820" cy="450" r="2.2"/>
+    <circle cx="1340" cy="470" r="2.8"/><circle cx="1320" cy="450" r="2"/><circle cx="1360" cy="490" r="2.2"/>
+    <circle cx="240" cy="720" r="2.8"/><circle cx="260" cy="700" r="2"/><circle cx="220" cy="740" r="2.2"/>
+    <circle cx="800" cy="720" r="3"/><circle cx="780" cy="700" r="2"/><circle cx="820" cy="740" r="2.2"/>
+    <circle cx="1340" cy="720" r="2.8"/><circle cx="1320" cy="700" r="2"/><circle cx="1360" cy="740" r="2.2"/>
+  </g>
+
+  <!-- voids -->
+  <g>
+    <circle cx="500" cy="340" r="140" fill="url(#voidGlow2)"/>
+    <circle cx="500" cy="340" r="140" fill="none" stroke="#7cf4ff" stroke-width="0.7" stroke-dasharray="2 4" opacity="0.6"/>
+    <circle cx="1100" cy="600" r="180" fill="url(#voidGlow2)"/>
+    <circle cx="1100" cy="600" r="180" fill="none" stroke="#7cf4ff" stroke-width="0.7" stroke-dasharray="2 4" opacity="0.55"/>
+    <circle cx="1200" cy="280" r="100" fill="url(#voidGlow2)"/>
+    <circle cx="380" cy="650" r="110" fill="url(#voidGlow2)"/>
+  </g>
+
+  <!-- star field -->
+  <g fill="#c7d2fe" filter="url(#blurStars)">
+    <circle cx="40" cy="50" r="0.9" opacity="0.7"/><circle cx="160" cy="30" r="0.7" opacity="0.6"/>
+    <circle cx="260" cy="70" r="1" opacity="0.8"/><circle cx="370" cy="40" r="0.7" opacity="0.55"/>
+    <circle cx="490" cy="80" r="1" opacity="0.7"/><circle cx="610" cy="35" r="0.8" opacity="0.6"/>
+    <circle cx="730" cy="80" r="1.1" opacity="0.85"/><circle cx="850" cy="40" r="0.7" opacity="0.55"/>
+    <circle cx="970" cy="80" r="0.9" opacity="0.7"/><circle cx="1090" cy="35" r="0.8" opacity="0.6"/>
+    <circle cx="1210" cy="80" r="1" opacity="0.7"/><circle cx="1330" cy="40" r="0.9" opacity="0.7"/>
+    <circle cx="1450" cy="80" r="0.7" opacity="0.55"/><circle cx="1560" cy="50" r="1" opacity="0.7"/>
+
+    <circle cx="60" cy="150" r="0.7" opacity="0.55"/><circle cx="120" cy="280" r="0.9" opacity="0.65"/>
+    <circle cx="80" cy="430" r="0.6" opacity="0.55"/><circle cx="100" cy="580" r="0.9" opacity="0.65"/>
+    <circle cx="60" cy="720" r="0.7" opacity="0.55"/><circle cx="120" cy="850" r="1.0" opacity="0.7"/>
+
+    <circle cx="1540" cy="160" r="0.6" opacity="0.55"/><circle cx="1500" cy="300" r="0.9" opacity="0.65"/>
+    <circle cx="1560" cy="440" r="0.7" opacity="0.55"/><circle cx="1530" cy="590" r="0.9" opacity="0.65"/>
+    <circle cx="1540" cy="720" r="0.6" opacity="0.55"/><circle cx="1500" cy="850" r="1.0" opacity="0.7"/>
+
+    <circle cx="370" cy="170" r="0.8" opacity="0.55"/><circle cx="620" cy="170" r="0.7" opacity="0.55"/>
+    <circle cx="960" cy="170" r="0.8" opacity="0.55"/><circle cx="1230" cy="170" r="0.7" opacity="0.55"/>
+    <circle cx="370" cy="850" r="0.8" opacity="0.55"/><circle cx="620" cy="850" r="0.7" opacity="0.55"/>
+    <circle cx="960" cy="850" r="0.8" opacity="0.55"/><circle cx="1230" cy="850" r="0.7" opacity="0.55"/>
+  </g>
+</svg>

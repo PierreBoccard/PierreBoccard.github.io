@@ -1,5 +1,5 @@
 ---
-title: "Mapping cosmic voids in photometric surveys (PhD)"
+title: "Photo-z systematics on the Void Size Function (PhD)"
 layout: post
 date: 2026-05-12 20:44
 tag: cosmic-voids
@@ -7,10 +7,10 @@ image:
 headerImage: false
 projects: true
 hidden: true # don't count this post in blog pagination
-description: "PhD research on detecting cosmic voids in photometric galaxy data to study large-scale structure."
+description: "PhD at CPPM/CNRS Marseille under Alice Pisani — photometric-redshift systematics on the void size function for LSST."
 category: project
 author: pierre
-externalLink: false
+externalLink: /phd/
 ---
 
 This project is my PhD work on finding and characterizing **cosmic voids** — the giant, mostly empty regions between galaxy filaments — using large photometric galaxy surveys.

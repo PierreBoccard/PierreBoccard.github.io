@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Research pipeline</title>
+  <desc id="desc">A flow diagram from photometric catalogues to a calibrated void size function and cosmological inference.</desc>
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="100%" stop-color="#020416"/>
+    </linearGradient>
+    <linearGradient id="nodeFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#13203c"/>
+      <stop offset="100%" stop-color="#0b1020"/>
+    </linearGradient>
+    <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.5"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7cf4ff"/>
+    </marker>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg4)"/>
+
+  <!-- title -->
+  <g font-family="'Space Grotesk', sans-serif" fill="#c7d2fe">
+    <text x="40" y="40" font-size="14" letter-spacing="3">RESEARCH&#160;PIPELINE</text>
+    <text x="40" y="58" font-size="11" opacity="0.6">from photometric catalogues to a calibrated void size function</text>
+  </g>
+
+  <!-- nodes -->
+  <g font-family="'Space Grotesk', sans-serif" fill="#c7d2fe">
+    <!-- 1 photometric data -->
+    <g transform="translate(70 130)">
+      <rect width="160" height="80" rx="10" fill="url(#nodeFill)" stroke="#7cf4ff" stroke-width="1.2"/>
+      <text x="80" y="34" text-anchor="middle" font-size="12" letter-spacing="2" fill="#7cf4ff">PHOTOMETRIC</text>
+      <text x="80" y="50" text-anchor="middle" font-size="12" letter-spacing="2" fill="#7cf4ff">CATALOGUE</text>
+      <text x="80" y="68" text-anchor="middle" font-size="10" opacity="0.7">LSST / DES / Euclid mocks</text>
+    </g>
+    <!-- 2 photo-z estimation -->
+    <g transform="translate(290 130)">
+      <rect width="160" height="80" rx="10" fill="url(#nodeFill)" stroke="#a96bff" stroke-width="1.2"/>
+      <text x="80" y="34" text-anchor="middle" font-size="12" letter-spacing="2" fill="#a96bff">PHOTO-Z</text>
+      <text x="80" y="50" text-anchor="middle" font-size="12" letter-spacing="2" fill="#a96bff">ESTIMATION</text>
+      <text x="80" y="68" text-anchor="middle" font-size="10" opacity="0.7">templates · ML · stacking</text>
+    </g>
+    <!-- 3 void finder -->
+    <g transform="translate(510 130)">
+      <rect width="160" height="80" rx="10" fill="url(#nodeFill)" stroke="#41d0a4" stroke-width="1.2"/>
+      <text x="80" y="34" text-anchor="middle" font-size="12" letter-spacing="2" fill="#41d0a4">VOID</text>
+      <text x="80" y="50" text-anchor="middle" font-size="12" letter-spacing="2" fill="#41d0a4">FINDER</text>
+      <text x="80" y="68" text-anchor="middle" font-size="10" opacity="0.7">VIDE · ZOBOV · Voronoi</text>
+    </g>
+
+    <!-- 4 systematic modelling -->
+    <g transform="translate(70 290)">
+      <rect width="160" height="80" rx="10" fill="url(#nodeFill)" stroke="#f1c93b" stroke-width="1.2"/>
+      <text x="80" y="34" text-anchor="middle" font-size="12" letter-spacing="2" fill="#f1c93b">SYSTEMATIC</text>
+      <text x="80" y="50" text-anchor="middle" font-size="12" letter-spacing="2" fill="#f1c93b">MODELLING</text>
+      <text x="80" y="68" text-anchor="middle" font-size="10" opacity="0.7">bias · scatter · outliers</text>
+    </g>
+    <!-- 5 calibrated VSF -->
+    <g transform="translate(290 290)">
+      <rect width="160" height="80" rx="10" fill="url(#nodeFill)" stroke="#ff7adf" stroke-width="1.2"/>
+      <text x="80" y="34" text-anchor="middle" font-size="12" letter-spacing="2" fill="#ff7adf">CALIBRATED</text>
+      <text x="80" y="50" text-anchor="middle" font-size="12" letter-spacing="2" fill="#ff7adf">VOID&#160;SIZE&#160;FUNCTION</text>
+      <text x="80" y="68" text-anchor="middle" font-size="10" opacity="0.7">forward-modelled abundance</text>
+    </g>
+    <!-- 6 cosmology -->
+    <g transform="translate(510 290)">
+      <rect width="160" height="80" rx="10" fill="url(#nodeFill)" stroke="#7cf4ff" stroke-width="1.4"/>
+      <text x="80" y="34" text-anchor="middle" font-size="12" letter-spacing="2" fill="#7cf4ff">COSMOLOGICAL</text>
+      <text x="80" y="50" text-anchor="middle" font-size="12" letter-spacing="2" fill="#7cf4ff">INFERENCE</text>
+      <text x="80" y="68" text-anchor="middle" font-size="10" opacity="0.7">w · Ω_m · modified gravity</text>
+    </g>
+  </g>
+
+  <!-- arrows -->
+  <g stroke="#7cf4ff" stroke-width="1.6" fill="none" filter="url(#glow2)">
+    <line x1="230" y1="170" x2="285" y2="170" marker-end="url(#arrow)"/>
+    <line x1="450" y1="170" x2="505" y2="170" marker-end="url(#arrow)"/>
+    <path d="M370,210 C370,250 150,250 150,285" marker-end="url(#arrow)"/>
+    <line x1="230" y1="330" x2="285" y2="330" marker-end="url(#arrow)"/>
+    <line x1="450" y1="330" x2="505" y2="330" marker-end="url(#arrow)"/>
+    <!-- feedback loop -->
+    <path d="M510,330 C400,420 200,420 150,370" stroke-dasharray="4 4" marker-end="url(#arrow)" opacity="0.7"/>
+  </g>
+
+  <!-- feedback label -->
+  <text x="330" y="430" text-anchor="middle" fill="#c7d2fe" font-family="'Space Grotesk', sans-serif" font-size="10" opacity="0.65" letter-spacing="2">feedback &#8212; iterate</text>
+</svg>

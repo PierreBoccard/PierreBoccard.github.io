@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Photometric vs spectroscopic redshift scatter</title>
+  <desc id="desc">A z_phot vs z_spec scatter plot with the y=x identity, a bias slope, catastrophic outliers and a σ envelope.</desc>
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="100%" stop-color="#020416"/>
+    </linearGradient>
+    <linearGradient id="bandGrad2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7cf4ff" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#7cf4ff" stop-opacity="0.0"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg3)"/>
+
+  <!-- starfield -->
+  <g fill="#c7d2fe" opacity="0.3">
+    <circle cx="40" cy="40" r="0.7"/><circle cx="120" cy="20" r="0.9"/>
+    <circle cx="200" cy="30" r="0.6"/><circle cx="320" cy="18" r="1.0"/>
+    <circle cx="450" cy="25" r="0.7"/><circle cx="580" cy="15" r="1.1"/>
+    <circle cx="700" cy="35" r="0.8"/>
+  </g>
+
+  <!-- axes -->
+  <g stroke="#3f8cff" stroke-width="1.2" opacity="0.85" fill="none">
+    <line x1="90" y1="60" x2="90" y2="430"/>
+    <line x1="90" y1="430" x2="740" y2="430"/>
+  </g>
+
+  <!-- ticks + labels -->
+  <g font-family="'Space Grotesk', sans-serif" font-size="11" fill="#c7d2fe" opacity="0.7">
+    <text x="190" y="450" text-anchor="middle">0.5</text>
+    <text x="290" y="450" text-anchor="middle">1.0</text>
+    <text x="390" y="450" text-anchor="middle">1.5</text>
+    <text x="490" y="450" text-anchor="middle">2.0</text>
+    <text x="590" y="450" text-anchor="middle">2.5</text>
+    <text x="690" y="450" text-anchor="middle">3.0</text>
+
+    <text x="78" y="430" text-anchor="end">0.0</text>
+    <text x="78" y="356" text-anchor="end">0.5</text>
+    <text x="78" y="282" text-anchor="end">1.0</text>
+    <text x="78" y="208" text-anchor="end">1.5</text>
+    <text x="78" y="134" text-anchor="end">2.0</text>
+  </g>
+
+  <g fill="#c7d2fe" font-family="'Space Grotesk', sans-serif" font-size="13" letter-spacing="1">
+    <text x="415" y="475" text-anchor="middle">spectroscopic redshift  z_spec</text>
+    <text transform="rotate(-90 36 245)" x="36" y="245" text-anchor="middle">photometric redshift  z_phot</text>
+  </g>
+
+  <!-- 1-sigma envelope around identity -->
+  <path d="M90,460 L740,30 L740,90 L90,500 Z" fill="url(#bandGrad2)" opacity="0.4"/>
+
+  <!-- y=x identity -->
+  <line x1="90" y1="430" x2="740" y2="80" stroke="#7cf4ff" stroke-width="1.8" stroke-dasharray="4 5" opacity="0.95"/>
+
+  <!-- main scatter cloud (well-measured galaxies) -->
+  <g fill="#7cf4ff" opacity="0.85">
+    <circle cx="170" cy="392" r="2.5"/><circle cx="180" cy="402" r="2.2"/>
+    <circle cx="195" cy="395" r="2"/><circle cx="210" cy="385" r="2.6"/>
+    <circle cx="225" cy="378" r="2.2"/><circle cx="245" cy="370" r="2"/>
+    <circle cx="260" cy="362" r="2.4"/><circle cx="280" cy="350" r="2"/>
+    <circle cx="295" cy="340" r="2.3"/><circle cx="312" cy="332" r="2"/>
+    <circle cx="330" cy="318" r="2.5"/><circle cx="345" cy="310" r="2"/>
+    <circle cx="365" cy="296" r="2.3"/><circle cx="385" cy="282" r="2"/>
+    <circle cx="400" cy="270" r="2.4"/><circle cx="420" cy="255" r="2"/>
+    <circle cx="440" cy="245" r="2.3"/><circle cx="460" cy="232" r="2"/>
+    <circle cx="480" cy="220" r="2.4"/><circle cx="500" cy="210" r="2"/>
+    <circle cx="520" cy="195" r="2.3"/><circle cx="540" cy="184" r="2"/>
+    <circle cx="560" cy="170" r="2.4"/><circle cx="580" cy="160" r="2"/>
+    <circle cx="600" cy="148" r="2.3"/><circle cx="620" cy="138" r="2"/>
+    <circle cx="640" cy="125" r="2.5"/><circle cx="660" cy="115" r="2"/>
+    <circle cx="680" cy="102" r="2.2"/>
+
+    <!-- secondary cluster around the line -->
+    <circle cx="200" cy="378" r="1.8"/><circle cx="240" cy="350" r="1.7"/>
+    <circle cx="280" cy="330" r="1.6"/><circle cx="320" cy="298" r="1.9"/>
+    <circle cx="360" cy="278" r="1.7"/><circle cx="400" cy="248" r="1.8"/>
+    <circle cx="440" cy="225" r="1.6"/><circle cx="490" cy="200" r="1.9"/>
+    <circle cx="540" cy="170" r="1.7"/><circle cx="590" cy="140" r="1.8"/>
+    <circle cx="640" cy="110" r="1.6"/>
+
+    <circle cx="180" cy="385" r="1.5"/><circle cx="220" cy="368" r="1.4"/>
+    <circle cx="270" cy="345" r="1.4"/><circle cx="310" cy="320" r="1.4"/>
+    <circle cx="355" cy="295" r="1.4"/><circle cx="395" cy="265" r="1.5"/>
+    <circle cx="435" cy="240" r="1.4"/><circle cx="475" cy="220" r="1.4"/>
+    <circle cx="520" cy="190" r="1.4"/><circle cx="565" cy="165" r="1.4"/>
+    <circle cx="610" cy="138" r="1.4"/><circle cx="655" cy="110" r="1.4"/>
+  </g>
+
+  <!-- catastrophic outliers (high z_spec mistaken as low z_phot, and vice versa) -->
+  <g fill="#ff7adf" opacity="0.95">
+    <circle cx="560" cy="380" r="3"/>
+    <circle cx="610" cy="395" r="2.6"/>
+    <circle cx="640" cy="370" r="2.8"/>
+    <circle cx="685" cy="390" r="3"/>
+    <circle cx="155" cy="160" r="3"/>
+    <circle cx="200" cy="120" r="2.8"/>
+    <circle cx="240" cy="180" r="2.6"/>
+    <circle cx="280" cy="140" r="3"/>
+  </g>
+
+  <!-- legend -->
+  <g font-family="'Space Grotesk', sans-serif" font-size="12" fill="#c7d2fe">
+    <rect x="500" y="320" width="220" height="90" fill="#0b1020" stroke="#3f8cff" opacity="0.85" rx="6"/>
+    <circle cx="520" cy="340" r="3" fill="#7cf4ff"/>
+    <text x="535" y="344">good photo-z</text>
+    <circle cx="520" cy="362" r="3" fill="#ff7adf"/>
+    <text x="535" y="366">catastrophic outliers</text>
+    <line x1="510" y1="384" x2="540" y2="384" stroke="#7cf4ff" stroke-width="1.8" stroke-dasharray="4 5"/>
+    <text x="548" y="388">z_phot = z_spec</text>
+    <rect x="510" y="395" width="30" height="8" fill="url(#bandGrad2)"/>
+    <text x="548" y="403">1σ scatter</text>
+  </g>
+
+  <!-- title -->
+  <g font-family="'Space Grotesk', sans-serif" fill="#c7d2fe">
+    <text x="100" y="35" font-size="14" letter-spacing="3" opacity="0.9">PHOTOMETRIC&#160;REDSHIFT&#160;ACCURACY</text>
+    <text x="100" y="52" font-size="11" opacity="0.55">photo-z vs spec-z &#8211; bias, scatter, outliers</text>
+  </g>
+</svg>

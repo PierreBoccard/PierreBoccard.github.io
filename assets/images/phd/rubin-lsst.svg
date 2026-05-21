@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Vera C. Rubin Observatory and the LSST sky scan</title>
+  <desc id="desc">Stylised telescope silhouette on Cerro Pachón scanning the southern sky in the six LSST bands.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="55%" stop-color="#0d1230"/>
+      <stop offset="100%" stop-color="#020416"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0%" stop-color="#7cf4ff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#7cf4ff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="mountain" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2338"/>
+      <stop offset="100%" stop-color="#0b1020"/>
+    </linearGradient>
+    <radialGradient id="dome" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#3f8cff" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#0b1020" stop-opacity="1"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#sky)"/>
+
+  <!-- stars -->
+  <g fill="#c7d2fe">
+    <circle cx="60" cy="50" r="1.2" opacity="0.9"/>
+    <circle cx="140" cy="80" r="0.7" opacity="0.6"/>
+    <circle cx="220" cy="35" r="1" opacity="0.8"/>
+    <circle cx="310" cy="70" r="0.6" opacity="0.5"/>
+    <circle cx="400" cy="25" r="1.4" opacity="0.95"/>
+    <circle cx="500" cy="60" r="0.8" opacity="0.7"/>
+    <circle cx="585" cy="30" r="1.1" opacity="0.85"/>
+    <circle cx="660" cy="80" r="0.7" opacity="0.6"/>
+    <circle cx="740" cy="40" r="1.0" opacity="0.8"/>
+    <circle cx="170" cy="150" r="0.7" opacity="0.6"/>
+    <circle cx="260" cy="200" r="0.9" opacity="0.7"/>
+    <circle cx="540" cy="180" r="0.8" opacity="0.7"/>
+    <circle cx="680" cy="220" r="1.0" opacity="0.8"/>
+    <circle cx="60" cy="230" r="0.7" opacity="0.5"/>
+  </g>
+
+  <!-- six LSST filter bands (concentric arcs labelled u g r i z y) -->
+  <g fill="none" filter="url(#glow)" opacity="0.8">
+    <path d="M120 250 A 280 240 0 0 1 680 250" stroke="#a96bff" stroke-width="1.4"/>
+    <path d="M150 250 A 250 215 0 0 1 650 250" stroke="#4d7bff" stroke-width="1.4"/>
+    <path d="M180 250 A 220 190 0 0 1 620 250" stroke="#41d0a4" stroke-width="1.4"/>
+    <path d="M210 250 A 190 165 0 0 1 590 250" stroke="#f1c93b" stroke-width="1.4"/>
+    <path d="M240 250 A 160 140 0 0 1 560 250" stroke="#f08a4b" stroke-width="1.4"/>
+    <path d="M270 250 A 130 115 0 0 1 530 250" stroke="#e0466f" stroke-width="1.4"/>
+  </g>
+  <g font-family="'Space Grotesk', sans-serif" font-size="10" fill="#c7d2fe" opacity="0.85">
+    <text x="105" y="247" text-anchor="end">u</text>
+    <text x="135" y="247" text-anchor="end">g</text>
+    <text x="165" y="247" text-anchor="end">r</text>
+    <text x="195" y="247" text-anchor="end">i</text>
+    <text x="225" y="247" text-anchor="end">z</text>
+    <text x="255" y="247" text-anchor="end">y</text>
+  </g>
+
+  <!-- mountain silhouette -->
+  <path d="M0,420 L120,360 L210,395 L330,330 L450,395 L560,345 L700,400 L800,365 L800,500 L0,500 Z"
+        fill="url(#mountain)"/>
+
+  <!-- light beam from telescope -->
+  <path d="M395,310 L320,90 L470,90 Z" fill="url(#beam)" opacity="0.85"/>
+
+  <!-- pier -->
+  <rect x="380" y="320" width="40" height="80" fill="#1a2338" stroke="#3f8cff" stroke-width="1"/>
+  <!-- dome -->
+  <g transform="translate(400 310)">
+    <ellipse cx="0" cy="0" rx="65" ry="60" fill="url(#dome)" stroke="#7cf4ff" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="65" ry="60" fill="none" stroke="#3f8cff" stroke-width="0.5" opacity="0.6"/>
+    <!-- dome slit -->
+    <path d="M-12,-60 Q0,-30 12,-60 L12,0 L-12,0 Z" fill="#0b1020"/>
+    <!-- light rim -->
+    <path d="M-65,0 Q0,-65 65,0" fill="none" stroke="#7cf4ff" stroke-width="1.4" filter="url(#glow)"/>
+  </g>
+  <!-- support struts -->
+  <g stroke="#3f8cff" stroke-width="1" opacity="0.7">
+    <line x1="380" y1="320" x2="370" y2="400"/>
+    <line x1="420" y1="320" x2="430" y2="400"/>
+  </g>
+
+  <!-- sky-survey footprint dots (galaxies being imaged) -->
+  <g fill="#7cf4ff" opacity="0.85">
+    <circle cx="345" cy="180" r="1.6"/>
+    <circle cx="370" cy="160" r="1.2"/>
+    <circle cx="400" cy="140" r="1.8"/>
+    <circle cx="430" cy="160" r="1.3"/>
+    <circle cx="455" cy="180" r="1.6"/>
+    <circle cx="335" cy="220" r="1.0"/>
+    <circle cx="465" cy="220" r="1.1"/>
+  </g>
+
+  <!-- labels -->
+  <g font-family="'Space Grotesk', sans-serif" fill="#c7d2fe">
+    <text x="40" y="40" font-size="14" letter-spacing="3">VERA&#160;C.&#160;RUBIN&#160;OBSERVATORY</text>
+    <text x="40" y="58" font-size="11" opacity="0.6">LSST · 10-year wide-fast-deep optical survey</text>
+    <text x="400" y="445" text-anchor="middle" font-size="10" fill="#8b95b7" letter-spacing="2">CERRO&#160;PACHÓN</text>
+  </g>
+
+  <!-- corner stat block -->
+  <g font-family="'Space Grotesk', sans-serif" font-size="10" fill="#c7d2fe">
+    <text x="600" y="380" letter-spacing="1.4">8.4 m mirror</text>
+    <text x="600" y="395" letter-spacing="1.4">3.2 Gpx camera</text>
+    <text x="600" y="410" letter-spacing="1.4">~20 billion galaxies</text>
+    <text x="600" y="425" letter-spacing="1.4">6 bands · u g r i z y</text>
+  </g>
+</svg>

@@ -42,6 +42,13 @@ layout: compress
 
 </head>
 <body>
+    {% if page.layout == "phd" or page.full_bleed %}
+        <div class="phd-wrapper">
+            <div class="phd">
+            {{ content }}
+            </div>
+        </div>
+    {% else %}
     <div class="wrapper-{% if site.width == "normal" %}normal{% elsif site.width == "large" %}large{% endif %}">
         {% if page.layout == "post" %}
             <div class="post">
@@ -58,5 +65,6 @@ layout: compress
                 </div>
             </div>
     </div>
+    {% endif %}
 </body>
 </html>
