@@ -27,6 +27,22 @@ layout: default
 
 {% include footer.html %}
 
+<!-- MathJax for rendering LaTeX equations inside decrypted drafts -->
+<script>
+window.MathJax = {
+    tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        tags: 'none'
+    },
+    options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
 <script>
 (function () {
     var slug = "{{ page.project_slug }}";
@@ -81,6 +97,10 @@ layout: default
             content.hidden = false;
             form.style.display = 'none';
             window.scrollTo({ top: 0, behavior: 'instant' });
+            /* Typeset any LaTeX math the draft contains */
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([content]).catch(function () { /* ignore */ });
+            }
         } catch (ex) {
             if (ex && ex.message === 'missing') {
                 showError('Encrypted draft not uploaded yet for this project.');
@@ -88,6 +108,44 @@ layout: default
                 showError('Wrong passphrase. Try again.');
             }
         }
+    });
+
+    /* Lightbox: click any figure image (incl. dynamically-injected ones) to enlarge */
+    var lightbox = document.createElement('div');
+    lightbox.className = 'phd-lightbox';
+    lightbox.innerHTML = '<button class="close" aria-label="Close">&times;</button><img alt=""/><figcaption></figcaption>';
+    document.body.appendChild(lightbox);
+    var lbImg = lightbox.querySelector('img');
+    var lbCap = lightbox.querySelector('figcaption');
+    var lbClose = lightbox.querySelector('.close');
+
+    function openLightbox(src, caption, alt) {
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = caption || '';
+        lbCap.style.display = caption ? 'block' : 'none';
+        lightbox.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        document.body.style.overflow = '';
+    }
+
+    /* Event delegation so it catches dynamically-injected <img> too */
+    content.addEventListener('click', function (e) {
+        var t = e.target;
+        if (t && t.tagName === 'IMG') {
+            var fig = t.closest('figure');
+            var cap = fig ? fig.querySelector('figcaption') : null;
+            openLightbox(t.currentSrc || t.src, cap ? cap.textContent.trim() : '', t.alt);
+        }
+    });
+    lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox || e.target === lbClose) closeLightbox();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
     });
 })();
 </script>

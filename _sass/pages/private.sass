@@ -229,3 +229,75 @@ body:has(.private-page)
             color: $priv-accent
             padding: 1px 5px
             border-radius: 4px
+
+        sup, sub
+            font-size: 0.75em
+            line-height: 0
+
+        .meta-block
+            font-size: 1.15rem
+            color: $priv-text-muted
+            line-height: 1.6
+            padding: 14px 18px
+            border-left: 2px solid rgba($priv-accent, 0.4)
+            background: rgba($priv-accent, 0.04)
+            border-radius: 0 8px 8px 0
+
+            .meta-affil
+                display: block
+                margin-top: 6px
+                font-size: 1.05rem
+                opacity: 0.85
+
+        .callout-private
+            margin: 28px 0
+            padding: 18px 22px
+            border-left: 3px solid $priv-accent
+            background: rgba(124, 244, 255, 0.07)
+            border-radius: 0 12px 12px 0
+            font-size: 1.4rem
+            color: $priv-text-strong
+
+            strong
+                color: $priv-accent
+
+        .caption-private
+            margin-top: -10px
+            font-size: 1.2rem
+            color: $priv-text-muted
+            text-align: center
+            font-style: italic
+
+        table.pub-table
+            width: 100%
+            margin: 24px 0
+            border-collapse: collapse
+            font-size: 1.3rem
+            background: rgba(2, 5, 15, 0.55)
+            border-radius: 10px
+            overflow: hidden
+
+            th, td
+                padding: 10px 14px
+                text-align: center
+                border: 1px solid rgba($priv-accent, 0.15)
+
+            thead th
+                background: rgba($priv-accent, 0.10)
+                color: $priv-accent
+                letter-spacing: 0.1em
+                text-transform: uppercase
+                font-size: 1.15rem
+
+            tbody th
+                background: rgba($priv-accent, 0.05)
+                color: $priv-text-strong
+                text-align: left
+                font-weight: 500
+
+        /* MathJax adjustments inside the dark glass panel */
+        mjx-container
+            color: $priv-text-strong !important
+
+        mjx-container[display="true"]
+            margin: 18px 0 !important
