@@ -16,9 +16,12 @@ body:has(.private-page)
 
 .private-page
     color: $priv-text
-    max-width: 900px
+    max-width: 1240px
     margin: 0 auto
-    padding: 120px 24px 80px
+    padding: 120px 32px 80px
+
+    @media #{$mobile}, #{$tablet}
+        padding: 110px 18px 60px
 
     &::before
         content: ""
@@ -26,28 +29,33 @@ body:has(.private-page)
         inset: 0
         z-index: -1
         background: $priv-bg url("/assets/images/phd/hero-web.svg") center / cover no-repeat
-        opacity: 0.55
+        opacity: 0.45
 
     &::after
         content: ""
         position: fixed
         inset: 0
         z-index: -1
-        background: radial-gradient(circle at 50% 0%, rgba(124, 244, 255, 0.10), transparent 55%)
+        background: radial-gradient(ellipse at 50% 30%, rgba(2, 5, 15, 0.55), rgba(2, 5, 15, 0.92) 70%)
+
+    /* Page-header column — kept narrower than the figure area so the title doesn't sprawl */
+    .private-back, .private-eyebrow, .private-title, .private-status, .private-lock, .private-error
+        max-width: 900px
+        margin-left: auto
+        margin-right: auto
 
     .private-back
-        display: inline-block
+        display: block
         font-size: 1.2rem
         letter-spacing: 0.15em
         text-transform: uppercase
         color: $priv-text-muted
-        border-bottom: 1px solid transparent
+        border-bottom: none
         margin-bottom: 40px
-        transition: color 0.2s ease, border-color 0.2s ease
+        transition: color 0.2s ease
 
         &:hover
             color: $priv-accent
-            border-color: rgba($priv-accent, 0.5)
 
     .private-eyebrow
         display: inline-block
@@ -67,6 +75,7 @@ body:has(.private-page)
         color: $priv-text-strong
         font-weight: 700
         letter-spacing: -0.01em
+        text-shadow: 0 2px 18px rgba(2, 5, 15, 0.85)
 
     .private-status
         display: flex
@@ -74,7 +83,8 @@ body:has(.private-page)
         gap: 10px
         font-size: 1.3rem
         color: $priv-text-muted
-        margin: 0 0 40px
+        margin-top: 0
+        margin-bottom: 40px
         line-height: 1.55
 
         i
@@ -152,65 +162,99 @@ body:has(.private-page)
         font-size: 1.2rem
         color: #ff7adf
 
-    // ---- Decrypted content ------------------------------------------------
+    // ---- Decrypted content (no glass panel — sits directly on the cosmic bg)
     .private-content
         margin-top: 50px
-        padding: 40px
-        border-radius: 18px
-        border: 1px solid rgba($priv-accent, 0.18)
-        background: $priv-panel
-        backdrop-filter: blur(14px)
-        box-shadow: 0 30px 80px rgba(2, 5, 15, 0.6)
+        /* Inner reading column for prose. Figures and equations break out wider. */
+        --reading-width: 760px
 
-        @media #{$mobile}, #{$tablet}
-            padding: 28px 22px
+        > p, > ul, > ol, > blockquote, > .callout-private, > .meta-block, > .caption-private
+            max-width: var(--reading-width)
+            margin-left: auto
+            margin-right: auto
 
-        h1, h2, h3, h4
+        > h1, > h2, > h3, > h4
+            max-width: var(--reading-width)
+            margin-left: auto
+            margin-right: auto
             color: $priv-text-strong
-            margin-top: 32px
+            margin-top: 48px
+            margin-bottom: 14px
             line-height: 1.25
+            text-shadow: 0 1px 12px rgba(2, 5, 15, 0.9)
 
-        h2
-            font-size: 2.2rem
-            padding-bottom: 8px
-            border-bottom: 1px solid rgba($priv-accent, 0.2)
+        > h2
+            font-size: 2.3rem
+            font-weight: 600
+            letter-spacing: -0.005em
 
-        h3
+        > h3
             font-size: 1.7rem
             color: $priv-accent
+            text-transform: none
+            letter-spacing: 0.01em
+
+        .lede
+            font-size: 1.7rem
+            line-height: 1.55
+            color: $priv-text-strong
+            margin-bottom: 32px
 
         p, li
             font-size: 1.45rem
-            line-height: 1.7
+            line-height: 1.78
             color: $priv-text
+            text-shadow: 0 1px 8px rgba(2, 5, 15, 0.8)
+
+        em
+            color: $priv-text-strong
+            font-style: italic
+
+        strong
+            color: $priv-text-strong
 
         a
             color: $priv-accent
+            border-bottom: 1px solid rgba($priv-accent, 0.35)
+            transition: color 0.2s ease, border-color 0.2s ease, text-shadow 0.2s ease
+
+            &:hover
+                color: $priv-text-strong
+                border-bottom-color: $priv-accent
+                text-shadow: 0 0 12px rgba($priv-accent, 0.6)
 
         img
             max-width: 100%
             height: auto
             display: block
-            margin: 28px auto
+            margin: 0 auto
             border-radius: 12px
-            border: 1px solid rgba($priv-accent, 0.25)
-            background: $priv-bg
+            border: 1px solid rgba($priv-accent, 0.20)
+            background: rgba(2, 5, 15, 0.4)
             cursor: zoom-in
+            box-shadow: 0 20px 50px rgba(2, 5, 15, 0.55)
 
         figure
-            margin: 32px 0
+            margin: 44px auto
+            max-width: 100%
 
             figcaption
-                margin-top: 10px
+                margin: 14px auto 0
+                max-width: var(--reading-width)
                 text-align: center
                 font-size: 1.2rem
+                line-height: 1.55
                 color: $priv-text-muted
+                font-style: italic
+
+            &.wide
+                max-width: 1100px
 
         blockquote
-            margin: 24px 0
-            padding: 16px 22px
+            margin: 28px auto
+            padding: 18px 24px
             border-left: 3px solid $priv-accent
-            background: rgba($priv-accent, 0.05)
+            background: rgba(124, 244, 255, 0.05)
             border-radius: 0 12px 12px 0
             font-size: 1.4rem
             color: $priv-text
@@ -223,6 +267,9 @@ body:has(.private-page)
             font-size: 1.2rem
             overflow-x: auto
             border: 1px solid rgba($priv-accent, 0.15)
+            max-width: var(--reading-width)
+            margin-left: auto
+            margin-right: auto
 
         code
             background: rgba(2, 5, 15, 0.6)
@@ -243,61 +290,25 @@ body:has(.private-page)
             background: rgba($priv-accent, 0.04)
             border-radius: 0 8px 8px 0
 
-            .meta-affil
-                display: block
-                margin-top: 6px
-                font-size: 1.05rem
-                opacity: 0.85
-
         .callout-private
-            margin: 28px 0
-            padding: 18px 22px
+            margin: 32px auto
+            padding: 20px 26px
+            max-width: var(--reading-width)
             border-left: 3px solid $priv-accent
-            background: rgba(124, 244, 255, 0.07)
+            background: rgba(124, 244, 255, 0.06)
             border-radius: 0 12px 12px 0
             font-size: 1.4rem
+            line-height: 1.6
             color: $priv-text-strong
 
             strong
                 color: $priv-accent
 
-        .caption-private
-            margin-top: -10px
-            font-size: 1.2rem
-            color: $priv-text-muted
-            text-align: center
-            font-style: italic
-
-        table.pub-table
-            width: 100%
-            margin: 24px 0
-            border-collapse: collapse
-            font-size: 1.3rem
-            background: rgba(2, 5, 15, 0.55)
-            border-radius: 10px
-            overflow: hidden
-
-            th, td
-                padding: 10px 14px
-                text-align: center
-                border: 1px solid rgba($priv-accent, 0.15)
-
-            thead th
-                background: rgba($priv-accent, 0.10)
-                color: $priv-accent
-                letter-spacing: 0.1em
-                text-transform: uppercase
-                font-size: 1.15rem
-
-            tbody th
-                background: rgba($priv-accent, 0.05)
-                color: $priv-text-strong
-                text-align: left
-                font-weight: 500
-
-        /* MathJax adjustments inside the dark glass panel */
+        /* MathJax — give display equations breathing room and keep them inside the reading column */
         mjx-container
             color: $priv-text-strong !important
 
         mjx-container[display="true"]
-            margin: 18px 0 !important
+            margin: 22px auto !important
+            max-width: var(--reading-width)
+            text-shadow: 0 0 10px rgba(2, 5, 15, 0.6)
