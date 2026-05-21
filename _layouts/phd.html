@@ -66,5 +66,42 @@ layout: default
             f.style.transform = 'translateY(' + (delta * -16).toFixed(1) + 'px)';
         });
     }, { passive: true });
+
+    /* Image lightbox: click any figure image to enlarge */
+    var lightbox = document.createElement('div');
+    lightbox.className = 'phd-lightbox';
+    lightbox.innerHTML = '<button class="close" aria-label="Close">&times;</button><img alt=""/><figcaption></figcaption>';
+    document.body.appendChild(lightbox);
+    var lbImg = lightbox.querySelector('img');
+    var lbCap = lightbox.querySelector('figcaption');
+    var lbClose = lightbox.querySelector('.close');
+
+    function openLightbox(src, caption, alt) {
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = caption || '';
+        lbCap.style.display = caption ? 'block' : 'none';
+        lightbox.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.section-figure img').forEach(function (img) {
+        img.addEventListener('click', function () {
+            var fig = img.closest('figure');
+            var cap = fig ? fig.querySelector('figcaption') : null;
+            openLightbox(img.currentSrc || img.src, cap ? cap.textContent.trim() : '', img.alt);
+        });
+    });
+
+    lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox || e.target === lbClose) closeLightbox();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+    });
 })();
 </script>

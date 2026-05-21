@@ -398,6 +398,11 @@ $phd-panel-solid: #0b1020
                 span
                     opacity: 1
 
+    // -------- Lightbox-able figures --------------------------------------
+    .section-figure
+        img, svg
+            cursor: zoom-in
+
     // -------- Closing CTA -------------------------------------------------
     .phd-cta
         text-align: center
@@ -438,3 +443,68 @@ $phd-panel-solid: #0b1020
                     background: rgba($phd-accent, 0.18)
                     box-shadow: 0 0 18px rgba($phd-accent, 0.4)
                     color: $phd-text-strong
+
+
+// ============================================================================
+// Fullscreen image lightbox (root-level so it can sit on top of everything).
+// Toggled by JS in _layouts/phd.html when a .section-figure image is clicked.
+// ============================================================================
+.phd-lightbox
+    position: fixed
+    inset: 0
+    z-index: 9999
+    background: rgba(2, 5, 15, 0.92)
+    backdrop-filter: blur(8px)
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    padding: 40px
+    opacity: 0
+    pointer-events: none
+    transition: opacity 0.25s ease
+    cursor: zoom-out
+
+    &.is-open
+        opacity: 1
+        pointer-events: auto
+
+    img
+        max-width: 95vw
+        max-height: 82vh
+        width: auto
+        height: auto
+        border-radius: 10px
+        border: 1px solid rgba(124, 244, 255, 0.35)
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 30px rgba(124, 244, 255, 0.15)
+        background: #02050f
+
+    figcaption
+        margin-top: 16px
+        max-width: 90vw
+        color: #c7d2fe
+        font-size: 1.3rem
+        line-height: 1.5
+        text-align: center
+        opacity: 0.85
+
+    .close
+        position: absolute
+        top: 18px
+        right: 22px
+        width: 44px
+        height: 44px
+        border-radius: 50%
+        border: 1px solid rgba(124, 244, 255, 0.4)
+        background: rgba(11, 16, 32, 0.6)
+        color: #c7d2fe
+        font-size: 1.8rem
+        line-height: 42px
+        text-align: center
+        cursor: pointer
+        transition: all 0.2s ease
+
+        &:hover
+            border-color: rgba(124, 244, 255, 0.8)
+            color: #f8fbff
+            box-shadow: 0 0 16px rgba(124, 244, 255, 0.4)
