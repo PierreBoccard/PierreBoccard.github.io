@@ -141,7 +141,23 @@
         if (!svg) return null;
         var foreground = svg.querySelector('.foreground');
 
-        /* ---- Light cone (drawn FIRST so it sits behind everything else) - */
+        /* ---- Static patch grid -- 10 faint dashed outlines so the user
+                can literally count "10 patches" on the sky --------------- */
+        var patchGridG = svgEl('g', { 'class': 'patch-grid' });
+        for (var pi = 0; pi < N_PATCHES; pi++) {
+            var pbb = patchBBox(pi);
+            patchGridG.appendChild(svgEl('rect', {
+                x: (pbb.x + 1).toFixed(1),
+                y: (pbb.y + 1).toFixed(1),
+                width:  (pbb.w - 2).toFixed(1),
+                height: (pbb.h - 2).toFixed(1),
+                rx: 3,
+                ry: 3
+            }));
+        }
+        svg.insertBefore(patchGridG, foreground);
+
+        /* ---- Light cone (drawn FIRST among dynamic layers) ------------ */
         var cone = svgEl('path', {
             'class': 'lightcone',
             d: 'M0,0 L0,0 L0,0 Z',
