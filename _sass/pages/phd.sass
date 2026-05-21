@@ -1,5 +1,5 @@
 // ===========================================================================
-// Dedicated PhD landing page — futuristic dynamic layout
+// Dedicated PhD landing page -- futuristic dynamic layout
 // Uses a fixed dark palette regardless of system theme so the cosmic-web
 // background and glass panels read correctly in both light and dark modes.
 // ===========================================================================
@@ -36,11 +36,11 @@ $phd-panel-solid: #0b1020
         background: linear-gradient(180deg, rgba(2, 5, 15, 0.55) 0%, rgba(2, 5, 15, 0.75) 60%, rgba(2, 5, 15, 0.90) 100%), radial-gradient(circle at 50% 0%, rgba(124, 244, 255, 0.08), transparent 55%)
         pointer-events: none
 
-@keyframes phd-bg-drift
-    0%
-        transform: scale(1.0) translate(0, 0)
-    100%
-        transform: scale(1.06) translate(-1.5%, -1%)
+    @keyframes phd-bg-drift
+        0%
+            transform: scale(1.0) translate(0, 0)
+        100%
+            transform: scale(1.06) translate(-1.5%, -1%)
 
     // -------- HERO --------------------------------------------------------
     .phd-hero
@@ -140,7 +140,7 @@ $phd-panel-solid: #0b1020
             transform: translateY(10px)
             opacity: 0.2
 
-    // -------- SECTIONS — fluid layout, no glass rectangles ----------------
+    // -------- SECTIONS -- fluid layout, no glass rectangles ----------------
     .phd-section
         position: relative
         margin: 100px auto
@@ -280,7 +280,7 @@ $phd-panel-solid: #0b1020
                     background: $phd-accent
                     box-shadow: 0 0 10px rgba($phd-accent, 0.7)
 
-    // ---- Section divider — subtle horizontal rule between sections -------
+    // ---- Section divider -- subtle horizontal rule between sections -------
     .phd-section + .phd-section
         margin-top: 80px
 
@@ -293,7 +293,7 @@ $phd-panel-solid: #0b1020
             height: 1px
             background: linear-gradient(90deg, transparent 0%, rgba($phd-accent, 0.45) 50%, transparent 100%)
 
-    // -------- SUB-RESULT CARDS — clean, glassy on hover only --------------
+    // -------- SUB-RESULT CARDS -- clean, glassy on hover only --------------
     .results-grid
         display: grid
         grid-template-columns: repeat(2, 1fr)
@@ -373,7 +373,7 @@ $phd-panel-solid: #0b1020
                 display: inline-block
                 margin-bottom: 8px
 
-        // Glow trail on hover — a faint expanding ring from the letter
+        // Glow trail on hover -- a faint expanding ring from the letter
         &::before
             content: ""
             position: absolute
