@@ -184,10 +184,12 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
      Sibling of (not inside) the .phd-section above, because that wrapper
      uses a transform-based .reveal animation that would break the
      descendants' position: sticky in some browsers.
-     6 sky patches * 3 passes. JS in assets/js/rubin-scrolly.js drives
+     6 sky patches * 5 passes. JS in assets/js/rubin-scrolly.js drives
      the scene from the scroll position; the SVG below is the static
-     scaffolding (sky frame, patch grid, telescope, ground) and the
-     galaxies / footprint / scan beam are appended at runtime.
+     scaffolding (sky outline, telescope, ground) and the galaxies +
+     octagonal footprint + light cone are appended at runtime.
+     Sky region sits upper-left, telescope lower-right, giving the scene
+     a strong diagonal perspective rather than a flat top/bottom split.
      ===================================================================== -->
 <section class="scrolly-rubin" id="rubinScrolly" aria-label="Animated illustration of the LSST survey strategy">
     <div class="scrolly-pin">
@@ -195,41 +197,80 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
 
             <svg class="rubin-scene" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet">
 
-                <!-- Sky frame + patch grid (static scaffolding) -->
-                <rect class="sky-frame" x="60" y="50" width="1080" height="400" rx="6"/>
-                <g class="patch-grid">
-                    <line x1="420" y1="50" x2="420" y2="450"/>
-                    <line x1="780" y1="50" x2="780" y2="450"/>
-                    <line x1="60"  y1="250" x2="1140" y2="250"/>
-                </g>
+                <defs>
+                    <!-- Light-cone gradient: bright at the telescope, fading into the patch -->
+                    <linearGradient id="lightConeGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%"   stop-color="#7cf4ff" stop-opacity="0.55"/>
+                        <stop offset="55%"  stop-color="#7cf4ff" stop-opacity="0.18"/>
+                        <stop offset="100%" stop-color="#7cf4ff" stop-opacity="0.02"/>
+                    </linearGradient>
+                    <!-- Telescope dome gradient -->
+                    <linearGradient id="domeGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%"   stop-color="#1a2540"/>
+                        <stop offset="100%" stop-color="#070b1d"/>
+                    </linearGradient>
+                </defs>
 
-                <text class="label-faint" x="78"   y="35">SOUTHERN&#160;SKY  *  6&#160;PATCHES  *  3&#160;PASSES</text>
-                <text class="label-accent" x="1118" y="35" text-anchor="end">VERA&#160;C.&#160;RUBIN&#160;OBSERVATORY  *  LSST</text>
+                <!-- Sky region label (no rectangle behind it) -->
+                <text class="label-faint" x="40"   y="32">SOUTHERN&#160;SKY  *  6&#160;PATCHES  *  5&#160;PASSES</text>
 
                 <!--
-                  JS inserts here, before .foreground so galaxies sit behind the dome:
-                    <g class="galaxies"> ...circles... </g>
-                    <rect class="footprint"/>
-                    <path class="scan-beam"/>
+                  JS will insert, before .foreground:
+                    <path class="lightcone"/>
+                    <g    class="galaxies">...</g>
+                    <g    class="footprint">octagon + grid + outline</g>
+                  Telescope is in .foreground so it draws on top of the cone.
                 -->
                 <g class="foreground">
 
-                    <!-- Ground / horizon silhouette -->
-                    <path class="horizon" d="M0,520 L120,500 L260,540 L380,495 L520,540 L600,470 L700,535 L820,505 L960,545 L1100,510 L1200,535 L1200,720 L0,720 Z"/>
+                    <!-- Ground silhouette -- rises on the right where the telescope sits -->
+                    <path class="horizon" d="M0,635 L120,640 L260,620 L380,628 L520,610 L660,608 L800,575 L920,540 L1010,520 L1110,538 L1200,560 L1200,720 L0,720 Z"/>
 
-                    <!-- Pier (telescope mount) -->
-                    <rect class="pier" x="580" y="540" width="40" height="80"/>
+                    <!-- ============================================================
+                         Rubin-style telescope at the lower right
+                         ============================================================ -->
+                    <g class="telescope" transform="translate(1020 555)">
 
-                    <!-- Dome on Cerro Pachon -- telescope in the 1st plan -->
-                    <g transform="translate(600 540)">
-                        <ellipse class="dome" cx="0" cy="0" rx="68" ry="58"/>
-                        <path class="dome-slit" d="M-12,-58 Q0,-20 12,-58 L12,5 L-12,5 Z"/>
-                        <path class="dome-rim"  d="M-68,0 Q0,-68 68,0"/>
-                        <line x1="-20" y1="58" x2="-30" y2="78" stroke="rgba(124,244,255,0.45)" stroke-width="1.2"/>
-                        <line x1="20"  y1="58" x2="30"  y2="78" stroke="rgba(124,244,255,0.45)" stroke-width="1.2"/>
+                        <!-- Pier (cylindrical base) -->
+                        <rect class="pier" x="-35" y="40" width="70" height="125" rx="2"/>
+                        <rect class="pier-band" x="-35" y="55" width="70" height="4"/>
+                        <rect class="pier-band" x="-35" y="135" width="70" height="4"/>
+
+                        <!-- Calotte dome (oblate, Rubin-style) -->
+                        <ellipse class="dome" cx="0" cy="-5" rx="100" ry="55" fill="url(#domeGrad)"/>
+
+                        <!-- Horizontal louvres on the dome -->
+                        <g class="dome-louvre">
+                            <line x1="-90" y1="-25" x2="90" y2="-25"/>
+                            <line x1="-96" y1="-12" x2="96" y2="-12"/>
+                            <line x1="-100" y1="2"  x2="100" y2="2"/>
+                            <line x1="-96" y1="16" x2="96" y2="16"/>
+                            <line x1="-85" y1="30" x2="85" y2="30"/>
+                        </g>
+
+                        <!-- Vertical slit opening (with the tube sticking out) -->
+                        <path class="dome-slit"
+                              d="M-13,-55 Q -13,-40 -10,-25 L-10,5 L10,5 L10,-25 Q 13,-40 13,-55 Z"/>
+
+                        <!-- Telescope tube emerging from the slit, tilted toward the upper-left patch area -->
+                        <g transform="rotate(-32 0 0)">
+                            <!-- Tube body -->
+                            <rect class="tube" x="-13" y="-130" width="26" height="120" rx="3"/>
+                            <!-- Aperture / mirror cell visible at the top -->
+                            <ellipse class="tube-aperture" cx="0" cy="-130" rx="13" ry="4"/>
+                            <!-- Secondary mirror / spider -->
+                            <line class="tube-spider" x1="-8" y1="-125" x2="8"  y2="-125"/>
+                            <line class="tube-spider" x1="0"  y1="-132" x2="0"  y2="-118"/>
+                            <!-- Mount yoke at the bottom -->
+                            <rect class="tube" x="-18" y="-15" width="36" height="22" rx="3"/>
+                        </g>
+
+                        <!-- Glowing rim arc at the top of the dome (suggests the slit is open and starlight is hitting the secondary) -->
+                        <path class="dome-rim" d="M-100,-5 Q 0,-65 100,-5"/>
+
                     </g>
 
-                    <text class="label-faint" x="600" y="660" text-anchor="middle">CERRO&#160;PACHON  *  2680&#160;m</text>
+                    <text class="label-faint" x="1020" y="690" text-anchor="middle">CERRO&#160;PACHON  *  2680&#160;m</text>
 
                 </g>
 
