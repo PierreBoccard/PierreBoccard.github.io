@@ -34,9 +34,8 @@
     /* Geometry                                                              */
     /* ===================================================================== */
 
-    /* Smaller sky region, pushed upper-left, so the cone has room to be long
-       and the sky reads as "further away" from the telescope. */
-    var SKY = { x: 60, y: 80, w: 720, h: 260 };
+    /* Sky region, upper-left of the scene. */
+    var SKY = { x: 50, y: 70, w: 860, h: 320 };
     var PATCH_COLS = 5;
     var PATCH_ROWS = 2;
     var PATCH_W = SKY.w / PATCH_COLS;
@@ -44,7 +43,11 @@
     var N_PATCHES = PATCH_COLS * PATCH_ROWS;     /* 10 */
     var N_PASSES = 5;
     var TOTAL_VISITS = N_PATCHES * N_PASSES;     /* 50 */
-    var GALAXIES_PER_LAYER = 14;                  /* per patch per pass */
+    var GALAXIES_PER_LAYER = 32;                  /* per patch per pass */
+    /* Galaxies for each patch are sampled from a region slightly LARGER than
+       the patch bbox itself, so neighbouring patches overlap and the sky
+       reads as a continuous field with no empty gaps at patch boundaries. */
+    var PATCH_GAL_OVERLAP = 0.22;                /* fraction of patch size */
 
     /* Telescope apex (the LIGHT cone is anchored here) */
     var TELESCOPE = { x: 1000, y: 540 };
@@ -141,22 +144,6 @@
         if (!svg) return null;
         var foreground = svg.querySelector('.foreground');
 
-        /* ---- Static patch grid -- 10 faint dashed outlines so the user
-                can literally count "10 patches" on the sky --------------- */
-        var patchGridG = svgEl('g', { 'class': 'patch-grid' });
-        for (var pi = 0; pi < N_PATCHES; pi++) {
-            var pbb = patchBBox(pi);
-            patchGridG.appendChild(svgEl('rect', {
-                x: (pbb.x + 1).toFixed(1),
-                y: (pbb.y + 1).toFixed(1),
-                width:  (pbb.w - 2).toFixed(1),
-                height: (pbb.h - 2).toFixed(1),
-                rx: 3,
-                ry: 3
-            }));
-        }
-        svg.insertBefore(patchGridG, foreground);
-
         /* ---- Light cone (drawn FIRST among dynamic layers) ------------ */
         var cone = svgEl('path', {
             'class': 'lightcone',
@@ -171,17 +158,28 @@
 
         var rng = mulberry32(20260521);
         var byPatchAndPass = [];
+        /* Galaxy sampling region per patch: enlarged by PATCH_GAL_OVERLAP on
+           each side, then clipped to the SKY bbox so we don't spill into the
+           foreground / outside the sky. Neighbouring patches' galaxies then
+           overlap in the boundary region. */
+        var dx = PATCH_W * PATCH_GAL_OVERLAP;
+        var dy = PATCH_H * PATCH_GAL_OVERLAP;
         for (var p = 0; p < N_PATCHES; p++) {
             byPatchAndPass[p] = [];
             var bb = patchBBox(p);
+            var sx0 = Math.max(SKY.x, bb.x - dx);
+            var sy0 = Math.max(SKY.y, bb.y - dy);
+            var sx1 = Math.min(SKY.x + SKY.w, bb.x + bb.w + dx);
+            var sy1 = Math.min(SKY.y + SKY.h, bb.y + bb.h + dy);
+            var sW = sx1 - sx0;
+            var sH = sy1 - sy0;
             for (var pass = 0; pass < N_PASSES; pass++) {
                 var arr = [];
                 for (var i = 0; i < GALAXIES_PER_LAYER; i++) {
-                    var pad = 10;
-                    var gx = bb.x + pad + rng() * (bb.w - 2 * pad);
-                    var gy = bb.y + pad + rng() * (bb.h - 2 * pad);
+                    var gx = sx0 + rng() * sW;
+                    var gy = sy0 + rng() * sH;
                     /* Earlier passes have larger, brighter galaxies */
-                    var r = 1.0 + rng() * (pass <= 1 ? 1.5 : (pass <= 2 ? 1.1 : 0.8));
+                    var r = 1.0 + rng() * (pass <= 1 ? 1.6 : (pass <= 2 ? 1.2 : 0.9));
                     var c = svgEl('circle', {
                         cx: gx.toFixed(1),
                         cy: gy.toFixed(1),
