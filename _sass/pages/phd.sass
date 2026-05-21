@@ -210,32 +210,31 @@ $phd-panel-solid: #0b1020
 
         .section-figure
             position: relative
-            border-radius: 16px
-            overflow: hidden
-            border: 1px solid rgba($phd-accent, 0.18)
-            background: rgba(2, 5, 15, 0.55)
-            box-shadow: 0 30px 70px rgba(2, 5, 15, 0.7), 0 0 30px rgba(124, 244, 255, 0.08)
-            transition: transform 0.6s cubic-bezier(.16,1,.3,1), box-shadow 0.6s ease
 
             img, svg
                 width: 100%
                 height: auto
                 display: block
                 cursor: zoom-in
+                border-radius: 16px
+                border: 1px solid rgba($phd-accent, 0.18)
+                background: rgba(2, 5, 15, 0.55)
+                box-shadow: 0 30px 70px rgba(2, 5, 15, 0.7), 0 0 30px rgba(124, 244, 255, 0.08)
+                transition: transform 0.6s cubic-bezier(.16,1,.3,1), box-shadow 0.6s ease
 
             figcaption
-                position: static
-                top: auto
-                margin: 0
-                padding: 14px 18px
+                margin: 24px auto 0
+                padding: 0 4px
                 font-size: 1.15rem
                 line-height: 1.55
-                text-align: left
+                text-align: center
                 color: $phd-text-muted
-                background: rgba(2, 5, 15, 0.88)
-                border-top: 1px solid rgba($phd-accent, 0.18)
+                background: transparent
+                border-top: none
+                max-width: 92%
+                font-style: italic
 
-        &:hover .section-figure
+        &:hover .section-figure img, &:hover .section-figure svg
             transform: translateY(-4px)
             box-shadow: 0 36px 80px rgba(2, 5, 15, 0.8), 0 0 36px rgba(124, 244, 255, 0.22)
 

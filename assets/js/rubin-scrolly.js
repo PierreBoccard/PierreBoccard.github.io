@@ -49,6 +49,26 @@
        reads as a continuous field with no empty gaps at patch boundaries. */
     var PATCH_GAL_OVERLAP = 0.22;                /* fraction of patch size */
 
+    /* Shell curvature -- the sky is bowed so it looks like the inner surface
+       of a dome:
+         * horizontal bend (rows arc downward at the edges)
+         * vertical squeeze (columns get a hair smaller toward the edges)
+       Implemented as a simple parametric warp applied to every (x, y) inside
+       the sky region: galaxy positions, patch centres, footprint position. */
+    var SHELL_BEND_Y = 36;   /* px the rows arc downward at the very edges */
+    var SHELL_SQUEEZE_X = 0.06; /* fractional horizontal compression at edges */
+
+    function shellWarp(x, y) {
+        /* u: horizontal position normalised to [-1, 1] across the sky */
+        var u = (x - (SKY.x + SKY.w / 2)) / (SKY.w / 2);
+        /* gentle quadratic bend downward toward the edges */
+        var dy = SHELL_BEND_Y * u * u;
+        /* slight horizontal compression toward the edges (sin-warp) */
+        var ux = Math.sin(u * 1.05) / Math.sin(1.05);
+        var x2 = (SKY.x + SKY.w / 2) + ux * (SKY.w / 2) * (1 - SHELL_SQUEEZE_X * u * u);
+        return [x2, y + dy];
+    }
+
     /* Telescope apex (the LIGHT cone is anchored here) */
     var TELESCOPE = { x: 1000, y: 540 };
 
@@ -159,18 +179,18 @@
         var rng = mulberry32(20260521);
         var byPatchAndPass = [];
         /* Galaxy sampling region per patch: enlarged by PATCH_GAL_OVERLAP on
-           each side, then clipped to the SKY bbox so we don't spill into the
-           foreground / outside the sky. Neighbouring patches' galaxies then
-           overlap in the boundary region. */
-        var dx = PATCH_W * PATCH_GAL_OVERLAP;
-        var dy = PATCH_H * PATCH_GAL_OVERLAP;
+           each side, then clipped to the SKY bbox. After sampling we apply
+           the shell warp so the field of galaxies looks like it lies on a
+           curved dome. */
+        var dxOv = PATCH_W * PATCH_GAL_OVERLAP;
+        var dyOv = PATCH_H * PATCH_GAL_OVERLAP;
         for (var p = 0; p < N_PATCHES; p++) {
             byPatchAndPass[p] = [];
             var bb = patchBBox(p);
-            var sx0 = Math.max(SKY.x, bb.x - dx);
-            var sy0 = Math.max(SKY.y, bb.y - dy);
-            var sx1 = Math.min(SKY.x + SKY.w, bb.x + bb.w + dx);
-            var sy1 = Math.min(SKY.y + SKY.h, bb.y + bb.h + dy);
+            var sx0 = Math.max(SKY.x, bb.x - dxOv);
+            var sy0 = Math.max(SKY.y, bb.y - dyOv);
+            var sx1 = Math.min(SKY.x + SKY.w, bb.x + bb.w + dxOv);
+            var sy1 = Math.min(SKY.y + SKY.h, bb.y + bb.h + dyOv);
             var sW = sx1 - sx0;
             var sH = sy1 - sy0;
             for (var pass = 0; pass < N_PASSES; pass++) {
@@ -178,6 +198,8 @@
                 for (var i = 0; i < GALAXIES_PER_LAYER; i++) {
                     var gx = sx0 + rng() * sW;
                     var gy = sy0 + rng() * sH;
+                    var w = shellWarp(gx, gy);
+                    gx = w[0]; gy = w[1];
                     /* Earlier passes have larger, brighter galaxies */
                     var r = 1.0 + rng() * (pass <= 1 ? 1.6 : (pass <= 2 ? 1.2 : 0.9));
                     var c = svgEl('circle', {
@@ -268,8 +290,12 @@
             }
         }
 
-        /* ---- Footprint position (absolute coords) ---------------- */
+        /* ---- Footprint position (absolute coords, shell-warped) ----- */
         var bb = patchBBox(currentPatch);
+        /* Shell warp the patch centre so the footprint sits on the curved
+           dome along with the galaxies underneath. */
+        var w = shellWarp(bb.cx, bb.cy);
+        bb = { x: bb.x, y: bb.y, w: bb.w, h: bb.h, cx: w[0], cy: w[1] };
         var settle = 1 - clamp(withinT * 3, 0, 1);    /* 1 at start, 0 after a third */
         var inflate = 0.08 * settle;
         var poly = octagonPoints(bb, inflate);
