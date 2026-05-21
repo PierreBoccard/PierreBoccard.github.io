@@ -1,5 +1,5 @@
 /*
- * Rubin LSST scroll-pinned animation (v2)
+ * Rubin LSST scroll-pinned animation (v3)
  * -----------------------------------------------------------------------------
  * Scrolling through a tall outer wrapper drives a 0->1 progress value that
  * plays a multi-pass survey animation in a sticky scene:
@@ -7,16 +7,22 @@
  *   * 6 sky patches in a 3 x 2 grid, upper-left of the scene
  *   * 5 full passes across all 6 patches  ->  30 visits total
  *   * Each visit reveals one more layer of galaxies in that patch
- *   * An OCTAGONAL camera footprint (chamfered square) hops between patches
- *     with a CCD-grid hatch pattern inside
- *   * A triangular LIGHT CONE drawn from the telescope apex (lower-right)
- *     to the current patch, filled with a linear gradient
+ *   * An OCTAGONAL camera footprint (chamfered square) hops between patches,
+ *     with a CCD-grid hatch inside (lines clipped to the octagon)
+ *   * A triangular LIGHT CONE from the telescope apex (lower-right) to the
+ *     current patch, filled with a linear gradient
  *
- * The scene is positioned with perspective: sky upper-left, telescope
- * lower-right, so the cone is naturally a long diagonal beam.
+ * v3 design notes
+ *   * The footprint is rebuilt in ABSOLUTE user-space coords on every frame.
+ *     CSS transforms on SVG <g> were unreliable across browsers; computing
+ *     points directly is bulletproof.
+ *   * The CCD-grid lines are clipped by a <clipPath> whose polygon is
+ *     updated to the current octagon on every frame, so the hatch sits
+ *     cleanly inside the chamfered shape.
+ *   * The lightcone gradient stops are re-anchored along the cone axis on
+ *     every frame so bright -> faint always points telescope -> patch.
  *
- * No external libraries; block-comment style everywhere so the Jekyll
- * compress.html layout cannot kill anything.
+ * Block-comment style throughout to survive the Jekyll compress.html layout.
  */
 
 (function () {
@@ -28,8 +34,9 @@
     /* Geometry                                                              */
     /* ===================================================================== */
 
-    /* Sky area: upper-left of the 1200 x 720 viewBox */
-    var SKY = { x: 50, y: 70, w: 880, h: 360 };
+    /* Smaller sky region, pushed upper-left, so the cone has room to be long
+       and the sky reads as "further away" from the telescope. */
+    var SKY = { x: 100, y: 80, w: 600, h: 260 };
     var PATCH_COLS = 3;
     var PATCH_ROWS = 2;
     var PATCH_W = SKY.w / PATCH_COLS;
@@ -39,11 +46,17 @@
     var TOTAL_VISITS = N_PATCHES * N_PASSES;     /* 30 */
     var GALAXIES_PER_LAYER = 22;                  /* per patch per pass */
 
-    /* Telescope apex (where the light cone is anchored) - lower right */
-    var TELESCOPE = { x: 1020, y: 480 };
+    /* Telescope apex (the LIGHT cone is anchored here) */
+    var TELESCOPE = { x: 1000, y: 540 };
 
     /* Per-pass galaxy colour, 5 entries */
     var PASS_COLOURS = ['#7cf4ff', '#a96bff', '#41d0a4', '#ff7adf', '#f8fbff'];
+
+    /* Chamfer fraction for the octagon (0..0.5) */
+    var CHAMFER_FRAC = 0.28;
+
+    /* Number of grid lines per axis inside the footprint */
+    var GRID_STEPS = 4;
 
     /* Snake order so the camera moves continuously between rows */
     function patchOrder() {
@@ -71,26 +84,37 @@
         };
     }
 
-    /* ===================================================================== */
-    /* Octagonal footprint                                                   */
-    /* ===================================================================== */
+    /* Octagon vertices in absolute coords for a patch. inflate slightly
+       oversizes the shape and is animated down to 0 during withinT to give
+       the "settle" pulse on each visit. */
+    function octagonPoints(bb, inflate) {
+        var hw = (bb.w / 2) * (1 + inflate);
+        var hh = (bb.h / 2) * (1 + inflate);
+        var ch = CHAMFER_FRAC * Math.min(hw, hh);
+        var cx = bb.cx, cy = bb.cy;
+        return [
+            [cx - hw + ch, cy - hh],
+            [cx + hw - ch, cy - hh],
+            [cx + hw,      cy - hh + ch],
+            [cx + hw,      cy + hh - ch],
+            [cx + hw - ch, cy + hh],
+            [cx - hw + ch, cy + hh],
+            [cx - hw,      cy + hh - ch],
+            [cx - hw,      cy - hh + ch]
+        ];
+    }
 
-    /* Unit octagon points (a square with chamfered corners, in [-1, 1] coords) */
-    var CHAMFER = 0.30;
-    var OCTAGON_POINTS = [
-        [-1 + CHAMFER, -1], [ 1 - CHAMFER, -1],
-        [ 1, -1 + CHAMFER], [ 1,  1 - CHAMFER],
-        [ 1 - CHAMFER,  1], [-1 + CHAMFER,  1],
-        [-1,  1 - CHAMFER], [-1, -1 + CHAMFER]
-    ];
-    function octagonPointsAttr() {
-        return OCTAGON_POINTS.map(function (p) {
-            return p[0].toFixed(4) + ',' + p[1].toFixed(4);
-        }).join(' ');
+    function pointsToStr(pts) {
+        var out = '';
+        for (var i = 0; i < pts.length; i++) {
+            if (i > 0) out += ' ';
+            out += pts[i][0].toFixed(2) + ',' + pts[i][1].toFixed(2);
+        }
+        return out;
     }
 
     /* ===================================================================== */
-    /* Utility                                                               */
+    /* Utilities                                                             */
     /* ===================================================================== */
 
     function mulberry32(seed) {
@@ -117,11 +141,15 @@
         if (!svg) return null;
         var foreground = svg.querySelector('.foreground');
 
-        /* ---- Light cone path (drawn first so it sits behind galaxies) --- */
-        var cone = svgEl('path', { 'class': 'lightcone', d: '', fill: 'url(#lightConeGrad)' });
+        /* ---- Light cone (drawn FIRST so it sits behind everything else) - */
+        var cone = svgEl('path', {
+            'class': 'lightcone',
+            d: 'M0,0 L0,0 L0,0 Z',
+            fill: 'url(#lightConeGrad)'
+        });
         svg.insertBefore(cone, foreground);
 
-        /* ---- Galaxy layer ---------------------------------------------- */
+        /* ---- Galaxy layer --------------------------------------------- */
         var galaxiesG = svgEl('g', { 'class': 'galaxies' });
         svg.insertBefore(galaxiesG, foreground);
 
@@ -133,11 +161,11 @@
             for (var pass = 0; pass < N_PASSES; pass++) {
                 var arr = [];
                 for (var i = 0; i < GALAXIES_PER_LAYER; i++) {
-                    var pad = 12;
+                    var pad = 10;
                     var gx = bb.x + pad + rng() * (bb.w - 2 * pad);
                     var gy = bb.y + pad + rng() * (bb.h - 2 * pad);
                     /* Earlier passes have larger, brighter galaxies */
-                    var r = 1.1 + rng() * (pass <= 1 ? 1.7 : (pass <= 2 ? 1.3 : 0.9));
+                    var r = 1.0 + rng() * (pass <= 1 ? 1.5 : (pass <= 2 ? 1.1 : 0.8));
                     var c = svgEl('circle', {
                         cx: gx.toFixed(1),
                         cy: gy.toFixed(1),
@@ -152,49 +180,42 @@
             }
         }
 
-        /* ---- Octagonal footprint with CCD-grid hatch ------------------- */
+        /* ---- Octagonal footprint with CCD-grid hatch ------------------ */
         var fp = svgEl('g', { 'class': 'footprint' });
-        var pts = octagonPointsAttr();
 
-        /* Background fill */
-        fp.appendChild(svgEl('polygon', {
-            'class': 'fp-shape',
-            points: pts,
-            'vector-effect': 'non-scaling-stroke'
-        }));
+        /* Background fill polygon (octagon shape) */
+        var fpShape = svgEl('polygon', { 'class': 'fp-shape', points: '0,0 0,0 0,0' });
+        fp.appendChild(fpShape);
 
-        /* CCD grid lines, in unit coords, vector-effect to keep stroke crisp.
-           Lines extend across the [-1, 1] box; the chamfered corners may show
-           tiny line stubs which look like CCD-frame tick marks (intentional). */
-        var grid = svgEl('g', { 'class': 'fp-grid' });
-        var gridSteps = 4;  /* 4 lines per direction -> 5x5 cell grid */
-        for (var k = 1; k <= gridSteps; k++) {
-            var v = -1 + (2 * k) / (gridSteps + 1);
-            grid.appendChild(svgEl('line', {
-                x1: -1, y1: v.toFixed(4), x2: 1, y2: v.toFixed(4),
-                'vector-effect': 'non-scaling-stroke'
-            }));
-            grid.appendChild(svgEl('line', {
-                x1: v.toFixed(4), y1: -1, x2: v.toFixed(4), y2: 1,
-                'vector-effect': 'non-scaling-stroke'
-            }));
+        /* CCD grid lines, clipped to the octagon by the shared clipPath */
+        var grid = svgEl('g', { 'class': 'fp-grid', 'clip-path': 'url(#fpClipPath)' });
+        var gridLines = [];
+        for (var k = 0; k < 2 * GRID_STEPS; k++) {
+            var line = svgEl('line', { x1: 0, y1: 0, x2: 0, y2: 0 });
+            grid.appendChild(line);
+            gridLines.push(line);
         }
         fp.appendChild(grid);
 
-        /* Outline on top so chamfered corners read cleanly */
-        fp.appendChild(svgEl('polygon', {
-            'class': 'fp-outline',
-            points: pts,
-            'vector-effect': 'non-scaling-stroke'
-        }));
+        /* Outline on top so the chamfered corners read cleanly */
+        var fpOutline = svgEl('polygon', { 'class': 'fp-outline', points: '0,0 0,0 0,0' });
+        fp.appendChild(fpOutline);
 
         svg.insertBefore(fp, foreground);
+
+        var clipPoly = svg.querySelector('#fpClipPoly');
+        var gradient = svg.querySelector('#lightConeGrad');
 
         return {
             svg: svg,
             galaxies: byPatchAndPass,
-            footprint: fp,
-            cone: cone
+            fp: fp,
+            fpShape: fpShape,
+            fpOutline: fpOutline,
+            gridLines: gridLines,
+            clipPoly: clipPoly,
+            cone: cone,
+            gradient: gradient
         };
     }
 
@@ -217,20 +238,15 @@
         var currentPatch = PATCH_ORDER[orderIdx];
         var currentPass  = Math.floor(v / N_PATCHES);
 
-        /* ---- Galaxy reveal per (patch, pass) --------------------------- */
+        /* ---- Galaxy reveal ---------------------------------------- */
         for (var p = 0; p < N_PATCHES; p++) {
             for (var pass = 0; pass < N_PASSES; pass++) {
                 var orderIdxForP = PATCH_ORDER.indexOf(p);
                 var visitForPP = pass * N_PATCHES + orderIdxForP;
-
                 var op;
-                if (visitForPP < v) {
-                    op = 1;
-                } else if (visitForPP === v) {
-                    op = clamp(withinT * 1.25, 0, 1);
-                } else {
-                    op = 0;
-                }
+                if (visitForPP < v) op = 1;
+                else if (visitForPP === v) op = clamp(withinT * 1.25, 0, 1);
+                else op = 0;
                 var layer = state.galaxies[p][pass];
                 for (var i = 0; i < layer.length; i++) {
                     layer[i].style.opacity = op;
@@ -238,59 +254,73 @@
             }
         }
 
-        /* ---- Footprint position + scale -------------------------------- */
+        /* ---- Footprint position (absolute coords) ---------------- */
         var bb = patchBBox(currentPatch);
-        /* Settle effect: start a bit oversized, shrink during withinT */
-        var settle = 1 - clamp(withinT * 3, 0, 1);
-        var inflate = 0.08 * settle;            /* 8% oversize at start */
-        var sx = (bb.w / 2) * (1 + inflate);
-        var sy = (bb.h / 2) * (1 + inflate);
-        var cx = bb.cx;
-        var cy = bb.cy;
-        state.footprint.style.transform =
-            'translate(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px)' +
-            ' scale(' + sx.toFixed(2) + ',' + sy.toFixed(2) + ')';
+        var settle = 1 - clamp(withinT * 3, 0, 1);    /* 1 at start, 0 after a third */
+        var inflate = 0.08 * settle;
+        var poly = octagonPoints(bb, inflate);
+        var polyStr = pointsToStr(poly);
+        state.fpShape.setAttribute('points', polyStr);
+        state.fpOutline.setAttribute('points', polyStr);
+        if (state.clipPoly) state.clipPoly.setAttribute('points', polyStr);
+
+        /* Grid lines: GRID_STEPS horizontal + GRID_STEPS vertical, in absolute
+           coords spanning the inflated rectangle.  The clipPath crops them to
+           the octagon. */
+        var hw = (bb.w / 2) * (1 + inflate);
+        var hh = (bb.h / 2) * (1 + inflate);
+        var cx = bb.cx, cy = bb.cy;
+        for (var s = 0; s < GRID_STEPS; s++) {
+            var t = -1 + (2 * (s + 1)) / (GRID_STEPS + 1);
+            /* Horizontal line */
+            var lh = state.gridLines[2 * s];
+            lh.setAttribute('x1', (cx - hw).toFixed(2));
+            lh.setAttribute('y1', (cy + t * hh).toFixed(2));
+            lh.setAttribute('x2', (cx + hw).toFixed(2));
+            lh.setAttribute('y2', (cy + t * hh).toFixed(2));
+            /* Vertical line */
+            var lv = state.gridLines[2 * s + 1];
+            lv.setAttribute('x1', (cx + t * hw).toFixed(2));
+            lv.setAttribute('y1', (cy - hh).toFixed(2));
+            lv.setAttribute('x2', (cx + t * hw).toFixed(2));
+            lv.setAttribute('y2', (cy + hh).toFixed(2));
+        }
+
         /* Pulsing glow per visit */
         var pulse = 1 - clamp(withinT * 2, 0, 1);
-        state.footprint.style.filter =
+        state.fp.style.filter =
             'drop-shadow(0 0 ' + (8 + pulse * 16).toFixed(1) +
             'px rgba(124,244,255,' + (0.4 + pulse * 0.45).toFixed(2) + '))';
 
-        /* ---- Light cone polygon ---------------------------------------- */
-        /* Triangle from telescope apex to a wide base across the patch. */
+        /* ---- Light cone (apex at telescope, base across the patch) ---- */
         var dx = cx - TELESCOPE.x;
         var dy = cy - TELESCOPE.y;
         var L  = Math.sqrt(dx * dx + dy * dy) || 1;
-        var nx = dx / L;
-        var ny = dy / L;
-        /* Perpendicular unit vector (right-hand rule) */
-        var px = -ny;
-        var py =  nx;
-        /* Base of the cone: as wide as the patch's diagonal projection */
-        var baseHalf = 0.5 * Math.sqrt(bb.w * bb.w + bb.h * bb.h) * 0.55;
+        var nx = dx / L, ny = dy / L;
+        var px = -ny,    py = nx;     /* perpendicular unit */
+        /* Base half-width:  about the patch's larger half-extent perpendicular
+           to the cone axis.  Use the major axis projection. */
+        var baseHalf = Math.max(bb.w, bb.h) * 0.55;
         var baseAx = cx + px * baseHalf;
         var baseAy = cy + py * baseHalf;
         var baseBx = cx - px * baseHalf;
         var baseBy = cy - py * baseHalf;
-        /* Apex offset so the cone doesn't visually pierce the telescope body */
-        var apexX = TELESCOPE.x + nx * 28;
-        var apexY = TELESCOPE.y + ny * 28;
-        var d = 'M' + apexX.toFixed(1) + ',' + apexY.toFixed(1) +
-                ' L' + baseAx.toFixed(1) + ',' + baseAy.toFixed(1) +
-                ' L' + baseBx.toFixed(1) + ',' + baseBy.toFixed(1) + ' Z';
-        state.cone.setAttribute('d', d);
-        /* Align the gradient stops along the cone axis so bright -> faint goes
-           from telescope toward patch */
-        var grad = state.svg.querySelector('#lightConeGrad');
-        if (grad) {
-            grad.setAttribute('x1', apexX.toFixed(1));
-            grad.setAttribute('y1', apexY.toFixed(1));
-            grad.setAttribute('x2', cx.toFixed(1));
-            grad.setAttribute('y2', cy.toFixed(1));
+        /* Apex offset so the cone doesn't pierce the dome */
+        var apexX = TELESCOPE.x + nx * 30;
+        var apexY = TELESCOPE.y + ny * 30;
+        var dPath = 'M' + apexX.toFixed(1) + ',' + apexY.toFixed(1) +
+                    ' L' + baseAx.toFixed(1) + ',' + baseAy.toFixed(1) +
+                    ' L' + baseBx.toFixed(1) + ',' + baseBy.toFixed(1) + ' Z';
+        state.cone.setAttribute('d', dPath);
+        if (state.gradient) {
+            state.gradient.setAttribute('x1', apexX.toFixed(1));
+            state.gradient.setAttribute('y1', apexY.toFixed(1));
+            state.gradient.setAttribute('x2', cx.toFixed(1));
+            state.gradient.setAttribute('y2', cy.toFixed(1));
         }
         state.cone.style.opacity = (0.55 + 0.35 * (1 - withinT)).toFixed(2);
 
-        /* ---- HUD ------------------------------------------------------- */
+        /* ---- HUD -------------------------------------------------- */
         if (indicator) indicator.style.width = (progress * 100).toFixed(1) + '%';
         if (label) {
             label.textContent = 'Pass ' + (currentPass + 1) + ' / ' + N_PASSES

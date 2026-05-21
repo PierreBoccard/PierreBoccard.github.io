@@ -198,79 +198,77 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
             <svg class="rubin-scene" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet">
 
                 <defs>
-                    <!-- Light-cone gradient: bright at the telescope, fading into the patch -->
+                    <!-- Light-cone gradient: bright at the telescope apex, fading toward the patch -->
                     <linearGradient id="lightConeGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%"   stop-color="#7cf4ff" stop-opacity="0.55"/>
                         <stop offset="55%"  stop-color="#7cf4ff" stop-opacity="0.18"/>
                         <stop offset="100%" stop-color="#7cf4ff" stop-opacity="0.02"/>
                     </linearGradient>
-                    <!-- Telescope dome gradient -->
-                    <linearGradient id="domeGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%"   stop-color="#1a2540"/>
-                        <stop offset="100%" stop-color="#070b1d"/>
-                    </linearGradient>
+                    <!-- Clip path used by the CCD grid lines so they stay inside the octagon.
+                         JS rewrites the polygon points each frame to match the current patch. -->
+                    <clipPath id="fpClipPath" clipPathUnits="userSpaceOnUse">
+                        <polygon id="fpClipPoly" points="0,0 0,0 0,0"/>
+                    </clipPath>
                 </defs>
 
-                <!-- Sky region label (no rectangle behind it) -->
-                <text class="label-faint" x="40"   y="32">SOUTHERN&#160;SKY  *  6&#160;PATCHES  *  5&#160;PASSES</text>
+                <!-- Sky region label -->
+                <text class="label-faint" x="80" y="42">SOUTHERN&#160;SKY  *  6&#160;PATCHES  *  5&#160;PASSES</text>
 
                 <!--
                   JS will insert, before .foreground:
-                    <path class="lightcone"/>
-                    <g    class="galaxies">...</g>
-                    <g    class="footprint">octagon + grid + outline</g>
+                    <path    class="lightcone"/>
+                    <g       class="galaxies">...</g>
+                    <g       class="footprint">octagon + grid + outline</g>
                   Telescope is in .foreground so it draws on top of the cone.
                 -->
                 <g class="foreground">
 
-                    <!-- Ground silhouette -- rises on the right where the telescope sits -->
-                    <path class="horizon" d="M0,635 L120,640 L260,620 L380,628 L520,610 L660,608 L800,575 L920,540 L1010,520 L1110,538 L1200,560 L1200,720 L0,720 Z"/>
+                    <!-- Ground silhouette - low rolling hill that rises on the right -->
+                    <path class="horizon" d="M0,665 L160,660 L320,650 L480,645 L640,635 L780,615 L900,595 L990,580 L1080,590 L1160,610 L1200,630 L1200,720 L0,720 Z"/>
 
                     <!-- ============================================================
-                         Rubin-style telescope at the lower right
+                         Rubin Observatory building silhouette (white, like the
+                         reference image).  Multi-tier flat-roofed building with the
+                         calotte dome sitting on top.  Positioned at the lower-right.
                          ============================================================ -->
-                    <g class="telescope" transform="translate(1020 555)">
+                    <g class="telescope" transform="translate(1000 590)">
 
-                        <!-- Pier (cylindrical base) -->
-                        <rect class="pier" x="-35" y="40" width="70" height="125" rx="2"/>
-                        <rect class="pier-band" x="-35" y="55" width="70" height="4"/>
-                        <rect class="pier-band" x="-35" y="135" width="70" height="4"/>
-
-                        <!-- Calotte dome (oblate, Rubin-style) -->
-                        <ellipse class="dome" cx="0" cy="-5" rx="100" ry="55" fill="url(#domeGrad)"/>
-
-                        <!-- Horizontal louvres on the dome -->
-                        <g class="dome-louvre">
-                            <line x1="-90" y1="-25" x2="90" y2="-25"/>
-                            <line x1="-96" y1="-12" x2="96" y2="-12"/>
-                            <line x1="-100" y1="2"  x2="100" y2="2"/>
-                            <line x1="-96" y1="16" x2="96" y2="16"/>
-                            <line x1="-85" y1="30" x2="85" y2="30"/>
+                        <!-- Lower wing (long, low support building extending to the left) -->
+                        <path class="rubin-body" d="M-150,-2 L-150,28 L80,28 L80,-2 Z"/>
+                        <!-- a few window slits in the wing -->
+                        <g class="rubin-window">
+                            <rect x="-130" y="8" width="14" height="10"/>
+                            <rect x="-105" y="8" width="14" height="10"/>
+                            <rect x="-80"  y="8" width="14" height="10"/>
+                            <rect x="-55"  y="8" width="14" height="10"/>
+                            <rect x="-30"  y="8" width="14" height="10"/>
+                            <rect x="-5"   y="8" width="14" height="10"/>
+                            <rect x="20"   y="8" width="14" height="10"/>
+                            <rect x="45"   y="8" width="14" height="10"/>
                         </g>
 
-                        <!-- Vertical slit opening (with the tube sticking out) -->
-                        <path class="dome-slit"
-                              d="M-13,-55 Q -13,-40 -10,-25 L-10,5 L10,5 L10,-25 Q 13,-40 13,-55 Z"/>
+                        <!-- Upper-base block (the platform under the dome, narrower than the wing) -->
+                        <path class="rubin-body" d="M-50,-30 L-50,-2 L80,-2 L80,-30 L70,-40 L-40,-40 Z"/>
 
-                        <!-- Telescope tube emerging from the slit, tilted toward the upper-left patch area -->
-                        <g transform="rotate(-32 0 0)">
-                            <!-- Tube body -->
-                            <rect class="tube" x="-13" y="-130" width="26" height="120" rx="3"/>
-                            <!-- Aperture / mirror cell visible at the top -->
-                            <ellipse class="tube-aperture" cx="0" cy="-130" rx="13" ry="4"/>
-                            <!-- Secondary mirror / spider -->
-                            <line class="tube-spider" x1="-8" y1="-125" x2="8"  y2="-125"/>
-                            <line class="tube-spider" x1="0"  y1="-132" x2="0"  y2="-118"/>
-                            <!-- Mount yoke at the bottom -->
-                            <rect class="tube" x="-18" y="-15" width="36" height="22" rx="3"/>
+                        <!-- Hexagonal-ish dome (calotte) sitting on the upper-base -->
+                        <path class="rubin-dome" d="M-30,-72 L30,-72 L48,-58 L48,-44 L30,-40 L-30,-40 L-48,-44 L-48,-58 Z"/>
+
+                        <!-- Small slit / shutter housing on top of the dome -->
+                        <path class="rubin-shutter" d="M-12,-86 L12,-86 L16,-72 L-16,-72 Z"/>
+
+                        <!-- Subtle slit opening (dark slot down the front of the dome) -->
+                        <rect class="rubin-slit-open" x="-5" y="-86" width="10" height="46"/>
+
+                        <!-- Dome panel detail lines -->
+                        <g class="rubin-detail">
+                            <line x1="-48" y1="-50" x2="48" y2="-50"/>
+                            <line x1="-30" y1="-72" x2="-30" y2="-40"/>
+                            <line x1="30"  y1="-72" x2="30"  y2="-40"/>
                         </g>
-
-                        <!-- Glowing rim arc at the top of the dome (suggests the slit is open and starlight is hitting the secondary) -->
-                        <path class="dome-rim" d="M-100,-5 Q 0,-65 100,-5"/>
 
                     </g>
 
-                    <text class="label-faint" x="1020" y="690" text-anchor="middle">CERRO&#160;PACHON  *  2680&#160;m</text>
+                    <text class="label-faint" x="1000" y="700" text-anchor="middle">CERRO&#160;PACHON  *  2680&#160;m</text>
 
                 </g>
 
