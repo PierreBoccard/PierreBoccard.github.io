@@ -40,10 +40,10 @@
     var PATCH_ROWS = 2;
     var PATCH_W = SKY.w / PATCH_COLS;
     var PATCH_H = SKY.h / PATCH_ROWS;
-    var N_PATCHES = PATCH_COLS * PATCH_ROWS;     /* 10 */
-    var N_PASSES = 5;
-    var TOTAL_VISITS = N_PATCHES * N_PASSES;     /* 50 */
-    var GALAXIES_PER_LAYER = 32;                  /* per patch per pass */
+    var N_PATCHES = PATCH_COLS * PATCH_ROWS;     /* 10 sky cells */
+    var N_PASSES = 10;                            /* 10-year LSST survey */
+    var TOTAL_VISITS = N_PATCHES * N_PASSES;     /* 100 visits */
+    var GALAXIES_PER_LAYER = 12;                  /* per cell per year */
     /* Galaxies for each patch are sampled from a region slightly LARGER than
        the patch bbox itself, so neighbouring patches overlap and the sky
        reads as a continuous field with no empty gaps at patch boundaries. */
@@ -95,8 +95,21 @@
     /* Telescope apex (the LIGHT cone is anchored here) */
     var TELESCOPE = { x: 1000, y: 540 };
 
-    /* Per-pass galaxy colour, 5 entries */
-    var PASS_COLOURS = ['#7cf4ff', '#a96bff', '#41d0a4', '#ff7adf', '#f8fbff'];
+    /* Per-year galaxy colour. 10 entries spanning a dim-blue -> bright-white
+       gradient so the build-up of the survey is visible as a colour shift
+       as much as a density shift. */
+    var PASS_COLOURS = [
+        '#3e88c4',
+        '#5ba3d4',
+        '#73bee0',
+        '#8ad4eb',
+        '#9fe9f5',
+        '#7cf4ff',
+        '#a6f7ff',
+        '#caf9ff',
+        '#e2fbff',
+        '#ffffff'
+    ];
 
     /* Chamfer fraction for the octagon (0..0.5) */
     var CHAMFER_FRAC = 0.28;
@@ -386,8 +399,7 @@
         /* ---- HUD -------------------------------------------------- */
         if (indicator) indicator.style.width = (progress * 100).toFixed(1) + '%';
         if (label) {
-            label.textContent = 'Pass ' + (currentPass + 1) + ' / ' + N_PASSES
-                              + '  *  Patch ' + (orderIdx + 1) + ' / ' + N_PATCHES;
+            label.textContent = 'Year ' + (currentPass + 1) + ' / ' + N_PASSES;
         }
     }
 

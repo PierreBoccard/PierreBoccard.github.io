@@ -288,9 +288,10 @@ $phd-panel-solid: #0b1020
         margin-right: calc(50% - 50vw)
         margin-top: 80px
         margin-bottom: 80px
-        /* 10 patches x 5 passes = 50 visits -- a longer track keeps the
-           per-visit scroll distance comfortable (~12 vh / visit). */
-        height: 600vh
+        /* 10 cells x 10 years = 100 visits. Scaled the track to keep the
+           cadence close to the previous "year" feel (~7 vh per visit, so
+           a full survey year takes ~70 vh, i.e. ~1 viewport). */
+        height: 700vh
 
         @media #{$mobile}, #{$tablet}
             height: auto

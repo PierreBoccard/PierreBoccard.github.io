@@ -221,7 +221,7 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
      Sibling of (not inside) the .phd-section above, because that wrapper
      uses a transform-based .reveal animation that would break the
      descendants' position: sticky in some browsers.
-     10 sky patches * 5 passes. JS in assets/js/rubin-scrolly.js drives
+     10 sky cells * 10 years. JS in assets/js/rubin-scrolly.js drives
      the scene from the scroll position; the SVG below is the static
      scaffolding (sky outline, telescope, ground) and the galaxies +
      octagonal footprint + light cone are appended at runtime.
@@ -249,7 +249,7 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
                 </defs>
 
                 <!-- Sky region label -->
-                <text class="label-faint" x="80" y="42">SOUTHERN&#160;SKY  *  10&#160;PATCHES  *  5&#160;PASSES</text>
+                <text class="label-faint" x="80" y="42">SOUTHERN&#160;SKY  *  10-YEAR&#160;SURVEY</text>
 
                 <!--
                   JS will insert, before .foreground:
@@ -311,7 +311,7 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
 
             </svg>
 
-            <!-- HUD: progress bar + textual pass / patch counter -->
+            <!-- HUD: progress bar + textual year counter -->
             <div class="scrolly-hud" aria-hidden="true">
                 <div class="scrolly-progress-label" role="status"></div>
                 <div class="scrolly-progress-track">
@@ -325,11 +325,11 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
 </section>
 
 <p class="scrolly-caption">
-    Each visit to a patch adds a layer of galaxies; after three full passes the
-    survey footprint is dense enough to detect tens of thousands of cosmic voids.
-    The Rubin/LSST cadence is, in reality, ~3 000 visits per night over
-    ten years &mdash; this animation is a stylised three-pass sketch of the
-    build-up.
+    Year by year, the camera deepens its coverage of the southern sky: each
+    new visit adds a layer of galaxies, and by Year 10 the field is dense
+    enough to detect tens of thousands of cosmic voids. The Rubin/LSST cadence
+    is, in reality, ~3 000 visits per night over the full decade &mdash;
+    this animation is a stylised year-by-year sketch of the build-up.
 </p>
 
 <!-- ============================================================ -->
