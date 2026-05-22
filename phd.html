@@ -379,29 +379,103 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
         </figure>
     </div>
 
-    <div class="section-grid reverse" style="margin-top:50px">
-        <div class="reveal reveal-right">
-            <p>
-                The <em>advantage</em> of photometric surveys is sheer numbers:
-                Rubin will deliver photo-z for hundreds of times more galaxies
-                than DESI will ever measure spectroscopically. The
-                <em>challenge</em> is to forward-model the photo-z error
-                distribution into the void statistics, propagate it through the
-                void-finder, and recover an unbiased VSF.
-            </p>
+    <div class="reveal reveal-right" style="margin-top:50px; max-width:780px">
+        <p>
+            The <em>advantage</em> of photometric surveys is sheer numbers:
+            Rubin will deliver photo-z for hundreds of times more galaxies
+            than DESI will ever measure spectroscopically. The
+            <em>challenge</em> is to forward-model the photo-z error
+            distribution into the void statistics, propagate it through the
+            void-finder, and recover an unbiased VSF.
+        </p>
 
-            <ul class="feature-list">
-                <li>~99 % of LSST galaxies will have only photometric redshifts.</li>
-                <li>Photo-z scatter σ ~ 0.03 (1+z) translates to a radial smearing of ~100 Mpc/h at z = 1.</li>
-                <li>Need joint calibration of the n(z) using a small spec-z subset (DESI, 4MOST).</li>
-            </ul>
-        </div>
-
-        <figure class="section-figure reveal reveal-left">
-            <img src="/assets/images/phd/cosmic-web-sim.jpg" alt="Cosmic web from a large cosmological simulation"/>
-            <figcaption>A slice of the cosmic web from a large cosmological simulation — the kind of synthetic data I use to test how photo-z errors propagate into the void catalogue. Credit: Illustris Collaboration / ESO — public domain.</figcaption>
-        </figure>
+        <ul class="feature-list">
+            <li>~99 % of LSST galaxies will have only photometric redshifts.</li>
+            <li>Photo-z scatter σ ~ 0.03 (1+z) translates to a radial smearing of ~100 Mpc/h at z = 1.</li>
+            <li>Need joint calibration of the n(z) using a small spec-z subset (DESI, 4MOST).</li>
+        </ul>
     </div>
+</section>
+
+<!-- =====================================================================
+     Photo-z LOS shuffling scroll-pinned animation.
+     Sibling of (not inside) the .phd-section above, same reason as the
+     other two scrollies: the parent section has a transform-based reveal
+     that would break position: sticky on descendants.
+     JS in assets/js/photoz-scrolly.js drives the scene:
+       * ~1500 galaxies along a Voronoi-like filament network
+       * each galaxy has a fixed Gaussian "noise" draw
+       * displayed y = trueY + scroll_progress * MAX_SHIFT * noise
+       * filaments and voids smear out along the LOS as you scroll
+     ===================================================================== -->
+<section class="scrolly-photoz" id="photozScrolly" aria-label="Animated demonstration of photo-z line-of-sight shuffling">
+    <div class="scrolly-pin">
+        <div class="scrolly-stage">
+
+            <svg class="photoz-scene" viewBox="0 0 1800 900" preserveAspectRatio="xMidYMid meet">
+
+                <!-- Section label -->
+                <text x="80" y="48" font-family="'Space Grotesk', sans-serif"
+                      font-size="13" fill="#5b647a" letter-spacing="3">
+                    LINE-OF-SIGHT  SHUFFLING  *  scroll to apply photo-z scatter
+                </text>
+
+                <!--
+                  JS will insert here:
+                    <g class="photoz-galaxies">...</g>
+                    <g class="photoz-arrow">...</g>
+                -->
+
+            </svg>
+
+            <div class="scrolly-hud" aria-hidden="true">
+                <div class="scrolly-progress-label" role="status">
+                    <span class="sigma">σ&#8202;=&#8202;0.000</span>
+                    <span class="smear">&mdash;</span>
+                </div>
+                <div class="scrolly-progress-track">
+                    <div class="scrolly-progress-bar"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="scrolly-hint">scroll &darr;  to scramble galaxies along the line of sight</div>
+    </div>
+</section>
+
+<p class="scrolly-caption">
+    At the top of the animation each galaxy sits at its true 3D position and the
+    cosmic-web filaments + voids are perfectly readable. As you scroll, every
+    galaxy is displaced vertically (the line-of-sight direction) by a Gaussian
+    draw whose width grows with the simulated photo-z scatter σ. By the bottom
+    the filaments have blurred and the voids have visibly filled with shuffled
+    galaxies &mdash; this is exactly the systematic that the next plot quantifies
+    on the VSF.
+</p>
+
+<!-- ============================================================
+     A second photo-z section: the impact on the VSF itself.
+     ============================================================ -->
+<section class="phd-section reveal" id="photoz-vsf">
+    <span class="section-index">03 / The Challenge  *  on the VSF</span>
+    <h2 class="section-title">The photo-z imprint on the Void Size Function</h2>
+    <p class="section-lede reveal reveal-delay-1">
+        The shuffling above is not just cosmetic: it directly biases the
+        observed VSF. Photo-z scatter smooths over small voids, distorts the
+        radial scale, and shifts the abundance toward smaller radii. The plot
+        below makes that quantitative.
+    </p>
+
+    <figure class="section-figure reveal reveal-scale" style="max-width:1100px; margin: 30px auto 0">
+        <img src="/assets/images/phd/vsf-plot.png" alt="Theoretical spectroscopic VSF and photometric VSF degraded by sigma_z = 0.02"/>
+        <figcaption>
+            Theoretical VSF (solid cyan) with a 1&sigma; band and mock spec-z
+            measurements (points + Poisson error bars), compared to the
+            photometric prediction at &sigma;<sub>z</sub>&thinsp;=&thinsp;0.02
+            (dashed pink). The gap between the two curves is the systematic
+            my PhD aims to model and remove.
+        </figcaption>
+    </figure>
 </section>
 
 <!-- ============================================================ -->
@@ -464,3 +538,4 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
 <!-- Rubin scroll-pinned survey animation + cosmic-web -> VSF builder -->
 <script src="{{ site.url }}/assets/js/rubin-scrolly.js" defer></script>
 <script src="{{ site.url }}/assets/js/cosmic-web-scrolly.js" defer></script>
+<script src="{{ site.url }}/assets/js/photoz-scrolly.js" defer></script>
