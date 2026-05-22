@@ -107,19 +107,20 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
     <div class="scrolly-pin">
         <div class="scrolly-stage">
 
-            <svg class="cosmic-scene" viewBox="0 0 1800 920" preserveAspectRatio="xMidYMid meet">
+            <svg class="cosmic-scene" viewBox="0 0 1800 900" preserveAspectRatio="xMidYMid meet">
 
-                <!-- Cosmic-web image on the left half. The void circles
-                     and connector paths are appended by JS so they sit on
-                     top of the image. -->
+                <!-- Cosmic-web image on the LEFT half. Native ~1.84:1 aspect
+                     (1646 x 894 source), drawn at 1160 x 630.  The void
+                     circles, marker dots and connector paths are appended
+                     by JS so they sit on top of the image. -->
                 <image href="{{ site.url }}/assets/images/phd/cosmic-web-clean.jpg"
-                       x="10" y="80" width="800" height="800"
+                       x="20" y="70" width="1160" height="630"
                        preserveAspectRatio="xMidYMid slice"/>
 
                 <!-- Section label above the cosmic-web image -->
-                <text x="10"  y="50" font-family="'Space Grotesk', sans-serif"
+                <text x="20"  y="48" font-family="'Space Grotesk', sans-serif"
                       font-size="13" fill="#5b647a" letter-spacing="3">
-                    COSMIC&#160;WEB  *  IllustrisTNG  *  R.&#160;Weinberger
+                    COSMIC&#160;WEB  *  cosmic_web_explorer (Nicosmo)
                 </text>
 
                 <!--
@@ -135,7 +136,7 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
 
             <div class="scrolly-hud" aria-hidden="true">
                 <div class="scrolly-progress-label" role="status">
-                    <span class="count">0 / 18</span>
+                    <span class="count">0 / 28</span>
                     <span class="radius">&mdash;</span>
                 </div>
                 <div class="scrolly-progress-track">
@@ -149,10 +150,12 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
 </section>
 
 <p class="scrolly-caption">
-    Each new void detected on the cosmic web traces a line to its bin in the
-    Void Size Function. After 18 voids the histogram approximates the dashed
-    theoretical curve underneath &mdash; that's the basic VSF measurement that
-    Project A and Project B make rigorous on full LSST mocks.
+    Each new void detected on the cosmic web traces a line to its marker on
+    the Void Size Function. Voids are revealed smallest first, and after each
+    radius bin is done its connectors fade out and the next bin begins. After
+    all 28 voids the markers trace the dashed theoretical curve &mdash; the
+    basic VSF measurement that Project A and Project B make rigorous on full
+    LSST mocks.
 </p>
 
 <!-- ============================================================ -->

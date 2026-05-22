@@ -432,14 +432,14 @@ $phd-panel-solid: #0b1020
         margin-right: calc(50% - 50vw)
         margin-top: 80px
         margin-bottom: 80px
-        /* 18 voids * roughly 25 vh each, plus the pin */
-        height: 520vh
+        /* 28 reveal visits + 8 fade visits = 36 ticks, each gets ~20 vh */
+        height: 720vh
 
         @media #{$mobile}, #{$tablet}
             height: auto
 
     .scrolly-cosmic .scrolly-stage
-        aspect-ratio: 1800 / 920
+        aspect-ratio: 1800 / 900
 
     .cosmic-scene
         width: 100%
@@ -487,30 +487,35 @@ $phd-panel-solid: #0b1020
         letter-spacing: 0.3em
         text-transform: uppercase
 
-    /* Theoretical VSF curve (faint guide) */
+    /* Theoretical VSF curve (faint dashed guide under the markers) */
     .cosmic-scene .theory-line
         fill: none
-        stroke: rgba(124, 244, 255, 0.6)
-        stroke-width: 1.6
-        stroke-dasharray: 4 4
-
-    .cosmic-scene .theory-fill
-        fill: rgba(124, 244, 255, 0.05)
-        stroke: none
-
-    /* Histogram bars */
-    .cosmic-scene .bin-bar
-        fill: rgba(124, 244, 255, 0.22)
-        stroke: $phd-accent
+        stroke: rgba(124, 244, 255, 0.45)
         stroke-width: 1.4
-        transition: y 0.3s cubic-bezier(.16, 1, .3, 1), height 0.3s cubic-bezier(.16, 1, .3, 1)
-        filter: drop-shadow(0 0 6px rgba(124, 244, 255, 0.35))
+        stroke-dasharray: 5 4
+        filter: drop-shadow(0 0 3px rgba(124, 244, 255, 0.2))
 
-    .cosmic-scene .bin-count
+    /* VSF markers (one per bin). cx / cy are recomputed every frame in JS;
+       the transitions on those attributes give a smooth "rise" as the
+       count grows. */
+    .cosmic-scene .marker
+        fill: $phd-accent
+        stroke: $phd-text-strong
+        stroke-width: 1.6
+        transition: cy 0.32s cubic-bezier(.16, 1, .3, 1), opacity 0.35s ease-out
+
+    .cosmic-scene .marker-glow
+        fill: $phd-accent
+        opacity: 0
+        transition: cy 0.32s cubic-bezier(.16, 1, .3, 1), opacity 0.45s ease-out
+        filter: blur(7px)
+
+    .cosmic-scene .marker-count
         font-family: $fontSans
-        font-size: 14px
+        font-size: 13px
         font-weight: 600
         fill: $phd-text-strong
+        transition: y 0.32s cubic-bezier(.16, 1, .3, 1), opacity 0.35s ease-out
 
     /* Void circles on the cosmic web */
     .cosmic-scene .void-fill
