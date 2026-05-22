@@ -1,23 +1,18 @@
 /*
- * Cosmic web -> Void Size Function scroll-pinned animation  (v2)
+ * Cosmic web -> Void Size Function scroll-pinned animation
  * -----------------------------------------------------------------------------
- * Side-by-side scene:
- *   * LEFT  -- cosmic-web image from the cosmic-web-explorer simulation
- *   * RIGHT -- a VSF plot with axes, theoretical curve and 8 markers
+ * Left half of the scene: TNG cosmic-web image with void circles appearing
+ * one by one as the user scrolls.
+ * Right half: a histogram-style Void Size Function plot. Each new void's
+ * circle on the left draws a curved line toward the bin its radius
+ * belongs to on the right, and that bin grows by one.
  *
- * 28 voids were auto-detected on the image at 8 distinct spatial scales.
- * They are revealed in ascending radius order (smallest first), one per
- * scroll-tick. As each void appears:
- *   - a dashed cyan circle fades in on the image
- *   - a curved connector line draws from the void to the marker for its
- *     bin on the right (stroke-dashoffset animation)
- *   - the bin's marker rises up the y-axis as the count grows
+ * 18 voids were auto-detected on the IllustrisTNG image at multiple spatial
+ * scales (positions are encoded below in 1000-wide reference coords; the
+ * JS scales them to the SVG image rectangle). Each void belongs to one of
+ * 5 radius bins; together they reproduce a peaked VSF-like shape.
  *
- * After every void in a given bin has been revealed, the connectors for
- * THAT bin fade out and the next bin's voids begin to appear. The result
- * is a marker-based VSF that builds left-to-right.
- *
- * No external libs. Block-comment style throughout to survive Jekyll's
+ * No external libs. Block-comment style throughout to survive the Jekyll
  * compress.html layout.
  */
 
@@ -30,106 +25,91 @@
     /* Geometry                                                              */
     /* ===================================================================== */
 
-    /* SVG viewBox is 0 0 1800 900 (2:1). Side-by-side layout. */
-    /* Cosmic web image on the LEFT, native aspect ~1.84:1 */
-    var IMG = { x: 20, y: 70, w: 1160, h: 630 };
-    /* VSF panel on the RIGHT */
-    var VSF = { x: 1230, y: 70, w: 550, h: 760 };
-    /* Inner plot area inside the VSF panel */
-    var PLOT = { x: 1310, y: 200, w: 440, h: 580 };
+    /* SVG viewBox is 0 0 1800 920. */
+    /* Cosmic web image is drawn at this rectangle */
+    var IMG = { x: 10, y: 80, w: 800, h: 800 };
+    /* VSF plot lives on the right half */
+    var VSF = { x: 920, y: 80, w: 850, h: 800 };
+    /* VSF inner plot box (data area) */
+    var PLOT = { x: 1020, y: 200, w: 700, h: 560 };
 
-    /* 28 voids, 8 distinct radii. Reference coords are 0..1000 horizontally
-       (and proportional vertically); JS scales them to the IMG rectangle.
-       Sorted by radius ascending so the reveal goes smallest -> largest. */
+    /* Voids picked from the TNG image. Coords are in [0..1000] reference
+       space; we scale them to the IMG rectangle inside buildScene. */
     var VOIDS_REF = [
-        { cx: 263.7, cy: 492.7, r: 10.9 },
-        { cx: 157.4, cy: 237.5, r: 10.9 },
-        { cx: 323.2, cy: 126.4, r: 14.6 },
-        { cx: 515.8, cy: 233.9, r: 14.6 },
-        { cx: 735.1, cy: 217.5, r: 14.6 },
-        { cx: 410.1, cy:  93.6, r: 19.4 },
-        { cx: 829.3, cy: 406.4, r: 19.4 },
-        { cx: 878.5, cy: 301.9, r: 19.4 },
-        { cx: 420.4, cy: 380.9, r: 24.3 },
-        { cx: 653.7, cy: 173.1, r: 24.3 },
-        { cx: 480.0, cy:  64.4, r: 24.3 },
-        { cx: 478.1, cy: 493.9, r: 24.3 },
-        { cx: 206.0, cy: 270.4, r: 30.4 },
-        { cx: 585.7, cy:  96.0, r: 30.4 },
-        { cx: 864.5, cy: 229.6, r: 30.4 },
-        { cx: 342.6, cy: 311.1, r: 30.4 },
-        { cx: 230.9, cy: 334.1, r: 30.4 },
-        { cx: 666.5, cy:  59.5, r: 37.7 },
-        { cx: 321.4, cy: 440.5, r: 37.7 },
-        { cx: 125.2, cy: 170.1, r: 37.7 },
-        { cx: 586.3, cy: 324.4, r: 37.7 },
-        { cx: 922.8, cy: 473.3, r: 37.7 },
-        { cx: 848.7, cy:  82.0, r: 45.0 },
-        { cx: 419.8, cy: 282.5, r: 45.0 },
-        { cx: 555.9, cy: 418.6, r: 45.0 },
-        { cx: 432.6, cy: 182.3, r: 45.0 },
-        { cx: 675.6, cy: 283.1, r: 53.5 },
-        { cx: 754.6, cy: 298.9, r: 53.5 }
+        /* small */
+        { cx: 303.0, cy: 615.5, r: 27.5 },
+        { cx: 241.5, cy: 670.5, r: 27.5 },
+        /* small-medium */
+        { cx: 701.5, cy: 292.0, r: 37.5 },
+        { cx: 203.0, cy: 757.5, r: 37.5 },
+        { cx: 590.0, cy: 179.5, r: 37.5 },
+        { cx: 605.5, cy: 875.0, r: 37.5 },
+        /* medium (peak of the size distribution) */
+        { cx: 487.0, cy: 305.0, r: 47.5 },
+        { cx: 530.0, cy: 435.0, r: 47.5 },
+        { cx: 611.5, cy: 381.0, r: 47.5 },
+        { cx: 302.5, cy: 878.0, r: 47.5 },
+        { cx: 144.5, cy: 418.0, r: 47.5 },
+        /* medium-large */
+        { cx: 753.0, cy: 464.0, r: 62.5 },
+        { cx: 562.5, cy: 646.0, r: 62.5 },
+        { cx: 144.0, cy: 165.0, r: 62.5 },
+        { cx: 836.5, cy: 348.0, r: 62.5 },
+        /* large */
+        { cx: 744.0, cy: 636.0, r: 80.0 },
+        { cx: 364.0, cy: 417.5, r: 80.0 },
+        { cx: 854.5, cy: 775.5, r: 80.0 }
     ];
 
-    /* 8 unique bin radii (in 1000-wide reference units). Map each void to
-       its bin by exact match -- the detection used these exact radii. */
-    var BIN_RADII = [10.9, 14.6, 19.4, 24.3, 30.4, 37.7, 45.0, 53.5];
-    /* Physical labels (rough Mpc/h) for the x-axis */
-    var BIN_LABELS_MPC = ['9', '12', '16', '20', '25', '31', '37', '44'];
-    var N_BINS = BIN_RADII.length;
+    /* 5 radius bins. Each void's r maps to one bin index based on the
+       midpoint, so the histogram has 5 bars. */
+    var BIN_CENTRES = [27.5, 37.5, 47.5, 62.5, 80.0];
+    var BIN_LABELS  = ['~15',  '~22',  '~28',  '~36',  '~46']; /* Mpc/h */
 
-    function binForR(r) {
-        for (var i = 0; i < BIN_RADII.length; i++) {
-            if (Math.abs(BIN_RADII[i] - r) < 0.05) return i;
-        }
-        /* fallback to nearest */
+    /* Map a radius (in ref space) to a bin index. Use nearest centre. */
+    function binFor(r) {
         var best = 0, bestD = Infinity;
-        for (var j = 0; j < BIN_RADII.length; j++) {
-            var d = Math.abs(BIN_RADII[j] - r);
-            if (d < bestD) { bestD = d; best = j; }
+        for (var i = 0; i < BIN_CENTRES.length; i++) {
+            var d = Math.abs(r - BIN_CENTRES[i]);
+            if (d < bestD) { bestD = d; best = i; }
         }
         return best;
     }
 
-    /* Per-bin total count (for axis scaling) */
-    var TOTAL_PER_BIN = new Array(N_BINS).fill(0);
+    /* Count of voids in each bin -- for axis scaling */
+    var TOTAL_PER_BIN = [0, 0, 0, 0, 0];
     for (var _i = 0; _i < VOIDS_REF.length; _i++) {
-        TOTAL_PER_BIN[binForR(VOIDS_REF[_i].r)]++;
+        TOTAL_PER_BIN[binFor(VOIDS_REF[_i].r)]++;
     }
-    var MAX_COUNT = Math.max.apply(null, TOTAL_PER_BIN);
-    /* Y-axis goes a bit above the max so the top marker has breathing room */
-    var Y_AXIS_MAX = Math.max(MAX_COUNT + 1, 6);
+    var MAX_BIN_COUNT = Math.max.apply(null, TOTAL_PER_BIN);
 
-    /* Build the visits sequence:
+    /* Reveal cadence */
+    var N_VOIDS = VOIDS_REF.length;
+    var N_BINS  = TOTAL_PER_BIN.length;
+
+    /* Build the VISITS sequence:
          for each bin (small radius -> large)
-            for each void in this bin: visit = reveal
-            one extra visit = fade (connectors for this bin fade out)
-    */
+            for each void in this bin: visit = { type: 'reveal', voidIdx, binIdx }
+            one extra visit per bin = { type: 'fade', binIdx }
+       That extra "fade" visit lets the bin's connectors fade out before the
+       next bin's voids start to appear. */
     var VISITS = [];
-    var voidIdxsByBin = []; /* per bin, indices of voids in VOIDS_REF */
-    for (var b = 0; b < N_BINS; b++) {
-        voidIdxsByBin[b] = [];
-        for (var i = 0; i < VOIDS_REF.length; i++) {
-            if (binForR(VOIDS_REF[i].r) === b) voidIdxsByBin[b].push(i);
+    var voidRevealVisit = new Array(N_VOIDS);     /* per-void: index in VISITS */
+    var binFadeVisit    = new Array(N_BINS);      /* per-bin: index in VISITS */
+    for (var bb = 0; bb < N_BINS; bb++) {
+        for (var ii = 0; ii < VOIDS_REF.length; ii++) {
+            if (binFor(VOIDS_REF[ii].r) === bb) {
+                VISITS.push({ type: 'reveal', voidIdx: ii, binIdx: bb });
+                voidRevealVisit[ii] = VISITS.length - 1;
+            }
         }
-        for (var k = 0; k < voidIdxsByBin[b].length; k++) {
-            VISITS.push({ type: 'reveal', voidIdx: voidIdxsByBin[b][k], binIdx: b });
-        }
-        VISITS.push({ type: 'fade', binIdx: b });
+        VISITS.push({ type: 'fade', binIdx: bb });
+        binFadeVisit[bb] = VISITS.length - 1;
     }
-    var N_VISITS = VISITS.length;
-    /* Pre-compute per-void reveal-visit index and per-bin fade-visit index */
-    var voidRevealVisit = new Array(VOIDS_REF.length);
-    var binFadeVisit    = new Array(N_BINS);
-    for (var vi = 0; vi < N_VISITS; vi++) {
-        var V = VISITS[vi];
-        if (V.type === 'reveal') voidRevealVisit[V.voidIdx] = vi;
-        else binFadeVisit[V.binIdx] = vi;
-    }
+    var N_VISITS = VISITS.length;       /* 18 reveal + 5 fade = 23 */
 
     /* ===================================================================== */
-    /* Utility                                                               */
+    /* Utilities                                                             */
     /* ===================================================================== */
 
     function svgEl(name, attrs) {
@@ -139,29 +119,33 @@
     }
     function clamp(x, lo, hi) { return x < lo ? lo : (x > hi ? hi : x); }
 
-    /* Scale a (cx, cy, r) from 1000-wide reference into the IMG rectangle.
-       The reference is normalised against the source image WIDTH, so the
-       same factor applies to all three. */
+    /* Scale a (cx, cy, r) from the 1000-wide reference into IMG SVG coords. */
     function scaleVoid(v) {
         var s = IMG.w / 1000.0;
         return {
             cx: IMG.x + v.cx * s,
             cy: IMG.y + v.cy * s,
             r:  v.r * s,
-            bin: binForR(v.r),
-            refR: v.r
+            bin: binFor(v.r)
         };
     }
     var VOIDS = VOIDS_REF.map(scaleVoid);
 
-    /* x-position of bin b's marker on the VSF plot */
-    var BIN_GAP = PLOT.w / N_BINS;
-    function binX(b) {
-        return PLOT.x + BIN_GAP * (b + 0.5);
+    /* Bin geometry: x-position of the bar, x-position of the bin centre on
+       the x-axis, etc. */
+    var BIN_W = PLOT.w / BIN_CENTRES.length;
+    function binX(binIdx) {
+        return PLOT.x + binIdx * BIN_W + BIN_W * 0.5;
     }
-    /* y-position for a given count value (linear scale 0..Y_AXIS_MAX) */
-    function plotY(count) {
-        return PLOT.y + PLOT.h * (1 - count / Y_AXIS_MAX);
+    function barX(binIdx) {
+        return PLOT.x + binIdx * BIN_W + BIN_W * 0.18;
+    }
+    var BAR_W = BIN_W * 0.64;
+    /* y position of the top of a bar containing `count` voids (linear scale
+       from 0..MAX_BIN_COUNT mapped to PLOT.y+PLOT.h .. PLOT.y) */
+    function barTopY(count) {
+        var fr = count / MAX_BIN_COUNT;
+        return PLOT.y + PLOT.h * (1 - fr);
     }
 
     /* ===================================================================== */
@@ -172,140 +156,156 @@
         var svg = scrolly.querySelector('.cosmic-scene');
         if (!svg) return null;
 
-        /* --- VSF axes / ticks / labels --------------------------------- */
-        var axes = svgEl('g', { 'class': 'vsf-axes' });
+        /* ---- VSF axes, ticks, grid, title -------------------------------- */
+        var axesG = svgEl('g', { 'class': 'vsf-axes' });
         /* axes lines */
-        axes.appendChild(svgEl('line', {
+        axesG.appendChild(svgEl('line', {
             x1: PLOT.x, y1: PLOT.y,
             x2: PLOT.x, y2: PLOT.y + PLOT.h
         }));
-        axes.appendChild(svgEl('line', {
-            x1: PLOT.x,           y1: PLOT.y + PLOT.h,
-            x2: PLOT.x + PLOT.w,  y2: PLOT.y + PLOT.h
+        axesG.appendChild(svgEl('line', {
+            x1: PLOT.x,             y1: PLOT.y + PLOT.h,
+            x2: PLOT.x + PLOT.w,    y2: PLOT.y + PLOT.h
         }));
-        /* x ticks */
-        for (var b = 0; b < N_BINS; b++) {
-            var bx = binX(b);
-            axes.appendChild(svgEl('line', {
-                x1: bx, y1: PLOT.y + PLOT.h,
-                x2: bx, y2: PLOT.y + PLOT.h + 7,
+        /* x-axis label */
+        var xLabel = svgEl('text', {
+            x: PLOT.x + PLOT.w / 2, y: PLOT.y + PLOT.h + 70,
+            'class': 'vsf-axis-label', 'text-anchor': 'middle'
+        });
+        xLabel.textContent = 'effective void radius  R  [ h^-1 Mpc ]';
+        axesG.appendChild(xLabel);
+        /* y-axis label (rotated) */
+        var yLabel = svgEl('text', {
+            x: PLOT.x - 75, y: PLOT.y + PLOT.h / 2,
+            'class': 'vsf-axis-label', 'text-anchor': 'middle',
+            transform: 'rotate(-90 ' + (PLOT.x - 75) + ' ' + (PLOT.y + PLOT.h / 2) + ')'
+        });
+        yLabel.textContent = 'number of voids per bin';
+        axesG.appendChild(yLabel);
+        /* x-axis ticks under each bin */
+        for (var b = 0; b < BIN_CENTRES.length; b++) {
+            axesG.appendChild(svgEl('line', {
+                x1: binX(b), y1: PLOT.y + PLOT.h,
+                x2: binX(b), y2: PLOT.y + PLOT.h + 8,
                 'class': 'vsf-tick'
             }));
             var t = svgEl('text', {
-                x: bx, y: PLOT.y + PLOT.h + 28,
+                x: binX(b), y: PLOT.y + PLOT.h + 30,
                 'class': 'vsf-tick-label', 'text-anchor': 'middle'
             });
-            t.textContent = BIN_LABELS_MPC[b];
-            axes.appendChild(t);
+            t.textContent = BIN_LABELS[b];
+            axesG.appendChild(t);
         }
-        /* y ticks */
-        for (var yt = 0; yt <= Y_AXIS_MAX; yt++) {
-            var yy = plotY(yt);
-            axes.appendChild(svgEl('line', {
-                x1: PLOT.x - 7, y1: yy, x2: PLOT.x, y2: yy,
+        /* y-axis ticks */
+        for (var yt = 0; yt <= MAX_BIN_COUNT; yt++) {
+            var yy = barTopY(yt);
+            axesG.appendChild(svgEl('line', {
+                x1: PLOT.x - 8, y1: yy, x2: PLOT.x, y2: yy,
                 'class': 'vsf-tick'
             }));
-            var ytxt = svgEl('text', {
-                x: PLOT.x - 12, y: yy + 5,
+            var tl = svgEl('text', {
+                x: PLOT.x - 14, y: yy + 5,
                 'class': 'vsf-tick-label', 'text-anchor': 'end'
             });
-            ytxt.textContent = yt;
-            axes.appendChild(ytxt);
-            /* faint gridline */
-            axes.appendChild(svgEl('line', {
+            tl.textContent = yt;
+            axesG.appendChild(tl);
+            /* faint horizontal gridline */
+            axesG.appendChild(svgEl('line', {
                 x1: PLOT.x, y1: yy, x2: PLOT.x + PLOT.w, y2: yy,
                 'class': 'vsf-grid'
             }));
         }
-        /* axis labels */
-        var xLab = svgEl('text', {
-            x: PLOT.x + PLOT.w / 2, y: PLOT.y + PLOT.h + 65,
-            'class': 'vsf-axis-label', 'text-anchor': 'middle'
-        });
-        xLab.textContent = 'effective void radius  R  [ h^-1 Mpc ]';
-        axes.appendChild(xLab);
-        var yLab = svgEl('text', {
-            x: PLOT.x - 60, y: PLOT.y + PLOT.h / 2,
-            'class': 'vsf-axis-label', 'text-anchor': 'middle',
-            transform: 'rotate(-90 ' + (PLOT.x - 60) + ' ' + (PLOT.y + PLOT.h / 2) + ')'
-        });
-        yLab.textContent = 'number of voids per bin';
-        axes.appendChild(yLab);
-        /* title */
+        /* Title */
         var title = svgEl('text', {
             x: VSF.x + VSF.w / 2, y: VSF.y + 60,
             'class': 'vsf-title', 'text-anchor': 'middle'
         });
         title.textContent = 'VOID  SIZE  FUNCTION';
-        axes.appendChild(title);
-        var sub = svgEl('text', {
-            x: VSF.x + VSF.w / 2, y: VSF.y + 92,
+        axesG.appendChild(title);
+        var subtitle = svgEl('text', {
+            x: VSF.x + VSF.w / 2, y: VSF.y + 95,
             'class': 'vsf-subtitle', 'text-anchor': 'middle'
         });
-        sub.textContent = 'one void at a time';
-        axes.appendChild(sub);
-        svg.appendChild(axes);
+        subtitle.textContent = 'one void at a time';
+        axesG.appendChild(subtitle);
+        svg.appendChild(axesG);
 
-        /* --- Theoretical VSF curve under the markers ------------------- */
+        /* ---- Theoretical VSF curve (faint guide under the bars) -------- */
         var curveG = svgEl('g', { 'class': 'vsf-curve' });
-        /* Smooth peaked curve passing roughly through the final marker
-           positions; computed analytically. */
+        /* Use a Sheth-vdW-like peaked shape: f(r) = A * r^a * exp(-(r/r0)^b)
+           parametrised so the peak sits near bin 2 (the data peak). */
+        var theoryPts = [];
+        var r0 = 50, A = 0.0009, a = 2.1, b = 2.4;
         var nPts = 220;
+        var rMin = BIN_CENTRES[0] - 8;
+        var rMax = BIN_CENTRES[BIN_CENTRES.length - 1] + 8;
+        var topY = MAX_BIN_COUNT + 0.4;     /* normalise so peak fits */
+        var theoryMax = 0;
+        for (var i = 0; i < nPts; i++) {
+            var rr = rMin + (rMax - rMin) * (i / (nPts - 1));
+            var v = A * Math.pow(rr, a) * Math.exp(-Math.pow(rr / r0, b));
+            if (v > theoryMax) theoryMax = v;
+            theoryPts.push([rr, v]);
+        }
+        /* Map theory to plot coords. We tie the theory's peak to MAX_BIN_COUNT
+           so the curve naturally sits at the bar tops. */
         var d = '';
-        var rMin = BIN_RADII[0] - 2;
-        var rMax = BIN_RADII[N_BINS - 1] + 4;
-        for (var p = 0; p < nPts; p++) {
-            var rr = rMin + (rMax - rMin) * (p / (nPts - 1));
-            /* peaked f(r) = A*r^a * exp(-(r/r0)^b) */
-            var r0 = 32, A = 0.00025, aa = 2.0, bb = 2.4;
-            var v = A * Math.pow(rr, aa) * Math.exp(-Math.pow(rr / r0, bb));
-            /* map to plot coordinates */
-            var fracX = (rr - rMin) / (rMax - rMin);
-            /* normalise so the curve's peak matches MAX_COUNT */
-            var fracY = v / (A * Math.pow(r0 * Math.pow(aa / bb, 1 / bb), aa)
-                              * Math.exp(-aa / bb));
-            var px = PLOT.x + PLOT.w * fracX;
-            var py = PLOT.y + PLOT.h * (1 - fracY * MAX_COUNT / Y_AXIS_MAX);
-            d += (p === 0 ? 'M' : ' L') + px.toFixed(1) + ',' + py.toFixed(1);
+        for (var j = 0; j < theoryPts.length; j++) {
+            var rr2 = theoryPts[j][0];
+            var vv  = theoryPts[j][1];
+            var binFrac = (rr2 - rMin) / (rMax - rMin);
+            var px = PLOT.x + PLOT.w * binFrac;
+            var py = PLOT.y + PLOT.h * (1 - (vv / theoryMax) * (MAX_BIN_COUNT / (MAX_BIN_COUNT + 0.4)));
+            d += (j === 0 ? 'M' : ' L') + px.toFixed(1) + ',' + py.toFixed(1);
         }
         curveG.appendChild(svgEl('path', { d: d, 'class': 'theory-line' }));
+        /* soft fill under the curve */
+        var dFill = d + ' L' + (PLOT.x + PLOT.w) + ',' + (PLOT.y + PLOT.h) +
+                          ' L' + PLOT.x         + ',' + (PLOT.y + PLOT.h) + ' Z';
+        curveG.appendChild(svgEl('path', { d: dFill, 'class': 'theory-fill' }));
         svg.appendChild(curveG);
 
-        /* --- Markers (one per bin) -------------------------------------- */
-        var markersG = svgEl('g', { 'class': 'markers' });
-        var markers = [];
-        for (var bb2 = 0; bb2 < N_BINS; bb2++) {
-            var mx = binX(bb2);
-            var my = plotY(0);
-            /* outer glow */
-            var glow = svgEl('circle', {
-                cx: mx, cy: my, r: 9, 'class': 'marker-glow'
+        /* ---- Histogram bars (one per bin) ------------------------------ */
+        var barsG = svgEl('g', { 'class': 'bars' });
+        var bars = [];
+        for (var bb = 0; bb < BIN_CENTRES.length; bb++) {
+            var bar = svgEl('rect', {
+                x: barX(bb), y: PLOT.y + PLOT.h,
+                width: BAR_W, height: 0,
+                'class': 'bin-bar'
             });
-            /* main marker */
-            var marker = svgEl('circle', {
-                cx: mx, cy: my, r: 5, 'class': 'marker'
-            });
-            /* count label above */
-            var lab = svgEl('text', {
-                x: mx, y: my - 14, 'class': 'marker-count', 'text-anchor': 'middle'
-            });
-            markersG.appendChild(glow);
-            markersG.appendChild(marker);
-            markersG.appendChild(lab);
-            markers.push({ glow: glow, marker: marker, label: lab });
+            barsG.appendChild(bar);
+            bars.push(bar);
         }
-        svg.appendChild(markersG);
+        svg.appendChild(barsG);
 
-        /* --- Void circles on the image --------------------------------- */
+        /* Count text above each bar */
+        var countTexts = [];
+        for (var bb2 = 0; bb2 < BIN_CENTRES.length; bb2++) {
+            var ct = svgEl('text', {
+                x: barX(bb2) + BAR_W / 2,
+                y: PLOT.y + PLOT.h - 6,
+                'class': 'bin-count', 'text-anchor': 'middle'
+            });
+            ct.textContent = '';
+            barsG.appendChild(ct);
+            countTexts.push(ct);
+        }
+
+        /* ---- Void circles on the cosmic web image ---------------------- */
         var voidsG = svgEl('g', { 'class': 'voids' });
         var voidCircles = [];
         for (var v = 0; v < VOIDS.length; v++) {
             var V = VOIDS[v];
+            /* faint inner fill */
             var fill = svgEl('circle', {
-                cx: V.cx, cy: V.cy, r: V.r, 'class': 'void-fill'
+                cx: V.cx, cy: V.cy, r: V.r,
+                'class': 'void-fill'
             });
+            /* dashed cyan outline */
             var ring = svgEl('circle', {
-                cx: V.cx, cy: V.cy, r: V.r, 'class': 'void-ring'
+                cx: V.cx, cy: V.cy, r: V.r,
+                'class': 'void-ring'
             });
             voidsG.appendChild(fill);
             voidsG.appendChild(ring);
@@ -313,21 +313,22 @@
         }
         svg.appendChild(voidsG);
 
-        /* --- Connectors (one per void) --------------------------------- */
-        var connG = svgEl('g', { 'class': 'connectors' });
+        /* ---- Connector lines (one per void) ---------------------------- */
+        var connectorsG = svgEl('g', { 'class': 'connectors' });
         var connectors = [];
-        for (var c = 0; c < VOIDS.length; c++) {
-            var path = svgEl('path', { d: '', 'class': 'void-connector' });
-            connG.appendChild(path);
-            connectors.push(path);
+        for (var v2 = 0; v2 < VOIDS.length; v2++) {
+            var con = svgEl('path', { d: '', 'class': 'void-connector' });
+            connectorsG.appendChild(con);
+            connectors.push(con);
         }
-        svg.appendChild(connG);
+        svg.appendChild(connectorsG);
 
         return {
             svg: svg,
-            markers: markers,
             voidCircles: voidCircles,
-            connectors: connectors
+            connectors: connectors,
+            bars: bars,
+            countTexts: countTexts
         };
     }
 
@@ -342,113 +343,106 @@
         var hudRadius = opts && opts.hudRadius;
         var hudBar = opts && opts.hudBar;
 
+        /* The scroll progress now maps to N_VISITS, which is N_VOIDS reveal
+           visits interleaved with one fade visit per bin (so the bin's
+           connectors fade out before the next bin starts). */
         var visitsF = progress * N_VISITS;
         var v = Math.min(N_VISITS - 1, Math.floor(visitsF));
         var withinT = clamp(visitsF - v, 0, 1);
         var currentVisit = VISITS[v];
 
-        /* ---- Per-bin counts (fractional during reveal) ------------- */
-        var counts = new Array(N_BINS).fill(0);
-        for (var i = 0; i < VOIDS.length; i++) {
-            var rv = voidRevealVisit[i];
-            var bIdx = VOIDS[i].bin;
-            if (rv < v) counts[bIdx] += 1;
-            else if (rv === v && currentVisit.type === 'reveal') counts[bIdx] += withinT;
+        /* ---- Per-bin counts (fractional during a reveal-in-progress) -- */
+        var counts = [0, 0, 0, 0, 0];
+        for (var ii = 0; ii < N_VOIDS; ii++) {
+            var rv = voidRevealVisit[ii];
+            var bi = VOIDS[ii].bin;
+            if (rv < v) counts[bi] += 1;
+            else if (rv === v && currentVisit.type === 'reveal') counts[bi] += withinT;
         }
 
-        /* ---- Markers ---------------------------------------------- */
-        for (var b = 0; b < N_BINS; b++) {
-            var c = counts[b];
-            var mx = binX(b);
-            var my = plotY(c);
-            state.markers[b].marker.setAttribute('cx', mx.toFixed(1));
-            state.markers[b].marker.setAttribute('cy', my.toFixed(1));
-            state.markers[b].glow.setAttribute('cx', mx.toFixed(1));
-            state.markers[b].glow.setAttribute('cy', my.toFixed(1));
-            state.markers[b].label.setAttribute('x', mx.toFixed(1));
-            state.markers[b].label.setAttribute('y', (my - 14).toFixed(1));
-            /* Visibility: marker shows once count > 0 */
-            var op = c > 0 ? 1 : 0;
-            state.markers[b].marker.style.opacity = op;
-            state.markers[b].glow.style.opacity   = op * 0.7;
-            state.markers[b].label.style.opacity  = op;
-            var displayN = Math.round(c);
-            state.markers[b].label.textContent = displayN > 0 ? displayN : '';
-        }
+        /* ---- Per-void state ------------------------------------------ */
+        for (var i = 0; i < N_VOIDS; i++) {
+            var V = VOIDS[i];
+            var rev = voidRevealVisit[i];
+            var bIdx = V.bin;
+            var fadeV = binFadeVisit[bIdx];
 
-        /* ---- Per-void state: reveal + connector ------------------- */
-        for (var iv = 0; iv < VOIDS.length; iv++) {
-            var V = VOIDS[iv];
-            var rv2 = voidRevealVisit[iv];
-            var bn  = V.bin;
-            var fadeV = binFadeVisit[bn];
-
-            /* Reveal of the circle */
+            /* Circle reveal: monotonic once shown, stays visible forever. */
             var revealT;
-            if (v < rv2) revealT = 0;
-            else if (v === rv2 && currentVisit.type === 'reveal') revealT = withinT;
+            if (v < rev) revealT = 0;
+            else if (v === rev && currentVisit.type === 'reveal') revealT = withinT;
             else revealT = 1;
-            state.voidCircles[iv].fill.style.opacity = (0.28 * revealT).toFixed(3);
-            state.voidCircles[iv].ring.style.opacity = revealT.toFixed(3);
+            state.voidCircles[i].fill.style.opacity = (0.30 * revealT).toFixed(3);
+            state.voidCircles[i].ring.style.opacity = revealT.toFixed(3);
+            state.voidCircles[i].ring.style.strokeDasharray = '6 5';
 
-            /* Connector opacity logic:
-                 visit <  rv2          -> 0
-                 visit == rv2          -> withinT (drawing in)
-                 rv2 < visit < fadeV   -> 1     (bin in progress)
-                 visit == fadeV        -> 1 - withinT  (fade out)
-                 visit >  fadeV        -> 0 */
+            /* Connector path: curved bezier from void to the top of the bin
+               bar. Path recomputed every frame so it tracks the bar's
+               CURRENT top (which moves up as voids feed in). */
+            var binCenterX = barX(bIdx) + BAR_W / 2;
+            var targetY    = barTopY(counts[bIdx]);
+            var midX = (V.cx + binCenterX) * 0.5;
+            var midY = Math.min(V.cy, targetY) - 60;
+            var dPath = 'M' + V.cx.toFixed(1) + ',' + V.cy.toFixed(1) +
+                        ' Q' + midX.toFixed(1) + ',' + midY.toFixed(1) +
+                        ' '  + binCenterX.toFixed(1) + ',' + targetY.toFixed(1);
+            state.connectors[i].setAttribute('d', dPath);
+
+            /* Connector opacity lifecycle:
+                 visit <  rev                                   -> 0
+                 visit == rev (reveal frame)                    -> withinT (drawing in)
+                 rev < visit < fadeV                            -> 1
+                 visit == fadeV (this bin's dedicated fade)     -> 1 - withinT
+                 visit >  fadeV                                 -> 0
+               This is what gives the per-bin "connectors clear out then
+               the next bin starts" effect. */
+            var path = state.connectors[i];
             var conOp;
-            if (v < rv2) conOp = 0;
-            else if (v === rv2 && currentVisit.type === 'reveal') conOp = withinT;
+            if (v < rev) conOp = 0;
+            else if (v === rev && currentVisit.type === 'reveal') conOp = withinT;
             else if (v < fadeV) conOp = 1;
             else if (v === fadeV && currentVisit.type === 'fade') conOp = 1 - withinT;
             else conOp = 0;
-
-            var path = state.connectors[iv];
             path.style.opacity = conOp.toFixed(3);
 
-            if (conOp > 0.01) {
-                /* Recompute the path EVERY FRAME so it tracks the marker's
-                   current position as the bin count grows. */
-                var bx = binX(bn);
-                var by = plotY(counts[bn]);
-                /* Quadratic bezier control point: between void & marker, lifted
-                   above to give a nice arc */
-                var midX = (V.cx + bx) * 0.5;
-                var midY = Math.min(V.cy, by) - 50;
-                var d = 'M' + V.cx.toFixed(1) + ',' + V.cy.toFixed(1) +
-                        ' Q' + midX.toFixed(1) + ',' + midY.toFixed(1) +
-                        ' ' + bx.toFixed(1) + ',' + by.toFixed(1);
-                path.setAttribute('d', d);
-                /* Animate stroke-dashoffset for the "drawing in" effect ONLY
-                   during the reveal frame. After the reveal, the line is
-                   fully drawn (no dash offset). */
-                if (path.getTotalLength) {
-                    var totalLen = path.getTotalLength();
-                    path.style.strokeDasharray  = totalLen;
-                    var drawProg;
-                    if (v < rv2) drawProg = 0;
-                    else if (v === rv2 && currentVisit.type === 'reveal') drawProg = withinT;
-                    else drawProg = 1;
-                    path.style.strokeDashoffset = (totalLen * (1 - drawProg)).toFixed(1);
-                }
+            /* During the reveal frame, also animate stroke-dashoffset for the
+               drawing-in effect. After the reveal, the line is fully drawn
+               (offset 0). After the fade visit it's invisible anyway. */
+            if (conOp > 0.001 && path.getTotalLength) {
+                var totalLen = path.getTotalLength();
+                path.style.strokeDasharray  = totalLen;
+                var drawProg;
+                if (v === rev && currentVisit.type === 'reveal') drawProg = withinT;
+                else drawProg = 1;
+                path.style.strokeDashoffset = (totalLen * (1 - drawProg)).toFixed(1);
             }
         }
 
-        /* ---- HUD --------------------------------------------------- */
-        if (hudBar) hudBar.style.width = (progress * 100).toFixed(1) + '%';
+        /* ---- Bars + count labels ------------------------------------- */
+        for (var b = 0; b < state.bars.length; b++) {
+            var c = counts[b];
+            var topY = barTopY(c);
+            var h = PLOT.y + PLOT.h - topY;
+            state.bars[b].setAttribute('y', topY.toFixed(1));
+            state.bars[b].setAttribute('height', Math.max(0, h).toFixed(1));
+            state.countTexts[b].setAttribute('y', (topY - 6).toFixed(1));
+            var nDisplay = Math.round(c);
+            state.countTexts[b].textContent = nDisplay > 0 ? nDisplay : '';
+        }
+
+        /* ---- HUD ----------------------------------------------------- */
         var totalRevealed = 0;
-        for (var ii = 0; ii < VOIDS.length; ii++) {
-            if (voidRevealVisit[ii] < v) totalRevealed++;
-            else if (voidRevealVisit[ii] === v && currentVisit.type === 'reveal')
-                totalRevealed += (withinT > 0.5 ? 1 : 0);
+        for (var jj = 0; jj < N_VOIDS; jj++) {
+            if (voidRevealVisit[jj] < v) totalRevealed++;
+            else if (voidRevealVisit[jj] === v &&
+                     currentVisit.type === 'reveal' && withinT > 0.5) totalRevealed++;
         }
-        if (hudCount) hudCount.textContent = totalRevealed + ' / ' + VOIDS.length;
+        if (hudCount) hudCount.textContent = totalRevealed + ' / ' + N_VOIDS;
         if (hudRadius) {
-            /* Show the current bin's radius */
             var curBin = (currentVisit && currentVisit.binIdx !== undefined) ? currentVisit.binIdx : 0;
-            hudRadius.textContent = 'R ~ ' + BIN_LABELS_MPC[curBin] + ' h^-1 Mpc';
+            hudRadius.textContent = 'R ~ ' + (BIN_LABELS[curBin] || '') + ' h^-1 Mpc';
         }
+        if (hudBar) hudBar.style.width = (progress * 100).toFixed(1) + '%';
     }
 
     /* ===================================================================== */
@@ -459,9 +453,9 @@
         var scrolly = document.getElementById('cosmicScrolly');
         if (!scrolly) return;
         var state = buildScene(scrolly);
-        var hudCount  = scrolly.querySelector('.scrolly-progress-label .count');
+        var hudCount = scrolly.querySelector('.scrolly-progress-label .count');
         var hudRadius = scrolly.querySelector('.scrolly-progress-label .radius');
-        var hudBar    = scrolly.querySelector('.scrolly-progress-bar');
+        var hudBar   = scrolly.querySelector('.scrolly-progress-bar');
 
         function update() {
             var rect = scrolly.getBoundingClientRect();
