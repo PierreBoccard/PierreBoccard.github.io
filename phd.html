@@ -57,66 +57,103 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
         bubbles that fill most of the volume of the observable Universe.
     </p>
 
-    <div class="section-grid">
-        <div class="reveal reveal-left">
-            <p>
-                A typical cosmic void spans tens of mega-parsecs across and
-                contains only a handful of galaxies. Because they are nearly
-                empty, voids are the cleanest cosmological laboratories we have:
-                their interior dynamics are dominated by dark energy rather than
-                non-linear gravity, and the imprint of modified-gravity theories
-                on their growth is amplified rather than washed out.
-            </p>
+    <div class="reveal reveal-left" style="margin-top:30px; max-width:780px">
+        <p>
+            A typical cosmic void spans tens of mega-parsecs across and
+            contains only a handful of galaxies. Because they are nearly empty,
+            voids are the cleanest cosmological laboratories we have: their
+            interior dynamics are dominated by dark energy rather than
+            non-linear gravity, and the imprint of modified-gravity theories
+            on their growth is amplified rather than washed out.
+        </p>
 
-            <div class="callout">
-                The <strong>Void Size Function</strong> (VSF) — the number
-                density of voids as a function of their radius — encodes how
-                the cosmic web grew under the competing pull of gravity and the
-                push of dark energy. Its shape is sensitive to
-                <strong>Ω<sub>m</sub></strong>, the dark-energy equation of
-                state <strong>w</strong>, and to modifications of general
-                relativity.
-            </div>
-
-            <ul class="feature-list">
-                <li>Voids cover ≳60 % of the Universe by volume yet host a small fraction of galaxies.</li>
-                <li>Their abundance follows a near-universal excursion-set prediction.</li>
-                <li>Combined with the void–galaxy cross-correlation, they constrain w to a few percent.</li>
-            </ul>
+        <div class="callout">
+            The <strong>Void Size Function</strong> (VSF) &mdash; the number
+            density of voids as a function of their radius &mdash; encodes how
+            the cosmic web grew under the competing pull of gravity and the
+            push of dark energy. Its shape is sensitive to
+            <strong>&Omega;<sub>m</sub></strong>, the dark-energy equation of
+            state <strong>w</strong>, and to modifications of general
+            relativity.
         </div>
 
-        <figure class="section-figure reveal reveal-right">
-            <img src="/assets/images/phd/cosmic-web-filaments.jpg" alt="Large-scale gas-density slice from the IllustrisTNG simulation with five highlighted voids"/>
-            <figcaption>Gas density on large scales from the IllustrisTNG simulation. Galaxies form along the bright filaments and at their intersections, leaving enormous underdense voids in between &mdash; five of them are marked with dashed cyan circles. Credit: <a href="https://rainerweinberger.com/illustris-tng" target="_blank" rel="noopener">Rainer Weinberger</a> / IllustrisTNG.</figcaption>
-        </figure>
-    </div>
-
-    <div class="section-grid reverse" style="margin-top:50px">
-        <div class="reveal reveal-right">
-            <p>
-                Theoretically, the VSF was derived from the same excursion-set
-                machinery as the halo mass function (Sheth &amp; van de Weygaert
-                2004; Jennings et&nbsp;al. 2013). It predicts a peaked
-                distribution: small voids merge into bigger ones as structure
-                grows, leaving a characteristic falloff at large radii whose
-                position is set by the linear growth of structure — and
-                therefore by cosmology.
-            </p>
-            <p>
-                To exploit the VSF observationally we need (a) accurate galaxy
-                positions in three dimensions and (b) a faithful void-finding
-                algorithm. Both pieces are challenged when galaxy distances come
-                from photometric, not spectroscopic, surveys — which is exactly
-                where Rubin/LSST will live.
-            </p>
-        </div>
-
-        <figure class="section-figure reveal reveal-left">
-            <img src="/assets/images/phd/vsf-plot.png" alt="Theoretical void size function with mock measurements and a photo-z-degraded prediction"/>
-            <figcaption>The theoretical VSF (solid cyan) with a mock measurement (points + Poisson error bars) and a photometric prediction with &sigma;<sub>z</sub> = 0.02 (dashed pink). The gap between the spec-z and photo-z curves is what my PhD aims to model and remove.</figcaption>
-        </figure>
+        <p style="margin-top:18px">
+            Theoretically, the VSF was derived from the same excursion-set
+            machinery as the halo mass function (Sheth &amp; van&nbsp;de&nbsp;Weygaert
+            2004; Jennings et&nbsp;al. 2013): it predicts a peaked distribution
+            where small voids merge into bigger ones as structure grows,
+            leaving a characteristic falloff at large radii whose position is
+            set by the linear growth of structure &mdash; and therefore by
+            cosmology. To exploit the VSF observationally we need accurate
+            galaxy positions and a faithful void-finding algorithm. Both
+            pieces are challenged when galaxy distances come from photometric,
+            not spectroscopic, surveys &mdash; which is exactly where
+            Rubin/LSST will live.
+        </p>
     </div>
 </section>
+
+<!-- =====================================================================
+     Cosmic web -> Void Size Function scroll-pinned animation.
+     A sibling of (not inside) the .phd-section above for the same
+     reason as the Rubin scrolly: the parent uses a transform-based
+     reveal that would break position: sticky on descendants.
+     JS in assets/js/cosmic-web-scrolly.js drives the scene:
+       * 18 voids appear one by one on the cosmic-web image (left)
+       * each one draws a curved line to its bin in the VSF (right)
+       * the histogram bar in that bin grows by one
+     ===================================================================== -->
+<section class="scrolly-cosmic" id="cosmicScrolly" aria-label="Animated build-up of the Void Size Function from a cosmic-web image">
+    <div class="scrolly-pin">
+        <div class="scrolly-stage">
+
+            <svg class="cosmic-scene" viewBox="0 0 1800 920" preserveAspectRatio="xMidYMid meet">
+
+                <!-- Cosmic-web image on the left half. The void circles
+                     and connector paths are appended by JS so they sit on
+                     top of the image. -->
+                <image href="{{ site.url }}/assets/images/phd/cosmic-web-clean.jpg"
+                       x="10" y="80" width="800" height="800"
+                       preserveAspectRatio="xMidYMid slice"/>
+
+                <!-- Section label above the cosmic-web image -->
+                <text x="10"  y="50" font-family="'Space Grotesk', sans-serif"
+                      font-size="13" fill="#5b647a" letter-spacing="3">
+                    COSMIC&#160;WEB  *  IllustrisTNG  *  R.&#160;Weinberger
+                </text>
+
+                <!--
+                  JS will insert here:
+                    <g class="vsf-axes">...</g>
+                    <g class="vsf-curve">...</g>
+                    <g class="bars">...</g>
+                    <g class="voids">...</g>
+                    <g class="connectors">...</g>
+                -->
+
+            </svg>
+
+            <div class="scrolly-hud" aria-hidden="true">
+                <div class="scrolly-progress-label" role="status">
+                    <span class="count">0 / 18</span>
+                    <span class="radius">&mdash;</span>
+                </div>
+                <div class="scrolly-progress-track">
+                    <div class="scrolly-progress-bar"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="scrolly-hint">scroll &darr;  to reveal voids one by one</div>
+    </div>
+</section>
+
+<p class="scrolly-caption">
+    Each new void detected on the cosmic web traces a line to its bin in the
+    Void Size Function. After 18 voids the histogram approximates the dashed
+    theoretical curve underneath &mdash; that's the basic VSF measurement that
+    Project A and Project B make rigorous on full LSST mocks.
+</p>
 
 <!-- ============================================================ -->
 <!-- 2. VERA C. RUBIN OBSERVATORY / LSST                           -->
@@ -424,5 +461,6 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
     </div>
 </section>
 
-<!-- Rubin scroll-pinned survey animation logic -->
+<!-- Rubin scroll-pinned survey animation + cosmic-web -> VSF builder -->
 <script src="{{ site.url }}/assets/js/rubin-scrolly.js" defer></script>
+<script src="{{ site.url }}/assets/js/cosmic-web-scrolly.js" defer></script>

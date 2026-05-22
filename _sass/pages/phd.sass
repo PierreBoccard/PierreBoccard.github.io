@@ -420,6 +420,127 @@ $phd-panel-solid: #0b1020
         font-size: 12px
         letter-spacing: 0.22em
 
+    /* ====================================================================
+       Cosmic web -> Void Size Function scroll-pinned animation.
+       Uses the same .scrolly-pin / .scrolly-stage / .scrolly-hud shells
+       defined above for the Rubin scrolly; only the inner SVG selectors
+       (.cosmic-scene) are unique to this section.                      */
+    .scrolly-cosmic
+        position: relative
+        width: 100vw
+        margin-left: calc(50% - 50vw)
+        margin-right: calc(50% - 50vw)
+        margin-top: 80px
+        margin-bottom: 80px
+        /* 18 voids * roughly 25 vh each, plus the pin */
+        height: 520vh
+
+        @media #{$mobile}, #{$tablet}
+            height: auto
+
+    .scrolly-cosmic .scrolly-stage
+        aspect-ratio: 1800 / 920
+
+    .cosmic-scene
+        width: 100%
+        height: 100%
+        display: block
+        background: transparent
+
+    /* VSF axes / ticks / labels */
+    .cosmic-scene .vsf-axes line
+        stroke: rgba(124, 244, 255, 0.45)
+        stroke-width: 1.1
+        fill: none
+
+    .cosmic-scene .vsf-axes .vsf-grid
+        stroke: rgba(124, 244, 255, 0.10)
+        stroke-width: 0.8
+
+    .cosmic-scene .vsf-axes .vsf-tick
+        stroke: rgba(124, 244, 255, 0.55)
+        stroke-width: 1
+
+    .cosmic-scene .vsf-axes .vsf-tick-label
+        font-family: $fontSans
+        font-size: 13px
+        fill: $phd-text-muted
+        letter-spacing: 0.5px
+
+    .cosmic-scene .vsf-axes .vsf-axis-label
+        font-family: $fontSans
+        font-size: 14px
+        fill: $phd-text
+        letter-spacing: 0.06em
+
+    .cosmic-scene .vsf-axes .vsf-title
+        font-family: $fontSans
+        font-size: 18px
+        fill: $phd-text-strong
+        font-weight: 700
+        letter-spacing: 0.35em
+
+    .cosmic-scene .vsf-axes .vsf-subtitle
+        font-family: $fontSans
+        font-size: 11px
+        fill: $phd-accent
+        letter-spacing: 0.3em
+        text-transform: uppercase
+
+    /* Theoretical VSF curve (faint guide) */
+    .cosmic-scene .theory-line
+        fill: none
+        stroke: rgba(124, 244, 255, 0.6)
+        stroke-width: 1.6
+        stroke-dasharray: 4 4
+
+    .cosmic-scene .theory-fill
+        fill: rgba(124, 244, 255, 0.05)
+        stroke: none
+
+    /* Histogram bars */
+    .cosmic-scene .bin-bar
+        fill: rgba(124, 244, 255, 0.22)
+        stroke: $phd-accent
+        stroke-width: 1.4
+        transition: y 0.3s cubic-bezier(.16, 1, .3, 1), height 0.3s cubic-bezier(.16, 1, .3, 1)
+        filter: drop-shadow(0 0 6px rgba(124, 244, 255, 0.35))
+
+    .cosmic-scene .bin-count
+        font-family: $fontSans
+        font-size: 14px
+        font-weight: 600
+        fill: $phd-text-strong
+
+    /* Void circles on the cosmic web */
+    .cosmic-scene .void-fill
+        fill: $phd-accent
+        opacity: 0
+        transition: opacity 0.4s ease-out
+
+    .cosmic-scene .void-ring
+        fill: none
+        stroke: $phd-accent
+        stroke-width: 2
+        opacity: 0
+        transition: opacity 0.35s ease-out
+        filter: drop-shadow(0 0 5px rgba(124, 244, 255, 0.7))
+
+    /* Connector lines from voids to bars */
+    .cosmic-scene .void-connector
+        fill: none
+        stroke: rgba(124, 244, 255, 0.65)
+        stroke-width: 1.2
+        opacity: 0
+        filter: drop-shadow(0 0 4px rgba(124, 244, 255, 0.45))
+
+    .scrolly-cosmic .scrolly-progress-label
+        .count
+            color: $phd-text-strong
+            margin-right: 18px
+        .radius
+            color: $phd-accent
+
     /* Floating progress bar + label */
     .scrolly-hud
         position: absolute
