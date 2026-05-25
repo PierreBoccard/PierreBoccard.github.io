@@ -476,6 +476,65 @@ $phd-panel-solid: #0b1020
         letter-spacing: 3px
         fill: $phd-text-muted
 
+    // ---- RA-Dec / RA-z two-panel scroll-pinned animation ----------------
+    .scrolly-radec
+        position: relative
+        width: 100vw
+        margin-left: calc(50% - 50vw)
+        margin-right: calc(50% - 50vw)
+        margin-top: 80px
+        margin-bottom: 80px
+        height: 300vh
+
+        @media #{$mobile}, #{$tablet}
+            height: auto
+
+    .scrolly-radec .scrolly-stage
+        aspect-ratio: 1800 / 900
+
+    .radec-scene
+        width: 100%
+        height: 100%
+        display: block
+        background: transparent
+        overflow: visible
+
+    .radec-scene .radec-galaxy
+        /* Only the right-panel galaxies move; the transition keeps the
+           per-frame cy update smooth. */
+        transition: cy 0.18s cubic-bezier(.16, 1, .3, 1)
+
+    .radec-scene .radec-frame
+        fill: rgba(2, 5, 15, 0.35)
+        stroke: rgba($phd-accent, 0.30)
+        stroke-width: 1
+        stroke-dasharray: 4 5
+
+    .radec-scene .radec-panel-title
+        font-family: $fontSans
+        font-size: 14px
+        letter-spacing: 2.5px
+        fill: $phd-text-strong
+        text-transform: uppercase
+
+    .radec-scene .radec-panel-sub
+        font-family: $fontSans
+        font-size: 11px
+        letter-spacing: 2px
+        text-transform: uppercase
+
+    .radec-scene .radec-panel-sub-static
+        fill: $phd-accent
+
+    .radec-scene .radec-panel-sub-shuffle
+        fill: #ff7adf
+
+    .radec-scene .radec-axis-label
+        font-family: $fontSans
+        font-size: 11px
+        letter-spacing: 2px
+        fill: $phd-text-muted
+
         @media #{$mobile}, #{$tablet}
             height: auto
 

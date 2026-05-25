@@ -453,6 +453,62 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
     on the VSF.
 </p>
 
+<!-- =====================================================================
+     RA-Dec  vs  RA-z  side-by-side scrolly.
+     Same galaxies, two projections. The LEFT panel (RA x Dec, the sky
+     projection) stays untouched as the user scrolls. The RIGHT panel
+     (RA x z, the line-of-sight slice) gets its y shuffled by the same
+     per-galaxy Gaussian as the previous animation. Punchline: 2D sky
+     clustering is preserved under photo-z scatter -- which is why 2D
+     void finders are the natural path for photometric surveys, and the
+     subject of the future Project C animation.
+     JS in assets/js/radec-scrolly.js.
+     ===================================================================== -->
+<section class="scrolly-radec" id="radecScrolly" aria-label="Two-panel demonstration that 2D sky clustering is preserved under photo-z scatter">
+    <div class="scrolly-pin">
+        <div class="scrolly-stage">
+
+            <svg class="radec-scene" viewBox="0 0 1800 900" preserveAspectRatio="xMidYMid meet">
+
+                <!-- Section label -->
+                <text x="60" y="48" font-family="'Space Grotesk', sans-serif"
+                      font-size="13" fill="#5b647a" letter-spacing="3">
+                    SKY  PROJECTION  vs  LOS  SLICE  *  scroll to apply photo-z scatter
+                </text>
+
+                <!--
+                  JS inserts here:
+                    <g class="radec-frames">...</g>
+                    <g class="radec-galaxies">  one circle per galaxy x 2 panels  </g>
+                -->
+
+            </svg>
+
+            <div class="scrolly-hud" aria-hidden="true">
+                <div class="scrolly-progress-label" role="status">
+                    <span class="sigma">σ&#8202;=&#8202;0.000</span>
+                    <span class="smear">&mdash;</span>
+                </div>
+                <div class="scrolly-progress-track">
+                    <div class="scrolly-progress-bar"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="scrolly-hint">scroll &darr;  same galaxies, two projections &mdash; only the right panel scrambles</div>
+    </div>
+</section>
+
+<p class="scrolly-caption">
+    Both panels start with exactly the same galaxy distribution. As the photo-z
+    scatter dials up, the LOS slice on the right blurs into noise while the sky
+    projection on the left remains untouched. That's the key: the 2D galaxy
+    clustering &mdash; and therefore the voids you see on the sky &mdash; are
+    almost insensitive to photo-z errors. This is the motivation for using
+    <strong>2D void finders</strong> on photometric surveys, which I will
+    illustrate in a future animation.
+</p>
+
 <!-- ============================================================
      A second photo-z section: the impact on the VSF itself.
      ============================================================ -->
@@ -539,3 +595,4 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
 <script src="{{ site.url }}/assets/js/rubin-scrolly.js" defer></script>
 <script src="{{ site.url }}/assets/js/cosmic-web-scrolly.js" defer></script>
 <script src="{{ site.url }}/assets/js/photoz-scrolly.js" defer></script>
+<script src="{{ site.url }}/assets/js/radec-scrolly.js" defer></script>
