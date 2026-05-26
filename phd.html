@@ -473,7 +473,7 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
                 <!-- Section label -->
                 <text x="60" y="48" font-family="'Space Grotesk', sans-serif"
                       font-size="13" fill="#5b647a" letter-spacing="3">
-                    SKY  PROJECTION  vs  LOS  SLICE  *  scroll to apply photo-z scatter
+                    SAME  Δz ≈ 0.02  SLICE  *  spec-z  vs  photo-z  selection  *  Abacus SkySim
                 </text>
 
                 <!--
@@ -495,16 +495,20 @@ description: "PhD research at CPPM/CNRS Marseille (Aix-Marseille Université) un
             </div>
 
         </div>
-        <div class="scrolly-hint">scroll &darr;  same galaxies, two projections &mdash; only the right panel scrambles</div>
+        <div class="scrolly-hint">scroll &darr;  cross-fade the right panel from true-z to photo-z slice selection</div>
     </div>
 </section>
 
 <p class="scrolly-caption">
-    Both panels start with exactly the same galaxy distribution. As the photo-z
-    scatter dials up, the LOS slice on the right blurs into noise while the sky
-    projection on the left remains untouched. That's the key: the 2D galaxy
-    clustering &mdash; and therefore the voids you see on the sky &mdash; are
-    almost insensitive to photo-z errors. This is the motivation for using
+    Both panels show the SAME thin redshift slice (~68.6 Mpc/h thick) of the
+    Abacus SkySim simulation, projected onto the RA-Dec sky. On the
+    <strong>left</strong>, galaxies are selected on their true (spectroscopic)
+    redshift. On the <strong>right</strong>, the slice is selected on the
+    photometric redshift &mdash; so the photo-z scatter pushes some galaxies
+    out of the window and brings new ones in. As you scroll the right panel
+    cross-fades from the true-z to the photo-z selection; the cluster /
+    void pattern stays clearly recognisable, even though only ~27 % of the
+    individual galaxies are the same. That's the motivation for using
     <strong>2D void finders</strong> on photometric surveys, which I will
     illustrate in a future animation.
 </p>
