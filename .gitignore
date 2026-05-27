@@ -5,6 +5,14 @@ Gemfile.lock
 .bundle
 vendor/
 
+# ----- Node tooling -----------------------------------------------------
+node_modules/
+package-lock.json
+
+# ----- Talk-animation captures ------------------------------------------
+# Rendered MP4s + PNG frames stay local (heavy, regeneratable).
+build/
+
 # ----- Privacy guardrails -----------------------------------------------
 # Plaintext PhD drafts must NEVER be committed. Drop them in ~/phd_drafts/
 # (outside the repo) and run `node scripts/encrypt-drafts.js`. The

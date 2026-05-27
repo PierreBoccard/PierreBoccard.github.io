@@ -1,0 +1,12 @@
+{
+  "name": "pierreboccard.github.io",
+  "private": true,
+  "description": "Tooling for the personal site (encryption pipeline, talk-animation capture).",
+  "scripts": {
+    "encrypt": "node scripts/encrypt-drafts.js",
+    "capture": "node scripts/capture-anim.js"
+  },
+  "devDependencies": {
+    "puppeteer": "^23.11.1"
+  }
+}
