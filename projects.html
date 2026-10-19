@@ -1,40 +1,10 @@
 ---
-layout: page
-title: Projects
+layout: null
+permalink: /projects/
+sitemap: false
 ---
-<section class="list">
-    <!-- Featured PhD card -->
-    <div class="item featured">
-        <a class="url" href="{{ site.url }}/phd">
-            <aside><time datetime="2025-10-01">PhD · 2025 — 2028</time></aside>
-            <h3 class="title">Photometric-redshift systematics on the Void Size Function</h3>
-            <p class="blurb">
-                PhD at CPPM (CNRS / IN2P3), Aix-Marseille Université, under
-                Alice Pisani. How fuzzy photometric distances distort the
-                cosmic void abundance — and how to correct it for the Vera C.
-                Rubin Observatory / LSST.
-            </p>
-            <div class="tag-row">
-                <span class="tag">Cosmic voids</span>
-                <span class="tag">LSST</span>
-                <span class="tag">Photo-z</span>
-                <span class="tag">Dark energy</span>
-            </div>
-        </a>
-    </div>
-</section>
-
-<h2 class="group-heading">Past projects</h2>
-
-<section class="list">
-    {% for post in site.posts %}
-        {% if post.projects and post.tag != "cosmic-voids" %}
-            <div class="item {% if post.star %}star{% endif %}">
-                <a class="url" href="{% if post.externalLink %}{{ post.externalLink }}{% else %}{{ site.url }}{{ post.url }}{% endif %}">
-                    <aside><time datetime="{{ post.date | date:"%d-%m-%Y" }}">{{ post.date | date: "%b %d %Y" }}</time></aside>
-                    <h3 class="title">{{ post.title }}</h3>
-                </a>
-            </div>
-        {% endif %}
-    {% endfor %}
-</section>
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Research</title>
+<meta http-equiv="refresh" content="0; url={{ site.url }}/">
+<link rel="canonical" href="{{ site.url }}/"></head>
+<body><p>The projects are listed on the <a href="{{ site.url }}/">research page</a>.</p></body></html>

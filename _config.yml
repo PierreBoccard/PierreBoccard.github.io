@@ -1,9 +1,9 @@
 # main text of home
 title: Pierre Boccard
-bio: PhD candidate in cosmology — CPPM / CNRS, Aix-Marseille Université. Voids, photometric redshifts, and the Vera C. Rubin Observatory (LSST).
+bio: PhD student in cosmology at CPPM (Aix-Marseille Université, CNRS/IN2P3). Cosmic voids in photometric surveys (LSST, Euclid, DESI).
 
 # twitter summary info
-description: 
+description: "Pierre Boccard, PhD student in cosmology at CPPM, Marseille. Cosmic voids in photometric surveys."
 # if it's an external image, update below for true
 # better with square images
 external-image: false
@@ -44,7 +44,7 @@ custom: https://people.epfl.ch/pierre.boccard
 authors:
   pierre:
     name: Pierre Boccard
-    bio: PhD candidate, CPPM / CNRS — Aix-Marseille Université. Voids, photo-z, LSST.
+    bio: PhD student in cosmology at CPPM (Aix-Marseille Université, CNRS/IN2P3). Cosmic voids, photometric redshifts, LSST.
     external-image: false
     picture: assets/images/CVphoto.png
     #twitter: johndoe

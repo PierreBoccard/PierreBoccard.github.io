@@ -35,7 +35,8 @@ const os = require('os');
 const DRAFTS_DIR = process.env.PHD_DRAFTS_DIR || path.join(os.homedir(), 'phd_drafts');
 const REPO_ROOT  = path.resolve(__dirname, '..');
 const OUT_DIR    = path.join(REPO_ROOT, 'assets', 'private');
-const PROJECTS   = ['project-a', 'project-b', 'project-c', 'project-d'];
+// One entry per page in projects/ (and per `slug` in _data/projects.yml)
+const PROJECTS   = ['rubin-vsf', 'photoz-vsf-model', 'gnn-voids', 'desi-dark-matter'];
 
 const MIME = {
     svg:  'image/svg+xml',

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="{{ site.title }}">
+    {% seo %}
+    {% include favicon.html %}
+    <link rel="canonical" href="{{ site.url }}{{ page.url | replace:'index.html','' }}">
+    <link rel="stylesheet" href="{{ site.url }}/assets/css/academic.css">
+    {% if page.math %}
+    <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+    {% endif %}
+</head>
+<body>
+
+<header class="ac-header">
+    <div class="ac-wrap">
+        <a class="ac-name" href="{{ site.url }}/">Pierre Boccard</a>
+        <nav class="ac-nav" aria-label="Main">
+            <a href="{{ site.url }}/" {% if page.nav == "research" %}class="current"{% endif %}>Research</a>
+            <a href="{{ site.url }}/publications/" {% if page.nav == "publications" %}class="current"{% endif %}>Publications &amp; talks</a>
+            <a href="{{ site.url }}/about/" {% if page.nav == "about" %}class="current"{% endif %}>About</a>
+            <a href="{{ site.url }}/{{ site.resume-url }}">CV</a>
+        </nav>
+    </div>
+</header>
+
+<main class="ac-wrap">
+{{ content }}
+</main>
+
+<footer class="ac-footer">
+    <div class="ac-wrap">
+        <span>&copy; {{ site.time | date: '%Y' }} Pierre Boccard &middot; Last updated {{ site.time | date: '%B %Y' }}</span>
+        <span><a href="mailto:{{ site.email }}">{{ site.email }}</a> &middot; <a href="https://github.com/{{ site.github }}">GitHub</a></span>
+    </div>
+</footer>
+
+</body>
+</html>

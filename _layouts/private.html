@@ -1,47 +1,43 @@
 ---
-layout: default
+layout: academic
+nav: research
 ---
-{% include nav.html %}
+{% assign entry = site.data.projects.current | where: "slug", page.project_slug | first %}
 
-<div class="private-page">
+<p class="back-link"><a href="{{ site.url }}/">&larr; Research</a></p>
 
-    <a class="private-back" href="/phd/">&larr; Back to PhD overview</a>
+<h1>{{ entry.title | default: page.project_full_title }}</h1>
 
-    <span class="private-eyebrow">{{ page.project_letter }} &middot; Private draft</span>
-    <h1 class="private-title">{{ page.project_full_title }}</h1>
-    <p class="private-status">
-        <i class="fa-solid fa-lock"></i>
-        <span>Unpublished work &mdash; gated by a passphrase. Drop me an <a href="mailto:boccard.pierre@gmail.com">email</a> if you'd like access.</span>
-    </p>
+{% if entry %}
+<p class="abstract">{{ entry.abstract }}</p>
+<p class="people muted small">{{ entry.people }}</p>
+{% endif %}
 
-    <form class="private-lock" id="lockForm" autocomplete="off">
-        <label for="pw">Passphrase</label>
-        <input type="password" id="pw" name="pw" required autofocus spellcheck="false" autocapitalize="off"/>
+<p class="private-status">This work is not published yet, so the full description is encrypted.
+If you would like to read it, <a href="mailto:boccard@cppm.in2p3.fr">write to me</a> and I will send you the password.</p>
+
+<form class="lock-form" id="lockForm" autocomplete="off">
+    <label for="pw">Password</label>
+    <div class="row">
+        <input type="password" id="pw" name="pw" required spellcheck="false" autocapitalize="off">
         <button type="submit" id="unlockBtn">Unlock</button>
-        <p class="private-error" id="lockErr" hidden></p>
-    </form>
+    </div>
+    <p class="lock-error" id="lockErr" hidden></p>
+</form>
 
-    <div class="private-content" id="privateContent" hidden></div>
+<div class="private-content" id="privateContent" hidden></div>
 
-</div>
+<div class="lightbox" id="lightbox"><img alt=""></div>
 
-{% include footer.html %}
-
-<!-- MathJax for rendering LaTeX equations inside decrypted drafts -->
+<!-- MathJax renders the LaTeX inside the decrypted text -->
 <script>
 window.MathJax = {
-    tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']],
-        processEscapes: true,
-        tags: 'none'
-    },
-    options: {
-        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    }
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], processEscapes: true },
+    options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] },
+    startup: { typeset: false }
 };
 </script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
 
 <script>
 (function () {
@@ -52,27 +48,29 @@ window.MathJax = {
     var content = document.getElementById('privateContent');
     var btn = document.getElementById('unlockBtn');
 
-    /* PBKDF2 + AES-GCM decryption via Web Crypto API */
+    /* PBKDF2 (250 000 iterations, SHA-256) + AES-256-GCM, same format as scripts/encrypt-drafts.js */
     async function decrypt(blobB64, passphrase) {
         var raw = Uint8Array.from(atob(blobB64), function (c) { return c.charCodeAt(0); });
         if (raw.length < 16 + 12 + 16 + 1) throw new Error('ciphertext too short');
         var salt = raw.slice(0, 16);
         var iv = raw.slice(16, 28);
-        var ctAndTag = raw.slice(28); /* ciphertext followed by 16-byte auth tag */
-
+        var ctAndTag = raw.slice(28);
         var enc = new TextEncoder();
-        var keyMat = await crypto.subtle.importKey(
-            'raw', enc.encode(passphrase),
-            { name: 'PBKDF2' }, false, ['deriveKey']
-        );
+        var keyMat = await crypto.subtle.importKey('raw', enc.encode(passphrase), { name: 'PBKDF2' }, false, ['deriveKey']);
         var key = await crypto.subtle.deriveKey(
             { name: 'PBKDF2', salt: salt, iterations: 250000, hash: 'SHA-256' },
-            keyMat,
-            { name: 'AES-GCM', length: 256 },
-            false, ['decrypt']
-        );
+            keyMat, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
         var plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, ctAndTag);
         return new TextDecoder().decode(plain);
+    }
+
+    /* Typeset the decrypted LaTeX once MathJax has loaded (it may still be loading) */
+    function typesetWhenReady(tries) {
+        if (window.MathJax && window.MathJax.typesetPromise) {
+            window.MathJax.typesetPromise([content]).catch(function () {});
+        } else if (tries < 60) {
+            setTimeout(function () { typesetWhenReady(tries + 1); }, 250);
+        }
     }
 
     function showError(msg) {
@@ -87,65 +85,35 @@ window.MathJax = {
         e.preventDefault();
         err.hidden = true;
         btn.disabled = true;
-        btn.textContent = 'Decrypting...';
+        btn.textContent = 'Decrypting…';
         try {
-            var res = await fetch('/assets/private/' + slug + '.enc', { cache: 'no-store' });
+            var res = await fetch('{{ site.url }}/assets/private/' + slug + '.enc', { cache: 'no-store' });
             if (!res.ok) throw new Error('missing');
             var blob = (await res.text()).trim();
             var html = await decrypt(blob, pwInput.value);
             content.innerHTML = html;
             content.hidden = false;
             form.style.display = 'none';
-            window.scrollTo({ top: 0, behavior: 'instant' });
-            /* Typeset any LaTeX math the draft contains */
-            if (window.MathJax && window.MathJax.typesetPromise) {
-                window.MathJax.typesetPromise([content]).catch(function () { /* ignore */ });
-            }
+            typesetWhenReady(0);
         } catch (ex) {
             if (ex && ex.message === 'missing') {
-                showError('Encrypted draft not uploaded yet for this project.');
+                showError('The encrypted description of this project is not online yet.');
             } else {
-                showError('Wrong passphrase. Try again.');
+                showError('Wrong password.');
             }
         }
     });
 
-    /* Lightbox: click any figure image (incl. dynamically-injected ones) to enlarge */
-    var lightbox = document.createElement('div');
-    lightbox.className = 'phd-lightbox';
-    lightbox.innerHTML = '<button class="close" aria-label="Close">&times;</button><img alt=""/><figcaption></figcaption>';
-    document.body.appendChild(lightbox);
-    var lbImg = lightbox.querySelector('img');
-    var lbCap = lightbox.querySelector('figcaption');
-    var lbClose = lightbox.querySelector('.close');
-
-    function openLightbox(src, caption, alt) {
-        lbImg.src = src;
-        lbImg.alt = alt || '';
-        lbCap.textContent = caption || '';
-        lbCap.style.display = caption ? 'block' : 'none';
-        lightbox.classList.add('is-open');
-        document.body.style.overflow = 'hidden';
-    }
-    function closeLightbox() {
-        lightbox.classList.remove('is-open');
-        document.body.style.overflow = '';
-    }
-
-    /* Event delegation so it catches dynamically-injected <img> too */
+    /* Click on a figure to enlarge it */
+    var lb = document.getElementById('lightbox');
+    var lbImg = lb.querySelector('img');
     content.addEventListener('click', function (e) {
-        var t = e.target;
-        if (t && t.tagName === 'IMG') {
-            var fig = t.closest('figure');
-            var cap = fig ? fig.querySelector('figcaption') : null;
-            openLightbox(t.currentSrc || t.src, cap ? cap.textContent.trim() : '', t.alt);
+        if (e.target && e.target.tagName === 'IMG') {
+            lbImg.src = e.target.currentSrc || e.target.src;
+            lb.classList.add('open');
         }
     });
-    lightbox.addEventListener('click', function (e) {
-        if (e.target === lightbox || e.target === lbClose) closeLightbox();
-    });
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
-    });
+    lb.addEventListener('click', function () { lb.classList.remove('open'); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('open'); });
 })();
 </script>

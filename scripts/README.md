@@ -11,7 +11,7 @@ without exposing the content.
 | `~/phd_drafts/<slug>/index.html` (+ `figures/`) | **Plaintext drafts. Local only. Never committed.** |
 | `scripts/encrypt-drafts.js` | The encryption pipeline (committed). |
 | `assets/private/<slug>.enc` | **Ciphertext blobs. Committed. Unreadable without the passphrase.** |
-| `phd/<slug>.html` (rendered as `/phd/<slug>/`) | Public per-project page with the password gate (committed). |
+| `projects/<slug>.html` (rendered as `/projects/<slug>/`) | Public per-project page with the password gate (committed). Its title and public abstract come from `_data/projects.yml`. |
 | `_layouts/private.html` | The lock-screen layout + Web Crypto decryption (committed). |
 
 The plaintext path (`~/phd_drafts/`) is **outside** the repo so that even
@@ -25,25 +25,27 @@ repo.
 
    ```
    ~/phd_drafts/
-   ├── project-a/
+   ├── rubin-vsf/
    │   ├── index.html        ← the page body (no <html>/<head> needed)
    │   └── figures/
-   │       ├── multiplicity-correction.png
    │       └── …
-   ├── project-b/
-   │   └── index.html
-   └── …
+   ├── photoz-vsf-model/
+   ├── gnn-voids/
+   └── desi-dark-matter/
    ```
 
-   Project slugs are exactly `project-a`, `project-b`, `project-c`,
-   `project-d`. (Edit `PROJECTS` in `encrypt-drafts.js` if you add more.)
+   Project slugs are exactly `rubin-vsf`, `photoz-vsf-model`, `gnn-voids`
+   and `desi-dark-matter`. To add a project: add it to `_data/projects.yml`,
+   create `projects/<slug>.html` (copy an existing one), and add the slug to
+   `PROJECTS` in `encrypt-drafts.js`. When a paper is published, set
+   `status: published` in `_data/projects.yml` and replace the page by a public one.
 
    The `index.html` is a fragment — just the body content. Use normal
    HTML: `<h2>`, `<p>`, `<ul>`, `<img src="figures/foo.png">`, `<blockquote>`,
    etc. Local `<img>` paths get inlined as base64 data URIs at encrypt time,
    so figures live entirely inside the encrypted blob.
 
-2. Run the encryption (one passphrase for all four projects):
+2. Run the encryption (one passphrase for all projects):
 
    ```bash
    PHD_PASS='correct horse battery staple' node scripts/encrypt-drafts.js
@@ -62,7 +64,7 @@ repo.
 
    ```bash
    git add assets/private/*.enc
-   git commit -m "Update encrypted draft of project-a"
+   git commit -m "Update encrypted draft of rubin-vsf"
    git push
    ```
 

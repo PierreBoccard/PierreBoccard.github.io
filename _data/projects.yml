@@ -1,0 +1,111 @@
+# Projects shown on the research page (index.html).
+#
+# status: unpublished -> the entry shows a "password-protected" badge and links to
+#                        /projects/<slug>/, whose content is the encrypted draft
+#                        assets/private/<slug>.enc (see scripts/README.md).
+# status: published   -> no badge; add the paper to `outputs` with its link, and
+#                        replace projects/<slug>.html by a normal public page if you
+#                        want to keep a longer description.
+
+current:
+  - slug: rubin-vsf
+    status: unpublished
+    title: "Cosmology from the Rubin Void Size Function"
+    abstract: >-
+      The void size function (VSF), the abundance of voids as a function of their
+      size, is sensitive to the matter density, to the amplitude of the matter
+      fluctuations and to dark energy, but it has mostly been used with spectroscopic
+      surveys. In this project I present the first forecast of the cosmological
+      constraints from voids in the photometric data of the Rubin Observatory LSST,
+      using a realistic mock catalogue of luminous red galaxies built from the
+      SkySim5000 simulation and the model of Verza et al. extended to photometric
+      redshifts. I also study the combination of voids with galaxy clusters.
+    people: "With G. Degni, N. Schuster, G. McFarland, K. Ghaemi Ardakani, P. Vielzeuf and A. Pisani &middot; CPPM, LSST DESC &middot; 2024&ndash;present"
+    outputs:
+      - kind: paper
+        text: "Boccard et al., <i>Cosmology from the Rubin Void Size Function</i>, soon to be submitted to A&amp;A"
+
+  - slug: photoz-vsf-model
+    status: unpublished
+    title: "Toward modelling redshift uncertainties in the photometric void size function"
+    abstract: >-
+      Photometric redshift errors spread galaxies along the line of sight over
+      distances comparable to the size of voids. We extend the theoretical model of
+      the void size function to include this effect, as a damping of the variance of
+      the density field, and we test it on AbacusSummit halo lightcones with mock
+      photometric redshifts. This is a first step towards modelling voids in LSST
+      and Euclid.
+    people: "With G. Verza, G. Degni, N. Schuster, G. McFarland, K. Ghaemi Ardakani, P. Vielzeuf and A. Pisani &middot; CPPM, CCA (Flatiron Institute) &middot; 2024&ndash;present"
+    outputs:
+      - kind: paper
+        text: "Boccard et al., <i>Toward modelling redshift uncertainties in the photometric void size function</i>, soon to be submitted to ApJL"
+
+  - slug: gnn-voids
+    status: unpublished
+    title: "VoidX-Voronoi: finding voids with a graph neural network"
+    abstract: >-
+      Classical void finders depend on hand-tuned choices: smoothing scales, density
+      thresholds and merging criteria. In this project I treat void finding as a
+      node-classification problem on the graph given by the Voronoi tessellation of the
+      tracers, and train a deep graph-attention network to reproduce a void catalogue
+      directly from it, in an N-body simulation. It is a side project, in which I also
+      build my skills in machine learning.
+    people: "Side project &middot; CPPM &middot; ongoing"
+    outputs: []
+
+  - slug: desi-dark-matter
+    status: unpublished
+    title: "Searching for decaying dark matter in cosmic voids"
+    abstract: >-
+      The gamma-ray signal of decaying dark matter scales with the dark matter
+      density, while voids contain very few of the astrophysical sources that
+      dominate the gamma-ray sky elsewhere. With Elena Pinetti, we are preparing a
+      search for decaying dark matter that combines DESI void catalogues, Fermi-LAT
+      gamma-ray data and Euclid weak-lensing shear, which measures the dark matter
+      profile of the voids. The project is at the planning stage.
+    people: "With E. Pinetti &middot; DESI &middot; in preparation"
+    outputs: []
+
+past:
+  - title: "Measuring the dark-energy equation of state from the compound lens DESJ0408&minus;5354"
+    url: /PDM-smbh/
+    abstract: >-
+      Master thesis. Modelling of the double-source-plane lens DESJ0408&minus;5354
+      with three-band HST imaging and <i>lenstronomy</i>, to extend the flat
+      &Lambda;CDM analysis of this system to <i>w</i>CDM through the ratio of
+      distances between the source planes.
+    people: "Supervised by J. Frieman and A. J. Shajib, with F. Courbin &middot; University of Chicago and EPFL &middot; 2023"
+    outputs:
+      - kind: paper
+        text: "Boccard, Shajib, Courbin, Frieman, soon to be submitted to A&amp;A"
+
+  - title: "Co-evolution of supermassive black holes and their host galaxies in IllustrisTNG"
+    url: /SpeMaster-smbh/
+    abstract: >-
+      Scaling relations between black-hole mass, stellar mass, velocity dispersion
+      and dark-matter halo mass in the IllustrisTNG simulations, and their
+      evolution with redshift.
+    people: "Supervised by M. Hirschmann and F. Courbin &middot; EPFL &middot; 2022&ndash;2023"
+    outputs:
+      - kind: report
+        text: "<a href=\"/assets/Report.pdf\">Project report (PDF)</a>"
+
+  - title: "Strong lensing with wavelets and automatic differentiation"
+    url: /SummerProject-glsumm/
+    abstract: >-
+      Modelling of the group-scale lens SDSS J1206+5142 with <i>lenstronomy</i>
+      (shapelets) and <i>SLITronomy</i> (wavelets), and comparison of the source
+      reconstructions.
+    people: "Supervised by A. Galan and F. Courbin &middot; EPFL &middot; 2022"
+    outputs: []
+
+  - title: "Redshift-space distortions in the void&ndash;galaxy cross-correlation"
+    url: /lss/
+    abstract: >-
+      Multipoles of the void&ndash;galaxy cross-correlation in redshift space measured
+      in the BigMultiDark simulation, and comparison with a linear model of
+      redshift-space distortions around voids.
+    people: "Supervised by J.-P. Kneib &middot; EPFL &middot; 2022"
+    outputs:
+      - kind: report
+        text: "<a href=\"/assets/TP4b_II.pdf\">Project report (PDF)</a>"

@@ -1,40 +1,38 @@
 ---
 title: About
-layout: page
+layout: academic
+nav: about
+description: "About Pierre Boccard, PhD student in cosmology at CPPM, Marseille."
 ---
-![Profile Image]({% if site.external-image %}{{ site.picture }}{% else %}{{ site.url }}/{{ site.picture }}{% endif %})
 
-## About me
+<img class="about-photo" src="{{ site.url }}/{{ site.picture }}" alt="Pierre Boccard">
 
-<p>I am Pierre Boccard, a PhD student in observational cosmology at the <a href="https://www.cppm.in2p3.fr/" target="_blank" rel="noopener">Centre de Physique des Particules de Marseille (CPPM, CNRS / IN2P3)</a>, within <a href="https://www.univ-amu.fr/" target="_blank" rel="noopener">Aix-Marseille Université</a>. I work under the supervision of <a href="https://www.cppm.in2p3.fr/spip/spip.php?article2099&amp;lang=en" target="_blank" rel="noopener">Prof. Alice Pisani</a> on the imprint of photometric-redshift systematics on the cosmic void abundance, as part of the <a href="https://rubinobservatory.org/" target="_blank" rel="noopener">Vera C. Rubin Observatory / LSST</a> collaboration.</p>
+# About
 
-<p>My PhD is titled <strong>"Study of systematic effects of photometric redshifts on the Void Size Function"</strong>. Cosmic voids — the vast, underdense regions of the universe — are exquisite cosmological probes, but the noisy distance estimates of photometric surveys distort their statistics. My work aims to characterise these biases and to build calibration strategies that let Rubin/LSST exploit voids as a competitive dark-energy and modified-gravity probe.</p>
+I am Pierre Boccard, a PhD student in cosmology at the [Centre de Physique des Particules de Marseille](https://www.cppm.in2p3.fr/) (CPPM, CNRS/IN2P3), part of [Aix-Marseille Université](https://www.univ-amu.fr/). I work under the supervision of Alice Pisani, and my thesis is titled *Cosmic Voids in Photometric Surveys: Systematics of the Void Size Function*. I will defend it in September 2027.
 
-<p>Before joining CPPM, I obtained a Master in Astrophysics at the <a href="https://www.epfl.ch/" target="_blank" rel="noopener">Swiss Federal Institute of Technology (EPFL)</a>. I carried out my Master Thesis at the University of Chicago with Prof. Joshua Frieman and Dr. Anowar Shajib, measuring the dark-energy equation of state from the compound strong-lens system DES J0408−5354 with <em>Lenstronomy</em>. Earlier I worked at LASTRO (EPFL) with Jean-Paul Kneib and Andrei Variu on the void–galaxy cross-correlation as a redshift-space-distortion probe.</p>
+Cosmic voids, the large underdense regions of the Universe, are sensitive to the matter density, to the growth of structure and to dark energy. The large photometric surveys that are starting now, such as the Legacy Survey of Space and Time (LSST) of the Vera C. Rubin Observatory and Euclid, will find far more voids than spectroscopic surveys, but their redshift errors distort the void statistics. My work is to model these effects and to make the void size function usable as a cosmological probe in this context. I am a member of LSST DESC, where I lead the void group, of the Euclid Consortium and of DESI.
 
-<p>I was raised in France by a Croatian mother and a French father — both scientists — and grew up between French, Croatian and English. Outside the lab I shoot 35 mm film, play music, and chase long-distance running goals along the calanques of Marseille.</p>
+Before coming to CPPM, I did my bachelor and master in physics at the [École Polytechnique Fédérale de Lausanne](https://www.epfl.ch/) (EPFL). I carried out my master thesis at the University of Chicago with Joshua Frieman and Anowar Shajib, on the dark-energy equation of state measured with the compound strong lens DESJ0408&minus;5354 and *lenstronomy*. At EPFL I also worked at the Laboratory of Astrophysics (LASTRO) with Jean-Paul Kneib on the void&ndash;galaxy cross-correlation as a probe of redshift-space distortions.
 
-My GitHub is [PierreBoccard](https://github.com/PierreBoccard).
+I grew up in France with a Croatian mother and a French father, both scientists, between French, Croatian and English. Outside work I shoot 35 mm film, play music, and run long distances along the calanques of Marseille.
 
-<h2>Research interests</h2>
+## Research interests
 
-<ul class="skill-list">
-	<li>Cosmic voids, void size function, void–galaxy cross-correlation</li>
-	<li>Photometric redshifts and survey systematics</li>
-	<li>Vera C. Rubin Observatory / LSST, DES, Euclid</li>
-	<li>Large-scale structure, dark energy, modified gravity</li>
-	<li>N-body simulations and mock-catalogue pipelines</li>
-</ul>
+- Cosmic voids: void size function, void&ndash;galaxy cross-correlation
+- Photometric redshifts and survey systematics
+- Vera C. Rubin Observatory / LSST, Euclid, DESI
+- Large-scale structure, dark energy, dark matter
+- N-body simulations and mock catalogues
 
-<h2>Technical toolbox</h2>
+## Technical skills
 
-<ul class="skill-list">
-	<li>Python (NumPy, SciPy, Astropy, healpy, JAX), C / C++, Fortran</li>
-	<li>Void finders (VIDE / ZOBOV, Voronoi-Voids pipelines), N-body post-processing</li>
-	<li>Statistical inference (MCMC, Fisher forecasts, emulators)</li>
-	<li>HPC workflows on the CC-IN2P3 cluster</li>
-</ul>
+- Programming: Python, C / C++
+- Machine learning: PyTorch and PyTorch Geometric (graph-attention networks), hyperparameter optimisation with Optuna, training on GPUs
+- Void finders (VIDE / ZOBOV, Voronoi-based post-processing) and N-body post-processing
+- Statistical inference: MCMC and nested sampling, Fisher forecasts, emulators
+- HPC workflows on the CC-IN2P3 cluster
 
-## Résumé
+## CV
 
-The full PDF is [here](/assets/CV.pdf).
+The full CV is [here]({{ site.url }}/{{ site.resume-url }}) (PDF).
