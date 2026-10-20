@@ -63,7 +63,7 @@ current:
       search for decaying dark matter that combines DESI void catalogues, Fermi-LAT
       gamma-ray data and Euclid weak-lensing shear, which measures the dark matter
       profile of the voids. The project is at the planning stage.
-    people: "With E. Pinetti &middot; DESI &middot; in preparation"
+    people: "DESI &middot; in preparation"
     outputs: []
 
 past:
@@ -72,8 +72,8 @@ past:
     abstract: >-
       Master thesis. Modelling of the double-source-plane lens DESJ0408&minus;5354
       with three-band HST imaging and <i>lenstronomy</i>, to extend the flat
-      &Lambda;CDM analysis of this system to <i>w</i>CDM through the ratio of
-      distances between the source planes.
+      &Lambda;CDM analysis of this system to <i>w</i>CDM and measure the
+      dark-energy equation of state.
     year: "2023"
     people: "Supervised by J. Frieman and A. J. Shajib, with F. Courbin &middot; University of Chicago and EPFL"
     outputs:
