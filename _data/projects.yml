@@ -72,8 +72,11 @@ past:
     abstract: >-
       Master thesis. Modelling of the double-source-plane lens DESJ0408&minus;5354
       with three-band HST imaging and <i>lenstronomy</i>, to extend the flat
-      &Lambda;CDM analysis of this system to <i>w</i>CDM and measure the
-      dark-energy equation of state.
+      &Lambda;CDM analysis of this system to <i>w</i>CDM. The two source planes are
+      close in redshift, so this lens alone does not constrain the dark-energy
+      equation of state <i>w</i>; combined with three other double-source-plane
+      lenses it gives a first joint constraint, and it also yields a measurement of
+      <i>H</i><sub>0</sub> in flat <i>w</i>CDM.
     year: "2023"
     people: "Supervised by J. Frieman and A. J. Shajib, with F. Courbin &middot; University of Chicago and EPFL"
     outputs:
