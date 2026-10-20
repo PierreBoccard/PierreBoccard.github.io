@@ -1,79 +1,94 @@
 ---
-layout: academic
-title: Research
-nav: research
-description: "Pierre Boccard, PhD student in cosmology at CPPM (Aix-Marseille Université, CNRS/IN2P3). Cosmic voids in photometric surveys: LSST, Euclid, DESI."
+layout: page
+title: Home
 ---
-{% assign lock = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 7V5a4 4 0 1 1 8 0v2h1v8H3V7h1zm2 0h4V5a2 2 0 1 0-4 0v2z"/></svg>' %}
 
-<section class="ac-intro">
-    <div class="ac-intro-text">
-        <p>I am a PhD student in cosmology at the
-        <a href="https://www.cppm.in2p3.fr/">Centre de Physique des Particules de Marseille</a>
-        (CPPM, Aix-Marseille Université, CNRS/IN2P3), supervised by Alice Pisani.
-        I work on cosmic voids as a cosmological probe, and on what is needed to use them
-        in photometric galaxy surveys, mainly the Legacy Survey of Space and Time (LSST)
-        of the Vera C. Rubin Observatory.</p>
-        <p>I am a member of LSST DESC, where I lead the void group, of the Euclid
-        Consortium and of DESI. My thesis, <i>Cosmic Voids in Photometric Surveys:
-        Systematics of the Void Size Function</i>, will be defended in September 2027.</p>
-        <p class="ac-links">
-            <a href="mailto:boccard@cppm.in2p3.fr">boccard@cppm.in2p3.fr</a> &middot;
-            <a href="{{ site.url }}/{{ site.resume-url }}">CV</a> &middot;
-            <a href="https://github.com/{{ site.github }}">GitHub</a> &middot;
-            <a href="https://www.linkedin.com/in/{{ site.linkedin }}">LinkedIn</a>
-        </p>
+<section class="home-extras">
+
+    <p class="home-intro">
+        Supervised by Alice&nbsp;Pisani, I work on what it takes to use cosmic voids as a
+        cosmological probe in photometric galaxy surveys, mainly for the
+        <a href="https://rubinobservatory.org/" target="_blank" rel="noopener">Vera&nbsp;C.&nbsp;Rubin Observatory</a>.
+        I lead the void group of LSST DESC, and I am a member of Euclid and DESI.
+    </p>
+
+    <div class="phd-anim-row">
+        <a class="phd-anim-btn" href="{{ site.url }}/phd/">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>My PhD in animations</span>
+            <span class="phd-anim-sub">a visual tour of voids &amp; photo-z</span>
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
     </div>
-    <img class="ac-photo" src="{{ site.url }}/{{ site.picture }}" alt="Pierre Boccard">
-</section>
 
-<h2>Current projects</h2>
+    <div class="home-affiliations">
+        <span class="aff-label">Affiliations</span>
+        <div class="aff-row">
+            <a href="https://www.cppm.in2p3.fr/" target="_blank" rel="noopener" title="Centre de Physique des Particules de Marseille">
+                <img src="{{ site.url }}/assets/images/logos/cppm.png" alt="CPPM" loading="lazy"/>
+            </a>
+            <a href="https://www.cnrs.fr/" target="_blank" rel="noopener" title="CNRS — Centre national de la recherche scientifique">
+                <img src="{{ site.url }}/assets/images/logos/cnrs.svg" alt="CNRS" loading="lazy"/>
+            </a>
+            <a href="https://www.univ-amu.fr/" target="_blank" rel="noopener" title="Aix-Marseille Université">
+                <img class="aff-amu" src="{{ site.url }}/assets/images/logos/amu.png" alt="Aix-Marseille Université" loading="lazy"/>
+            </a>
+            <a href="https://rubinobservatory.org/" target="_blank" rel="noopener" title="Vera C. Rubin Observatory · LSST">
+                <img class="aff-rubin" src="{{ site.url }}/assets/images/logos/rubin.png" alt="Vera C. Rubin Observatory / LSST" loading="lazy"/>
+            </a>
+        </div>
+    </div>
 
-<p class="muted small">Projects that are not yet published have a longer description behind a password.
-If you would like to read it, <a href="mailto:boccard@cppm.in2p3.fr">write to me</a>.</p>
+    <h2 class="group-heading">Current projects</h2>
+    <p class="group-note">
+        Projects that are not published yet have a longer description behind a password.
+        If you would like to read it, <a href="mailto:boccard@cppm.in2p3.fr">write to me</a>.
+    </p>
 
-{% for p in site.data.projects.current %}
-<div class="project">
-    <h3>{{ p.title }}{% if p.status == "unpublished" %} <a class="lock-badge" href="{{ site.url }}/projects/{{ p.slug }}/" title="Password-protected description">{{ lock }} private</a>{% endif %}</h3>
-    <p class="abstract">{{ p.abstract }}</p>
-    <div class="people">{{ p.people }}</div>
-    <ul class="outputs">
-        {% for o in p.outputs %}
-        <li><span class="kind">{{ o.kind }}</span><span>{{ o.text }}</span></li>
-        {% endfor %}
+    {% for p in site.data.projects.current %}
+    <article class="project-card">
         {% if p.status == "unpublished" %}
-        <li><span class="kind">details</span><span><a href="{{ site.url }}/projects/{{ p.slug }}/">Full description</a> (password-protected until publication)</span></li>
-        {% else %}
-        <li><span class="kind">details</span><span><a href="{{ site.url }}/projects/{{ p.slug }}/">Full description</a></span></li>
+        <span class="status-pill"><i class="fa-solid fa-lock"></i> Private</span>
         {% endif %}
-    </ul>
-</div>
-{% endfor %}
+        <h3>{{ p.title }}</h3>
+        <p class="project-abstract">{{ p.abstract }}</p>
+        <p class="project-people">{{ p.people }}</p>
+        {% if p.outputs.size > 0 %}
+        <ul class="project-outputs">
+            {% for o in p.outputs %}
+            <li><span class="kind">{{ o.kind }}</span> {{ o.text }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <a class="project-cta" href="{{ site.url }}/projects/{{ p.slug }}/">
+            Full description{% if p.status == "unpublished" %} (password){% endif %} <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </article>
+    {% endfor %}
 
-<h2>Past projects</h2>
+    <h2 class="group-heading">Past projects</h2>
 
-{% for p in site.data.projects.past %}
-<div class="project past">
-    <h3><a href="{{ site.url }}{{ p.url }}">{{ p.title }}</a></h3>
-    <p class="abstract">{{ p.abstract }}</p>
-    <div class="people">{{ p.people }}</div>
-    {% if p.outputs.size > 0 %}
-    <ul class="outputs">
-        {% for o in p.outputs %}
-        <li><span class="kind">{{ o.kind }}</span><span>{{ o.text }}</span></li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-</div>
-{% endfor %}
+    {% for p in site.data.projects.past %}
+    <div class="past-card">
+        <div class="past-head">
+            <h4><a href="{{ site.url }}{{ p.url }}">{{ p.title }}</a></h4>
+            <span class="past-date">{{ p.year }}</span>
+        </div>
+        <p>{{ p.abstract }}</p>
+        <p class="project-people">{{ p.people }}</p>
+        {% if p.outputs.size > 0 %}
+        <ul class="project-outputs">
+            {% for o in p.outputs %}
+            <li><span class="kind">{{ o.kind }}</span> {{ o.text }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    {% endfor %}
 
-<div class="ac-currently">
-    <strong>Currently:</strong> my first two papers on voids in photometric surveys,
-    on the modelling of redshift uncertainties in the void size function and on the
-    cosmology forecast for Rubin, are soon to be published.
-</div>
+    <div class="home-currently">
+        <span class="currently-dot"></span>
+        <span><strong>Currently:</strong> my first two papers on voids in photometric surveys, on the modelling of redshift uncertainties in the void size function and on the cosmology forecast for Rubin, are soon to be published.</span>
+    </div>
 
-<div class="ac-aside">
-    Something lighter: <a href="{{ site.url }}/phd/">my PhD in animations</a>,
-    a scroll-through, visual introduction to voids, photometric redshifts and the Rubin Observatory.
-</div>
+</section>

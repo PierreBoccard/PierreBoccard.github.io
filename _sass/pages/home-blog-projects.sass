@@ -317,3 +317,242 @@
                 color: $delta
                 background: rgba($delta, 0.05)
                 letter-spacing: 0.1em
+
+// ----- Research list on the home page (current and past projects) ----------
+.home
+    .home-intro
+        text-align: center
+        font-size: 1.45rem
+        line-height: 1.65
+        color: $alpha
+        max-width: 640px
+        margin: 0 auto 26px
+
+        a
+            color: $delta
+            border-bottom: 1px solid rgba($delta, 0.4)
+
+    /* Entry point to the PhD animations page: visible near the top, but kept
+       apart from the formal navigation */
+    .phd-anim-row
+        text-align: center
+        margin: 0 auto 44px
+
+    .phd-anim-btn
+        display: inline-flex
+        align-items: center
+        gap: 12px
+        padding: 14px 28px
+        border-radius: 999px
+        border: 1px solid rgba(169, 107, 255, 0.55)
+        background: linear-gradient(135deg, rgba($delta, 0.14), rgba(169, 107, 255, 0.16))
+        box-shadow: 0 12px 30px rgba(124, 244, 255, 0.16), inset 0 0 0 1px rgba(255, 255, 255, 0.04)
+        color: $beta
+        font-size: 1.6rem
+        font-weight: 600
+        letter-spacing: 0.04em
+        text-decoration: none
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease
+
+        i
+            color: $delta
+
+        .phd-anim-sub
+            font-size: 1.15rem
+            font-weight: 400
+            color: $gama
+            letter-spacing: 0.02em
+
+            @media #{$mobile}
+                display: none
+
+        &:hover
+            color: $beta
+            transform: translateY(-2px)
+            border-color: rgba($delta, 0.7)
+            box-shadow: 0 16px 36px rgba($delta, 0.28)
+            text-shadow: none
+
+    .group-heading
+        display: block
+        margin: 56px auto 12px
+        font-size: 1.15rem
+        font-weight: 600
+        letter-spacing: 0.35em
+        text-transform: uppercase
+        color: $delta
+        border-bottom: 1px solid rgba($delta, 0.25)
+        padding-bottom: 8px
+
+    .group-note
+        font-size: 1.2rem
+        color: $gama
+        margin: 0 0 22px
+
+        a
+            font-weight: 400
+
+    .project-card
+        position: relative
+        margin: 0 0 22px
+        padding: 26px 28px 22px
+        border-radius: 16px
+        border: 1px solid rgba($delta, 0.35)
+        background: linear-gradient(135deg, rgba($delta, 0.08), rgba(169, 107, 255, 0.06)), rgba($omega, 0.7)
+        box-shadow: 0 16px 40px rgba(6, 10, 24, 0.16)
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease
+
+        &:hover
+            transform: translateY(-3px)
+            border-color: rgba($delta, 0.6)
+            box-shadow: 0 18px 44px rgba($delta, 0.2)
+
+        h3
+            font-size: 1.9rem
+            line-height: 1.3
+            margin: 0 0 12px
+            color: $beta
+            font-weight: 700
+            padding-right: 110px
+
+            @media #{$mobile}
+                padding-right: 0
+
+        .status-pill
+            position: absolute
+            top: 26px
+            right: 26px
+            display: inline-flex
+            align-items: center
+            gap: 6px
+            font-size: 0.95rem
+            letter-spacing: 0.25em
+            text-transform: uppercase
+            padding: 4px 10px
+            border-radius: 999px
+            border: 1px solid rgba($delta, 0.45)
+            color: $delta
+            background: rgba($delta, 0.06)
+
+            @media #{$mobile}
+                position: static
+                margin-bottom: 10px
+
+        .project-abstract
+            font-size: 1.35rem
+            line-height: 1.65
+            margin: 0 0 12px
+
+        .project-people
+            font-size: 1.15rem
+            color: $gama
+            margin: 0 0 10px
+
+        .project-outputs
+            list-style: none
+            padding: 0
+            margin: 0 0 6px
+
+            li
+                font-size: 1.2rem
+                line-height: 1.6
+                margin-bottom: 4px
+
+            .kind
+                display: inline-block
+                min-width: 62px
+                font-size: 0.95rem
+                letter-spacing: 0.2em
+                text-transform: uppercase
+                color: $delta
+
+        .project-cta
+            display: inline-flex
+            align-items: center
+            gap: 6px
+            margin-top: 8px
+            font-size: 1.1rem
+            letter-spacing: 0.15em
+            text-transform: uppercase
+            border-bottom: none
+
+            i
+                transition: transform 0.25s ease
+
+            &:hover i
+                transform: translateX(4px)
+
+    .past-card
+        display: block
+        margin: 0 0 14px
+        padding: 20px 24px
+        border-radius: 14px
+        border: 1px solid rgba($delta, 0.2)
+        background: rgba($omega, 0.7)
+        box-shadow: 0 12px 30px rgba(6, 10, 24, 0.12)
+        text-decoration: none
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease
+
+        &:hover
+            transform: translateY(-3px)
+            border-color: rgba($delta, 0.4)
+            box-shadow: 0 16px 36px rgba($delta, 0.2)
+
+            h4 a
+                color: $delta
+
+        h4 a
+            color: $beta
+            font-weight: 500
+            border-bottom: none
+
+            &:hover
+                text-shadow: none
+
+        .project-outputs
+            list-style: none
+            padding: 0
+            margin: 6px 0 0
+
+            li
+                font-size: 1.15rem
+                line-height: 1.6
+
+            .kind
+                display: inline-block
+                min-width: 62px
+                font-size: 0.95rem
+                letter-spacing: 0.2em
+                text-transform: uppercase
+                color: $delta
+
+        .past-head
+            display: flex
+            justify-content: space-between
+            align-items: baseline
+            gap: 16px
+
+        h4
+            margin: 0 0 6px
+            font-size: 1.55rem
+            line-height: 1.35
+            font-weight: 500
+            color: $beta
+            transition: color 0.2s ease
+
+        .past-date
+            flex-shrink: 0
+            font-size: 1.15rem
+            font-weight: 300
+            color: $gama
+
+        p
+            font-size: 1.25rem
+            line-height: 1.6
+            margin: 0 0 6px
+            color: $alpha
+
+        .project-people
+            font-size: 1.1rem
+            color: $gama
+            margin: 0

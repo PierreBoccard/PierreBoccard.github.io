@@ -74,7 +74,8 @@ past:
       with three-band HST imaging and <i>lenstronomy</i>, to extend the flat
       &Lambda;CDM analysis of this system to <i>w</i>CDM through the ratio of
       distances between the source planes.
-    people: "Supervised by J. Frieman and A. J. Shajib, with F. Courbin &middot; University of Chicago and EPFL &middot; 2023"
+    year: "2023"
+    people: "Supervised by J. Frieman and A. J. Shajib, with F. Courbin &middot; University of Chicago and EPFL"
     outputs:
       - kind: paper
         text: "Boccard, Shajib, Courbin, Frieman, soon to be submitted to A&amp;A"
@@ -85,7 +86,8 @@ past:
       Scaling relations between black-hole mass, stellar mass, velocity dispersion
       and dark-matter halo mass in the IllustrisTNG simulations, and their
       evolution with redshift.
-    people: "Supervised by M. Hirschmann and F. Courbin &middot; EPFL &middot; 2022&ndash;2023"
+    year: "2022&ndash;2023"
+    people: "Supervised by M. Hirschmann and F. Courbin &middot; EPFL"
     outputs:
       - kind: report
         text: "<a href=\"/assets/Report.pdf\">Project report (PDF)</a>"
@@ -96,7 +98,8 @@ past:
       Modelling of the group-scale lens SDSS J1206+5142 with <i>lenstronomy</i>
       (shapelets) and <i>SLITronomy</i> (wavelets), and comparison of the source
       reconstructions.
-    people: "Supervised by A. Galan and F. Courbin &middot; EPFL &middot; 2022"
+    year: "2022"
+    people: "Supervised by A. Galan and F. Courbin &middot; EPFL"
     outputs: []
 
   - title: "Redshift-space distortions in the void&ndash;galaxy cross-correlation"
@@ -105,7 +108,8 @@ past:
       Multipoles of the void&ndash;galaxy cross-correlation in redshift space measured
       in the BigMultiDark simulation, and comparison with a linear model of
       redshift-space distortions around voids.
-    people: "Supervised by J.-P. Kneib &middot; EPFL &middot; 2022"
+    year: "2022"
+    people: "Supervised by J.-P. Kneib &middot; EPFL"
     outputs:
       - kind: report
         text: "<a href=\"/assets/TP4b_II.pdf\">Project report (PDF)</a>"
